@@ -12,7 +12,7 @@ import {
   type Edge,
 } from '@xyflow/react';
 import BaseNode from './nodes/BaseNode';
-import ArchimateEdge, { EdgeMarkerDefs } from './edges/ArchimateEdge';
+import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import { NODE_STYLES } from './utils/colors';
 
 interface FocusModeModalProps {
@@ -24,7 +24,7 @@ interface FocusModeModalProps {
 }
 
 const nodeTypes = { baseNode: BaseNode };
-const edgeTypes = { archimateEdge: ArchimateEdge };
+const edgeTypes = { relationshipEdge: RelationshipEdge };
 
 const HORIZONTAL_SPACING = 400;
 const VERTICAL_SPACING = 140;

@@ -15,6 +15,18 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     bg: '#eff6ff', border: '#3b82f6', text: '#1e40af',
     borderStyle: 'solid', borderRadius: '12px', icon: 'D',
   },
+  architecture_area_domain: {
+    bg: '#eff6ff', border: '#2563eb', text: '#1e40af',
+    borderStyle: 'solid', borderRadius: '12px', icon: 'D',
+  },
+  business_capability: {
+    bg: '#fff7ed', border: '#f97316', text: '#9a3412',
+    borderStyle: 'solid', borderRadius: '4px', icon: 'BC',
+  },
+  business_process: {
+    bg: '#fff7ed', border: '#fb923c', text: '#9a3412',
+    borderStyle: 'solid', borderRadius: '4px', icon: 'BP',
+  },
   logical_component: {
     bg: '#f5f3ff', border: '#8b5cf6', text: '#5b21b6',
     borderStyle: 'solid', borderRadius: '8px', icon: 'LC',
@@ -52,7 +64,7 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     borderStyle: 'solid', borderRadius: '8px', icon: 'Ev',
   },
   business_process_module: {
-    bg: '#fffbeb', border: '#f59e0b', text: '#92400e',
+    bg: '#fff7ed', border: '#f59e0b', text: '#92400e',
     borderStyle: 'solid', borderRadius: '4px', icon: 'BP',
   },
   principle: {

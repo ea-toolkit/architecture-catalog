@@ -1,5 +1,5 @@
-// catalog-ui/src/components/graphs/edges/ArchimateEdge.tsx
-// Custom edge component with ArchiMate relationship styling
+// catalog-ui/src/components/graphs/edges/RelationshipEdge.tsx
+// Custom edge component with relationship styling
 
 import React from 'react';
 import {
@@ -10,12 +10,12 @@ import {
 } from '@xyflow/react';
 import { getEdgeStyle } from '../utils/colors';
 
-export interface ArchimateEdgeData {
+export interface RelationshipEdgeData {
   relationship: string;
   showLabel?: boolean;
 }
 
-export default function ArchimateEdge({
+export default function RelationshipEdge({
   id,
   sourceX,
   sourceY,
@@ -26,7 +26,7 @@ export default function ArchimateEdge({
   data,
   selected,
 }: EdgeProps) {
-  const edgeData = data as ArchimateEdgeData | undefined;
+  const edgeData = data as RelationshipEdgeData | undefined;
   const relationship = edgeData?.relationship || 'default';
   const style = getEdgeStyle(relationship);
   const showLabel = edgeData?.showLabel !== false;
@@ -58,15 +58,16 @@ export default function ArchimateEdge({
             style={{
               position: 'absolute',
               transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-              background: 'white',
-              padding: '2px 6px',
+              background: 'rgba(255,255,255,0.95)',
+              padding: '3px 8px',
               borderRadius: 4,
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: 500,
-              color: '#64748b',
-              border: '1px solid #e2e8f0',
+              color: '#475569',
+              border: '1px solid #cbd5e1',
               pointerEvents: 'none',
               whiteSpace: 'nowrap',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
             }}
           >
             {style.label}

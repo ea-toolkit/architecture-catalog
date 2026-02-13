@@ -102,10 +102,17 @@ export default function BaseNode({ data, id }: NodeProps) {
   const style = d.style;
   const isFocused = d.isFocusCenter;
   const icon = ELEMENT_ICONS[d.type] || ELEMENT_ICONS.default;
+  const [hovered, setHovered] = React.useState(false);
+
+  const defaultShadow = '0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)';
+  const hoverShadow = `0 4px 12px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06)`;
+  const focusShadow = `0 0 0 3px ${style?.border}40, 0 4px 12px rgba(0,0,0,0.12)`;
 
   return (
     <div
       className="base-node"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         background: 'white',
         border: `2px solid ${style?.border || '#e2e8f0'}`,
@@ -114,10 +121,9 @@ export default function BaseNode({ data, id }: NodeProps) {
         maxWidth: 280,
         fontFamily: 'Inter, system-ui, sans-serif',
         cursor: 'pointer',
-        transition: 'box-shadow 0.15s, border-color 0.15s',
-        boxShadow: isFocused
-          ? `0 0 0 3px ${style?.border}40, 0 4px 12px rgba(0,0,0,0.12)`
-          : '0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)',
+        transition: 'box-shadow 0.2s, border-color 0.2s, transform 0.2s',
+        transform: hovered && !isFocused ? 'translateY(-1px)' : 'none',
+        boxShadow: isFocused ? focusShadow : hovered ? hoverShadow : defaultShadow,
         position: 'relative',
         opacity: d.opacity ?? 1,
         overflow: 'hidden',

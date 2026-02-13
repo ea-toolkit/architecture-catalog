@@ -96,7 +96,7 @@ export function buildDomainGraph(
           id: edgeId,
           source: normalized.source,
           target: normalized.target,
-          type: 'archimateEdge',
+          type: 'relationshipEdge',
           data: {
             relationship: rel.type,
             label: semantics.label,
@@ -307,7 +307,7 @@ export function buildElementGraph(
           id: `${other.id}--${rel.type}--${element.id}`,
           source: normalized.source,
           target: normalized.target,
-          type: 'archimateEdge',
+          type: 'relationshipEdge',
           data: {
             relationship: rel.type,
             label: semantics.label,

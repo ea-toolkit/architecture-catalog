@@ -1,7 +1,7 @@
 // catalog-ui/src/components/graphs/ElementContextGraph.tsx
 // Small context graph for element detail pages (/catalog/[id])
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   ReactFlow,
   Background,
@@ -11,11 +11,12 @@ import {
   ReactFlowProvider,
   type Node,
   type Edge,
+  type NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import BaseNode from './nodes/BaseNode';
-import ArchimateEdge, { EdgeMarkerDefs } from './edges/ArchimateEdge';
+import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import { applyDagreLayout } from './utils/layout';
 import { buildElementGraph } from './utils/graph-data';
 import type { Element } from '../../data/registry';
@@ -25,7 +26,7 @@ const nodeTypes = {
 };
 
 const edgeTypes = {
-  archimateEdge: ArchimateEdge,
+  relationshipEdge: RelationshipEdge,
 };
 
 interface ElementContextGraphProps {
@@ -68,6 +69,14 @@ function ElementContextGraphInner({ element, allElements, height = 350 }: Elemen
       return () => clearTimeout(timer);
     }
   }, [isLayoutReady, hasRelationships, fitView]);
+
+  // Click node to navigate to its catalog page
+  const onNodeClick: NodeMouseHandler = useCallback((event, node) => {
+    // Don't navigate if clicking on the doc icon link
+    if ((event.target as HTMLElement).closest('a')) return;
+    const url = (node.data as any)?.catalogUrl;
+    if (url) window.location.href = url;
+  }, []);
 
   if (!isLayoutReady) {
     return (
@@ -122,6 +131,7 @@ function ElementContextGraphInner({ element, allElements, height = 350 }: Elemen
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView

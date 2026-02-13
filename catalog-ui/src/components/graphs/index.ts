@@ -4,7 +4,7 @@
 export { default as DomainContextMap } from './DomainContextMap';
 export { default as ElementContextGraph } from './ElementContextGraph';
 export { default as BaseNode } from './nodes/BaseNode';
-export { default as ArchimateEdge, EdgeMarkerDefs } from './edges/ArchimateEdge';
+export { default as RelationshipEdge, EdgeMarkerDefs } from './edges/RelationshipEdge';
 
 // Utils
 export { applyDagreLayout, getGraphBounds } from './utils/layout';
