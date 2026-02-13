@@ -27,6 +27,10 @@ export const ELEMENT_HIERARCHY: Record<string, number> = {
   'assessment': -1,
   'requirement': -1,
   
+  // ── Products & Services Layer (LEFT of domain) ──
+  'product': -1,
+  'customer_segment': -2,
+
   // ── Business Layer (LEFT of domain) ──
   'business_actor': -1,
   'business_role': -1,

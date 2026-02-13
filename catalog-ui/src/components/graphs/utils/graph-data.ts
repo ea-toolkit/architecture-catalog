@@ -134,7 +134,7 @@ export function buildDomainGraph(
         id: edgeId,
         source: domain.id,
         target: el.id,
-        type: 'archimateEdge',
+        type: 'relationshipEdge',
         data: {
           relationship: relType,
           label: label,

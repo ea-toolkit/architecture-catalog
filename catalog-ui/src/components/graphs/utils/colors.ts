@@ -79,6 +79,26 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     bg: '#fff7ed', border: '#fb923c', text: '#9a3412',
     borderStyle: 'dashed', borderRadius: '50%', icon: 'R',
   },
+  product: {
+    bg: '#faf5ff', border: '#a855f7', text: '#6b21a8',
+    borderStyle: 'solid', borderRadius: '8px', icon: 'P',
+  },
+  customer_segment: {
+    bg: '#faf5ff', border: '#c084fc', text: '#6b21a8',
+    borderStyle: 'solid', borderRadius: '50%', icon: 'CS',
+  },
+  business_service: {
+    bg: '#faf5ff', border: '#9333ea', text: '#6b21a8',
+    borderStyle: 'solid', borderRadius: '12px', icon: 'BS',
+  },
+  hosting_node: {
+    bg: '#ecfdf5', border: '#10b981', text: '#065f46',
+    borderStyle: 'solid', borderRadius: '4px', icon: 'HN',
+  },
+  technology_infrastructure: {
+    bg: '#ecfdf5', border: '#34d399', text: '#065f46',
+    borderStyle: 'dashed', borderRadius: '4px', icon: 'TI',
+  },
 };
 
 // ArchiMate edge styles
@@ -107,7 +127,8 @@ export const EDGE_STYLES: Record<string, EdgeStyle> = {
 };
 
 export function getNodeStyle(type: string): NodeStyle {
-  return NODE_STYLES[type] || NODE_STYLES['logical_component'];
+  const normalized = type.replace(/-/g, '_');
+  return NODE_STYLES[normalized] || NODE_STYLES['logical_component'];
 }
 
 export function getEdgeStyle(relationship: string): EdgeStyle {

@@ -126,6 +126,162 @@ domain_color_palette:
 elements:
 
   # ══════════════════════════════════════════════
+  # Product (Layer 1)
+  # ══════════════════════════════════════════════
+  product:
+    label: Product
+    layer: products_and_services
+    folder: 1-products-and-services/products
+    id_field: name
+    archimate: product
+    graph_rank: -1
+    icon: 📦
+    badge_category: product
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      product_type:
+        type: string
+        required: false
+        label: Product Type
+    relationships:
+      serves_customer_segments:
+        target: customer_segment
+        type: serving
+        cardinality: many
+        resolve_by: name
+        inverse: served_by_products
+        required: false
+      aggregates_business_services:
+        target: business_service
+        type: aggregation
+        cardinality: many
+        resolve_by: name
+        inverse: aggregated_by_product
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Customer Segment (Layer 1)
+  # ══════════════════════════════════════════════
+  customer_segment:
+    label: Customer Segment
+    layer: products_and_services
+    folder: 1-products-and-services/customer-segments
+    id_field: name
+    archimate: business-actor
+    graph_rank: -2
+    icon: 👥
+    badge_category: segment
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+    relationships:
+      served_by_products:
+        target: product
+        type: serving
+        cardinality: many
+        resolve_by: name
+        inverse: serves_customer_segments
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Business Service (Layer 1)
+  # ══════════════════════════════════════════════
+  business_service:
+    label: Business Service
+    layer: products_and_services
+    folder: 1-products-and-services/business-services
+    id_field: name
+    archimate: business-service
+    graph_rank: -1
+    icon: 🎁
+    badge_category: service
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+    relationships:
+      aggregated_by_product:
+        target: product
+        type: aggregation
+        cardinality: one
+        resolve_by: name
+        inverse: aggregates_business_services
+        required: false
+      realized_by_business_capabilities:
+        target: business_capability
+        type: realization
+        cardinality: many
+        resolve_by: name
+        inverse: ~
+        required: false
+
+  # ══════════════════════════════════════════════
   # Business Capability (Layer 2)
   # ══════════════════════════════════════════════
   business_capability:
@@ -876,6 +1032,117 @@ elements:
         resolve_by: name
         inverse: ~
         required: false  # Cross-layer link — target type not yet mapped
+
+  # ══════════════════════════════════════════════
+  # Hosting Node (Layer 4)
+  # ══════════════════════════════════════════════
+  hosting_node:
+    label: Hosting Node
+    layer: infrastructure_and_hosting
+    folder: 4-infrastructure-and-hosting/hosting-nodes
+    id_field: name
+    archimate: node
+    graph_rank: 4
+    icon: 🖧
+    badge_category: infrastructure
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      node_type:
+        type: string
+        required: false
+        label: Node Type
+      cloud_provider:
+        type: string
+        required: false
+        label: Cloud Provider
+    relationships:
+      serves_software_subsystems:
+        target: software_subsystem
+        type: serving
+        cardinality: many
+        resolve_by: slug
+        inverse: ~
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Technology Infrastructure (Layer 4)
+  # ══════════════════════════════════════════════
+  technology_infrastructure:
+    label: Technology Infrastructure
+    layer: infrastructure_and_hosting
+    folder: 4-infrastructure-and-hosting/technology-infrastructure
+    id_field: name
+    archimate: system-software
+    graph_rank: 4
+    icon: ☁️
+    badge_category: infrastructure
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      cloud_provider:
+        type: string
+        required: false
+        label: Cloud Provider
+    relationships:
+      serves_software_subsystems:
+        target: software_subsystem
+        type: serving
+        cardinality: many
+        resolve_by: slug
+        inverse: ~
+        required: false
+      served_by_hosting_nodes:
+        target: hosting_node
+        type: serving
+        cardinality: many
+        resolve_by: name
+        inverse: ~
+        required: false
 
 # ═══════════════════════════════════════════════════════════════
 # Relationship Type Reference

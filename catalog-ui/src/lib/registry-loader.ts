@@ -414,8 +414,9 @@ function buildGraphIndexes(
     typeList.push(el);
     byType.set(el.elementType, typeList);
 
-    // By domain
-    const domain = (el.fields.domain as string) ?? 'unknown';
+    // By domain — normalize to slug format so "NovaCRM Platform" and "novacrm-platform" resolve to the same key
+    const rawDomain = (el.fields.domain as string) ?? 'unknown';
+    const domain = rawDomain === 'unknown' ? 'unknown' : rawDomain.toLowerCase().replace(/\s+/g, '-');
     const domainList = byDomain.get(domain) ?? [];
     domainList.push(el);
     byDomain.set(domain, domainList);
@@ -484,7 +485,7 @@ export function toLegacyElements(
   return domainElements.map((el) => ({
     id: el.id,
     name: (el.fields.name as string) ?? el.id,
-    type: el.elementType.replace(/_/g, '-'),  // software_system → software-system
+    type: el.elementType,  // Keep underscore format — matches NODE_STYLES, ELEMENT_ICONS, TYPE_BADGES keys
     typeLabel: el.typeLabel,
     layer: el.layer as LegacyElement['layer'],
     domain: domainId,
