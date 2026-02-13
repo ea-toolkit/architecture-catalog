@@ -134,7 +134,7 @@ const ELEMENT_ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function BaseNode({ data, id }: NodeProps) {
-  const d = data as BaseNodeData;
+  const d = data as unknown as BaseNodeData;
   const style = d.style;
   const isFocused = d.isFocusCenter;
   // Use hardcoded SVG icon if available, then mappingIcon emoji from YAML, then generic default

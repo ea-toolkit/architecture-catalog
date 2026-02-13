@@ -30,6 +30,12 @@ const formatColors = {
   </div>
   
   <div class="page-body">
+    {diagrams.length === 0 ? (
+      <div style="text-align: center; padding: 48px 24px; color: rgb(var(--ec-page-text-muted));">
+        <p style="font-size: 14px;">No diagrams found. Add diagram files to the <code>views/</code> folder to get started.</p>
+      </div>
+    ) : (
+    <Fragment>
     <!-- Format filter pills -->
     <div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
       <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); padding: 6px 0;">Filter:</span>
@@ -109,6 +115,8 @@ const formatColors = {
         </div>
       );
     })}
+    </Fragment>
+    )}
   </div>
 </Layout>
 

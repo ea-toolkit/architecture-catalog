@@ -74,7 +74,7 @@ function ElementContextGraphInner({ element, allElements, height = 350 }: Elemen
   const onNodeClick: NodeMouseHandler = useCallback((event, node) => {
     // Don't navigate if clicking on the doc icon link
     if ((event.target as HTMLElement).closest('a')) return;
-    const url = (node.data as any)?.catalogUrl;
+    const url = (node.data as Record<string, unknown>)?.catalogUrl as string | undefined;
     if (url) window.location.href = url;
   }, []);
 

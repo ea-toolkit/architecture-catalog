@@ -77,7 +77,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
       setEdges(allLayoutedEdges);
     } else {
       const visibleNodeIds = new Set(
-        allLayoutedNodes.filter(n => !hiddenTypes.has((n.data as any)?.type)).map(n => n.id)
+        allLayoutedNodes.filter(n => !hiddenTypes.has((n.data as Record<string, unknown>)?.type as string)).map(n => n.id)
       );
       setNodes(allLayoutedNodes.filter(n => visibleNodeIds.has(n.id)));
       setEdges(allLayoutedEdges.filter(e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target)));
@@ -133,7 +133,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
 
   // Legend items from edge/relationship types in the graph
   const legendEdgeItems = useMemo(() => {
-    const types = new Set(edges.map(e => (e.data as any)?.relationship).filter(Boolean));
+    const types = new Set(edges.map(e => (e.data as Record<string, unknown>)?.relationship as string).filter(Boolean));
     return Array.from(types).map(rel => ({
       type: rel,
       style: EDGE_STYLES[rel] || EDGE_STYLES['default'],
@@ -173,7 +173,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
           <Controls position="top-left" showInteractive={false} />
           <MiniMap
             nodeColor={(node) => {
-              const style = (node.data as any)?.style;
+              const style = (node.data as Record<string, unknown>)?.style as Record<string, string> | undefined;
               return style?.border || '#94a3b8';
             }}
             maskColor="rgba(0,0,0,0.1)"

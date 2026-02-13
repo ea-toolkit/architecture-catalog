@@ -183,7 +183,7 @@ function FocusModeContent({
   );
 
   const centerNode = allNodes.find((n) => n.id === centerNodeId);
-  const centerLabel = (centerNode?.data as any)?.label || centerNodeId;
+  const centerLabel = (centerNode?.data as Record<string, unknown>)?.label as string || centerNodeId;
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -268,8 +268,8 @@ export default function FocusModeModal({
   if (!isOpen || !centerNodeId) return null;
 
   const centerNode = allNodes.find((n) => n.id === centerNodeId);
-  const centerLabel = (centerNode?.data as any)?.label || centerNodeId;
-  const centerType = (centerNode?.data as any)?.elementType || 'Element';
+  const centerLabel = (centerNode?.data as Record<string, unknown>)?.label as string || centerNodeId;
+  const centerType = (centerNode?.data as Record<string, unknown>)?.elementType as string || 'Element';
 
   return (
     <div

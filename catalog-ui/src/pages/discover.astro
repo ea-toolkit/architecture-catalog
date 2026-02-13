@@ -26,6 +26,12 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
   </div>
 
   <div class="page-body">
+    {elements.length === 0 ? (
+      <div style="text-align: center; padding: 48px 24px; color: rgb(var(--ec-page-text-muted));">
+        <p style="font-size: 14px;">No elements registered yet. Add <code>.md</code> files to <code>registry-v2/</code> to get started.</p>
+      </div>
+    ) : (
+    <Fragment>
     <!-- Filter chips -->
     <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; align-items: center;">
       <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Filter:</span>
@@ -86,5 +92,7 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
         </tbody>
       </table>
     </div>
+    </Fragment>
+    )}
   </div>
 </Layout>
