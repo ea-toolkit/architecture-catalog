@@ -482,30 +482,40 @@ export function toLegacyElements(
 ): LegacyElement[] {
   const domainElements = graph.indexes.byDomain.get(domainId) ?? [];
 
-  return domainElements.map((el) => ({
-    id: el.id,
-    name: (el.fields.name as string) ?? el.id,
-    type: el.elementType,  // Keep underscore format — matches NODE_STYLES, ELEMENT_ICONS, TYPE_BADGES keys
-    typeLabel: el.typeLabel,
-    layer: el.layer as LegacyElement['layer'],
-    domain: domainId,
-    description: (el.fields.description as string) ?? '',
-    make_or_buy: el.fields.make_or_buy as LegacyElement['make_or_buy'],
-    status: (el.fields.status as LegacyElement['status']) ?? 'active',
-    owner: el.fields.owner as string | undefined,
-    relationships: el.relationships.flatMap((rel) =>
-      rel.refs
-        .filter((ref) => ref.resolved && ref.targetId)
-        .map((ref) => ({
-          target: ref.targetId!,
-          targetName: ref.targetName ?? ref.raw,
-          type: rel.type,
-          fieldKey: rel.fieldKey,
-        }))
-    ),
-    // Incoming edges — populated below
-    incomingRelationships: [],
-  }));
+  return domainElements.map((el) => {
+    // Derive schema metadata from the mapping — drives styling without hardcoding
+    const typeDef = graph.mapping.elements[el.elementType];
+    const layerDef = typeDef ? graph.mapping.layers?.[typeDef.layer] : undefined;
+
+    return {
+      id: el.id,
+      name: (el.fields.name as string) ?? el.id,
+      type: el.elementType,  // Keep underscore format — matches NODE_STYLES, ELEMENT_ICONS, TYPE_BADGES keys
+      typeLabel: el.typeLabel,
+      layer: el.layer as LegacyElement['layer'],
+      domain: domainId,
+      description: (el.fields.description as string) ?? '',
+      make_or_buy: el.fields.make_or_buy as LegacyElement['make_or_buy'],
+      status: (el.fields.status as LegacyElement['status']) ?? 'active',
+      owner: el.fields.owner as string | undefined,
+      graphRank: typeDef?.graph_rank ?? 1,
+      layerColor: layerDef?.color ?? '#6b7280',
+      layerBg: layerDef?.bg ?? '#f9fafb',
+      mappingIcon: typeDef?.icon ?? '▪',
+      relationships: el.relationships.flatMap((rel) =>
+        rel.refs
+          .filter((ref) => ref.resolved && ref.targetId)
+          .map((ref) => ({
+            target: ref.targetId!,
+            targetName: ref.targetName ?? ref.raw,
+            type: rel.type,
+            fieldKey: rel.fieldKey,
+          }))
+      ),
+      // Incoming edges — populated below
+      incomingRelationships: [],
+    };
+  });
 }
 
 /**
@@ -529,8 +539,14 @@ export function toLegacyDomains(graph: RegistryGraph): LegacyDomain[] {
       counts[label] = (counts[label] ?? 0) + 1;
     }
 
-    // Find domain description from architecture-area-domain file
-    const domainElement = elements.find((e) => e.elementType === 'architecture_area_domain');
+    // Find the domain anchor element — use graph_rank 0 (vocabulary-agnostic)
+    // Falls back to element whose slug matches the domain ID
+    const domainElement =
+      elements.find((e) => {
+        const typeDef = graph.mapping.elements[e.elementType];
+        return typeDef && typeDef.graph_rank === 0;
+      }) ??
+      elements.find((e) => e.id.split('--')[1] === domainId);
     const description = domainElement
       ? (domainElement.fields.description as string) ?? ''
       : '';

@@ -250,12 +250,13 @@ export const RELATIONSHIP_SEMANTICS: Record<string, RelationshipSemantics> = {
 };
 
 /**
- * Get the hierarchy rank for an element type
- * Returns 1 (default) if type is not in hierarchy
+ * Get the hierarchy rank for an element type.
+ * Checks hardcoded overrides first, then uses schema-derived fallbackRank
+ * from registry-mapping.yaml graph_rank field.
  */
-export function getElementRank(type: string): number {
+export function getElementRank(type: string, fallbackRank?: number): number {
   const normalizedType = type.toLowerCase().replace(/-/g, '_').replace(/ /g, '_');
-  return ELEMENT_HIERARCHY[normalizedType] ?? 1;
+  return ELEMENT_HIERARCHY[normalizedType] ?? fallbackRank ?? 1;
 }
 
 /**

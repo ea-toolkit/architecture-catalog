@@ -59,6 +59,14 @@ export interface Element {
   status: 'active' | 'planned' | 'deprecated';
   owner?: string;
   aggregate?: string;
+  /** Schema-derived: left-to-right rank from registry-mapping.yaml graph_rank */
+  graphRank: number;
+  /** Schema-derived: layer border color from registry-mapping.yaml layers */
+  layerColor: string;
+  /** Schema-derived: layer background color from registry-mapping.yaml layers */
+  layerBg: string;
+  /** Schema-derived: icon emoji from registry-mapping.yaml icon field */
+  mappingIcon: string;
   relationships: { target: string; targetName: string; type: string; fieldKey?: string }[];
   incomingRelationships?: { source: string; sourceName: string; type: string; fieldKey: string }[];
 }

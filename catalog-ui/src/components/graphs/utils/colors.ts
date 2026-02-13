@@ -126,9 +126,25 @@ export const EDGE_STYLES: Record<string, EdgeStyle> = {
   'default':       { stroke: '#94a3b8', strokeWidth: 1, label: '' },
 };
 
-export function getNodeStyle(type: string): NodeStyle {
+/**
+ * Get node style — checks hardcoded overrides first, then falls back
+ * to schema-derived style from registry-mapping.yaml layer colors.
+ * This ensures custom element types get proper styling without code changes.
+ */
+export function getNodeStyle(type: string, fallback?: { bg: string; border: string }): NodeStyle {
   const normalized = type.replace(/-/g, '_');
-  return NODE_STYLES[normalized] || NODE_STYLES['logical_component'];
+  if (NODE_STYLES[normalized]) return NODE_STYLES[normalized];
+  if (fallback) {
+    return {
+      bg: fallback.bg,
+      border: fallback.border,
+      text: '#334155',
+      borderStyle: 'solid',
+      borderRadius: '8px',
+      icon: '?',
+    };
+  }
+  return NODE_STYLES['logical_component'];
 }
 
 export function getEdgeStyle(relationship: string): EdgeStyle {

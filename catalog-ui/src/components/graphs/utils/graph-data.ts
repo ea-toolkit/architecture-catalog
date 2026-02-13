@@ -1,6 +1,7 @@
 // catalog-ui/src/components/graphs/utils/graph-data.ts
-// Transform mock data → ReactFlow nodes/edges for domain context maps
+// Transform registry data → ReactFlow nodes/edges for domain context maps
 // Uses meta-model config for hierarchy and relationship semantics
+// Falls back to schema-derived data from registry-mapping.yaml for unknown types
 
 import type { Node, Edge } from '@xyflow/react';
 import type { Element, Domain } from '../../../data/registry';
@@ -12,6 +13,21 @@ import {
 } from '../../../config/meta-model.config';
 
 /**
+ * Helper: get style for an element using schema-derived fallback
+ * Known types get rich hand-crafted styles; unknown types get layer-appropriate colors
+ */
+function getElementStyle(el: Element) {
+  return getNodeStyle(el.type, { bg: el.layerBg, border: el.layerColor });
+}
+
+/**
+ * Helper: get rank for an element using schema-derived fallback
+ */
+function getElementGraphRank(el: Element) {
+  return getElementRank(el.type, el.graphRank);
+}
+
+/**
  * Build the full domain context map nodes + edges.
  * Uses meta-model config to determine hierarchy and edge directions.
  */
@@ -21,7 +37,7 @@ export function buildDomainGraph(
 ): { nodes: Node[]; edges: Edge[] } {
   const nodes: Node[] = [];
   const edgeMap = new Map<string, Edge>();
-  
+
   // Create element lookup maps
   const elementById = new Map(elements.map(e => [e.id, e]));
   const elementIds = new Set(elements.map(e => e.id));
@@ -37,16 +53,16 @@ export function buildDomainGraph(
       elementType: 'Architecture Area',
       catalogUrl: `/domains/${domain.id}`,
       color: domain.color,
-      style: NODE_STYLES['domain'],
+      style: NODE_STYLES['domain'] ?? { bg: '#f1f5f9', border: '#64748b', text: '#334155', borderStyle: 'solid', borderRadius: '12px', icon: 'D' },
       rank: 0,
     },
   });
 
-  // 2. Element nodes with rank from meta-model
+  // 2. Element nodes with rank from schema (meta-model override → YAML fallback)
   for (const el of elements) {
-    const style = getNodeStyle(el.type);
-    const rank = getElementRank(el.type);
-    
+    const style = getElementStyle(el);
+    const rank = getElementGraphRank(el);
+
     nodes.push({
       id: el.id,
       type: 'baseNode',
@@ -58,6 +74,7 @@ export function buildDomainGraph(
         catalogUrl: `/catalog/${el.id}`,
         status: el.status,
         makeBuy: el.make_or_buy,
+        mappingIcon: el.mappingIcon,
         style,
         rank,
       },
@@ -65,7 +82,6 @@ export function buildDomainGraph(
   }
 
   // 3. Build edges with normalized directions for layout
-  // Track which elements are connected for later domain→element connections
   const connectedElements = new Set<string>();
 
   for (const el of elements) {
@@ -78,7 +94,7 @@ export function buildDomainGraph(
 
       // Get relationship semantics from config
       const semantics = getRelationshipSemantics(rel.type);
-      
+
       // Normalize edge direction for proper dagre layout
       const normalized = normalizeEdgeForLayout(
         el.id,
@@ -90,7 +106,7 @@ export function buildDomainGraph(
 
       // Create unique edge ID (use original direction for uniqueness)
       const edgeId = `${el.id}--${rel.type}--${rel.target}`;
-      
+
       if (!edgeMap.has(edgeId)) {
         edgeMap.set(edgeId, {
           id: edgeId,
@@ -111,33 +127,26 @@ export function buildDomainGraph(
     }
   }
 
-  // 4. Connect domain to rank-1 elements (immediate children by hierarchy)
-  // Per meta-model:
-  //   - Domain → [composition] → Logical Component
-  //   - Domain → [owns] → Data Concept
+  // 4. Connect domain to immediate children (vocabulary-agnostic)
+  // Auto-connect unconnected rank-1 elements to the domain anchor using composition
   const targetsWithIncoming = new Set(
     Array.from(edgeMap.values()).map(e => e.target)
   );
 
   for (const el of elements) {
-    const rank = getElementRank(el.type);
-    
+    const rank = getElementGraphRank(el);
+
     // Connect domain to rank 1 elements that have no other incoming edges
     if (rank === 1 && !targetsWithIncoming.has(el.id)) {
-      // Use appropriate relationship type based on element type
-      const isDataElement = el.type.includes('data');
-      const relType = isDataElement ? 'owns' : 'composition';
-      const label = isDataElement ? 'owns' : 'contains';
-      
-      const edgeId = `${domain.id}--${relType}--${el.id}`;
+      const edgeId = `${domain.id}--composition--${el.id}`;
       edgeMap.set(edgeId, {
         id: edgeId,
         source: domain.id,
         target: el.id,
         type: 'relationshipEdge',
         data: {
-          relationship: relType,
-          label: label,
+          relationship: 'composition',
+          label: 'contains',
         },
       });
     }
@@ -196,9 +205,9 @@ export function buildElementGraph(
   const elementById = new Map(allElements.map(e => [e.id, e]));
 
   // Center node
-  const style = getNodeStyle(element.type);
-  const rank = getElementRank(element.type);
-  
+  const style = getElementStyle(element);
+  const rank = getElementGraphRank(element);
+
   nodes.push({
     id: element.id,
     type: 'baseNode',
@@ -210,6 +219,7 @@ export function buildElementGraph(
       catalogUrl: `/catalog/${element.id}`,
       status: element.status,
       makeBuy: element.make_or_buy,
+      mappingIcon: element.mappingIcon,
       style,
       rank,
       isFocusCenter: true,
@@ -220,8 +230,8 @@ export function buildElementGraph(
   // Outgoing relationships (this element → target)
   for (const rel of element.relationships) {
     const targetEl = elementById.get(rel.target);
-    const tStyle = getNodeStyle(targetEl?.type || 'logical_component');
-    const tRank = getElementRank(targetEl?.type || 'logical_component');
+    const tStyle = targetEl ? getElementStyle(targetEl) : getNodeStyle('logical_component');
+    const tRank = targetEl ? getElementGraphRank(targetEl) : 1;
     const semantics = getRelationshipSemantics(rel.type);
 
     if (!addedNodes.has(rel.target)) {
@@ -231,11 +241,12 @@ export function buildElementGraph(
         position: { x: 0, y: 0 },
         data: {
           label: rel.targetName,
-          type: targetEl?.type || 'logical_component',
+          type: targetEl?.type || 'unknown',
           elementType: targetEl?.typeLabel || 'Element',
           catalogUrl: `/catalog/${rel.target}`,
           status: targetEl?.status,
           makeBuy: targetEl?.make_or_buy,
+          mappingIcon: targetEl?.mappingIcon,
           style: tStyle,
           rank: tRank,
         },
@@ -248,7 +259,7 @@ export function buildElementGraph(
       element.id,
       element.type,
       rel.target,
-      targetEl?.type || 'logical_component',
+      targetEl?.type || 'unknown',
       rel.type
     );
 
@@ -256,7 +267,7 @@ export function buildElementGraph(
       id: `${element.id}--${rel.type}--${rel.target}`,
       source: normalized.source,
       target: normalized.target,
-      type: 'archimateEdge',
+      type: 'relationshipEdge',
       data: {
         relationship: rel.type,
         label: semantics.label,
@@ -268,11 +279,11 @@ export function buildElementGraph(
   // Incoming relationships (other elements → this element)
   for (const other of allElements) {
     if (other.id === element.id) continue;
-    
+
     for (const rel of other.relationships) {
       if (rel.target === element.id) {
-        const oStyle = getNodeStyle(other.type);
-        const oRank = getElementRank(other.type);
+        const oStyle = getElementStyle(other);
+        const oRank = getElementGraphRank(other);
         const semantics = getRelationshipSemantics(rel.type);
 
         if (!addedNodes.has(other.id)) {
@@ -287,6 +298,7 @@ export function buildElementGraph(
               catalogUrl: `/catalog/${other.id}`,
               status: other.status,
               makeBuy: other.make_or_buy,
+              mappingIcon: other.mappingIcon,
               style: oStyle,
               rank: oRank,
             },

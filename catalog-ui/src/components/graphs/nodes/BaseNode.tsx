@@ -16,6 +16,8 @@ export interface BaseNodeData {
   color?: string;
   isFocusCenter?: boolean;
   opacity?: number;
+  /** Schema-derived icon emoji from registry-mapping.yaml — used as fallback */
+  mappingIcon?: string;
 }
 
 // Icon mapping for different element types
@@ -135,7 +137,12 @@ export default function BaseNode({ data, id }: NodeProps) {
   const d = data as BaseNodeData;
   const style = d.style;
   const isFocused = d.isFocusCenter;
-  const icon = ELEMENT_ICONS[d.type] || ELEMENT_ICONS.default;
+  // Use hardcoded SVG icon if available, then mappingIcon emoji from YAML, then generic default
+  const icon = ELEMENT_ICONS[d.type] || (
+    d.mappingIcon && d.mappingIcon !== '▪'
+      ? <span style={{ fontSize: 14, lineHeight: 1 }}>{d.mappingIcon}</span>
+      : ELEMENT_ICONS.default
+  );
   const [hovered, setHovered] = React.useState(false);
 
   const defaultShadow = '0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)';
