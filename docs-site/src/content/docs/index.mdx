@@ -1,0 +1,34 @@
+---
+title: Architecture Catalog
+description: A schema-driven, white-label architecture catalog that turns Markdown files into a beautiful, interactive static site.
+template: splash
+hero:
+  tagline: Model your enterprise architecture using plain Markdown files. Define your schema in a single YAML file. Get a fully navigable catalog with zero custom code.
+  actions:
+    - text: Get Started
+      link: /getting-started/introduction/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/ea-toolkit/architecture-catalog
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why Architecture Catalog?
+
+<CardGrid stagger>
+  <Card title="Schema-driven" icon="setting">
+    One YAML file defines everything: element types, fields, relationships, layers, and branding. Zero hardcoded type names in the UI.
+  </Card>
+  <Card title="Plain Markdown" icon="document">
+    Each architecture element is a `.md` file with YAML frontmatter. No proprietary formats, no vendor lock-in. Git-friendly and AI-readable.
+  </Card>
+  <Card title="Static site" icon="rocket">
+    Builds to pure static HTML with Astro. Deploy anywhere: GitHub Pages, S3, Netlify, or behind your VPN. No servers, no databases.
+  </Card>
+  <Card title="Interactive graphs" icon="random">
+    Dependency graphs powered by React Flow with automatic dagre layout. Search, filter, export to PNG.
+  </Card>
+</CardGrid>

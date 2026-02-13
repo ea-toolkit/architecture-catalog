@@ -109,11 +109,8 @@ scripts/
   extract_view.py            # Extract YAML from .drawio
   generate_library.py        # Generate draw.io library
 
-docs/
-  ARCHITECTURE.md            # Architecture overview
-  CONFIGURATION.md           # Configuration guide
-  CONTRIBUTING.md            # How to contribute
-  GETTING-STARTED.md         # Quick start guide
+docs-site/                   # Starlight documentation site
+  src/content/docs/            # All documentation pages (Markdown)
 ```
 
 ---
@@ -153,7 +150,7 @@ The UI is fully schema-driven via `models/registry-mapping.yaml`. Adding a new e
 4. Create registry entries in `registry-v2/3-applications-and-data/`
 5. Update welcome hook to show new skill
 
-See `docs/CONTRIBUTING.md` for detailed instructions.
+See `docs-site/src/content/docs/contributing/how-to-contribute.md` for detailed instructions.
 
 ---
 
