@@ -1,7 +1,7 @@
 // catalog-ui/src/components/graphs/DomainContextMap.tsx
 // Full domain context map with ReactFlow - used on /domains/[id] page
 
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import {
   ReactFlow,
   Background,
@@ -35,6 +35,10 @@ const edgeTypes = {
   relationshipEdge: RelationshipEdge,
 };
 
+// Status filter options
+const STATUS_OPTIONS = ['all', 'active', 'planned', 'deprecated'] as const;
+type StatusFilter = typeof STATUS_OPTIONS[number];
+
 interface DomainContextMapProps {
   domain: Domain;
   elements: Element[];
@@ -42,6 +46,7 @@ interface DomainContextMapProps {
 
 function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
   const { fitView } = useReactFlow();
+  const graphContainerRef = useRef<HTMLDivElement>(null);
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -53,6 +58,12 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
 
   // Legend filter state — which element types are visible
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set());
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Status filter state
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   // All laid-out nodes/edges (unfiltered) for reference
   const [allLayoutedNodes, setAllLayoutedNodes] = useState<Node[]>([]);
@@ -69,20 +80,42 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
     setIsLayoutReady(true);
   }, [domain, elements, setNodes, setEdges]);
 
-  // Apply type filtering when hiddenTypes changes
+  // Apply combined filtering: hiddenTypes + statusFilter + searchQuery
   useEffect(() => {
     if (!isLayoutReady) return;
-    if (hiddenTypes.size === 0) {
-      setNodes(allLayoutedNodes);
-      setEdges(allLayoutedEdges);
-    } else {
-      const visibleNodeIds = new Set(
-        allLayoutedNodes.filter(n => !hiddenTypes.has((n.data as Record<string, unknown>)?.type as string)).map(n => n.id)
-      );
-      setNodes(allLayoutedNodes.filter(n => visibleNodeIds.has(n.id)));
-      setEdges(allLayoutedEdges.filter(e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target)));
-    }
-  }, [hiddenTypes, allLayoutedNodes, allLayoutedEdges, isLayoutReady, setNodes, setEdges]);
+
+    const query = searchQuery.toLowerCase().trim();
+
+    // Filter nodes
+    const filteredNodes = allLayoutedNodes.map(n => {
+      const d = n.data as Record<string, unknown>;
+      const type = d?.type as string;
+      const status = d?.status as string;
+      const label = (d?.label as string || '').toLowerCase();
+
+      // Hard filter: hidden types completely remove nodes
+      if (hiddenTypes.has(type)) return null;
+
+      // Hard filter: status filter removes non-matching nodes (domain nodes always visible)
+      if (statusFilter !== 'all' && type !== 'domain' && status && status !== statusFilter) return null;
+
+      // Soft filter: search dims non-matching nodes but keeps them visible
+      const matchesSearch = !query || label.includes(query) || (type || '').includes(query);
+
+      return {
+        ...n,
+        style: { ...n.style, opacity: matchesSearch ? 1 : 0.2, transition: 'opacity 0.2s' },
+      };
+    }).filter(Boolean) as Node[];
+
+    const visibleNodeIds = new Set(filteredNodes.map(n => n.id));
+    const filteredEdges = allLayoutedEdges.filter(
+      e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target)
+    );
+
+    setNodes(filteredNodes);
+    setEdges(filteredEdges);
+  }, [hiddenTypes, statusFilter, searchQuery, allLayoutedNodes, allLayoutedEdges, isLayoutReady, setNodes, setEdges]);
 
   // Fit view when layout is ready
   useEffect(() => {
@@ -120,6 +153,63 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
     });
   }, []);
 
+  // PNG Export — renders the ReactFlow viewport to a canvas
+  const handleExportPng = useCallback(() => {
+    const viewport = graphContainerRef.current?.querySelector('.react-flow__viewport') as HTMLElement | null;
+    if (!viewport) return;
+
+    const canvas = document.createElement('canvas');
+    const svgEl = viewport.querySelector('svg');
+    const bounds = viewport.getBoundingClientRect();
+
+    // Use a higher resolution for crisp export
+    const scale = 2;
+    canvas.width = bounds.width * scale;
+    canvas.height = bounds.height * scale;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Draw white background
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Serialize the SVG + foreign objects to an image
+    const svgData = new XMLSerializer().serializeToString(viewport);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `${domain.name.replace(/\s+/g, '-').toLowerCase()}-context-map.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      // Fallback: use SVG download if PNG rendering fails (CORS/foreignObject issues)
+      const fallbackLink = document.createElement('a');
+      fallbackLink.download = `${domain.name.replace(/\s+/g, '-').toLowerCase()}-context-map.svg`;
+      fallbackLink.href = url;
+      fallbackLink.click();
+    };
+    img.src = url;
+  }, [domain.name]);
+
+  // Status counts for filter pills
+  const statusCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: elements.length, active: 0, planned: 0, deprecated: 0 };
+    for (const el of elements) {
+      if (el.status && counts[el.status] !== undefined) counts[el.status]++;
+    }
+    return counts;
+  }, [elements]);
+
   // Legend items from node types in the graph
   const legendItems = useMemo(() => {
     const types = new Set(elements.map(e => e.type));
@@ -143,7 +233,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
 
   if (!isLayoutReady) {
     return (
-      <div style={{ width: '100%', height: '100%', minHeight: 500, background: '#fafafa', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
+      <div style={{ width: '100%', height: '100%', minHeight: 400, background: '#fafafa', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
         Loading graph...
       </div>
     );
@@ -151,7 +241,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%', minHeight: 500, position: 'relative', background: '#fafafa', borderRadius: 12, overflow: 'hidden' }}>
+      <div ref={graphContainerRef} style={{ width: '100%', height: '100%', minHeight: 400, position: 'relative', background: '#fafafa', borderRadius: 12, overflow: 'hidden' }}>
         <EdgeMarkerDefs />
 
         {/* Main Domain Map */}
@@ -165,7 +255,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
           edgeTypes={edgeTypes}
           fitView
           fitViewOptions={{ padding: 0.15 }}
-          minZoom={0.2}
+          minZoom={0.15}
           maxZoom={2}
           proOptions={{ hideAttribution: true }}
         >
@@ -179,6 +269,96 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
             maskColor="rgba(0,0,0,0.1)"
             position="bottom-left"
           />
+
+          {/* Toolbar Panel — search, status filter, export */}
+          <Panel position="top-right">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {/* Search */}
+              <div style={{
+                background: 'white',
+                border: '1px solid #e2e8f0',
+                borderRadius: 8,
+                padding: '6px 10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search elements..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    border: 'none',
+                    outline: 'none',
+                    fontSize: 11,
+                    width: 130,
+                    background: 'transparent',
+                    color: '#334155',
+                  }}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8', fontSize: 14, lineHeight: 1, padding: 0 }}
+                  >
+                    x
+                  </button>
+                )}
+              </div>
+
+              {/* Status filter + Export row */}
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {STATUS_OPTIONS.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setStatusFilter(s)}
+                    style={{
+                      padding: '3px 8px',
+                      borderRadius: 6,
+                      border: `1px solid ${statusFilter === s ? '#3b82f6' : '#e2e8f0'}`,
+                      background: statusFilter === s ? '#eff6ff' : 'white',
+                      color: statusFilter === s ? '#3b82f6' : '#64748b',
+                      fontSize: 10,
+                      fontWeight: statusFilter === s ? 600 : 400,
+                      cursor: 'pointer',
+                      textTransform: 'capitalize',
+                    }}
+                  >
+                    {s}{s !== 'all' && statusCounts[s] > 0 ? ` (${statusCounts[s]})` : ''}
+                  </button>
+                ))}
+                {/* Export button */}
+                <button
+                  onClick={handleExportPng}
+                  title="Export as PNG"
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: 6,
+                    border: '1px solid #e2e8f0',
+                    background: 'white',
+                    color: '#64748b',
+                    fontSize: 10,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 3,
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  PNG
+                </button>
+              </div>
+            </div>
+          </Panel>
 
           {/* Legend Panel — clickable to filter types */}
           <Panel position="bottom-right">
