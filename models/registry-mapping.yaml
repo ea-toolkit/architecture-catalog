@@ -3,7 +3,7 @@
 # ═══════════════════════════════════════════════════════════════
 #
 # PURPOSE:
-#   Maps the enterprise meta model (conceptual) to the registry-v2
+#   Maps your architecture model (conceptual) to the registry-v2
 #   folder structure (physical). This file is the single contract
 #   consumed by:
 #     1. registry-loader.ts   — builds the in-memory graph for FE
@@ -11,17 +11,20 @@
 #     3. SaaS data pipelines  — know which .md files to write
 #
 # DESIGN PRINCIPLES:
-#   - Schema-driven: FE never hard-codes element types or field names
+#   - Schema-driven: UI never hard-codes element types or field names
+#   - Vocabulary-agnostic: works with any architecture framework
+#     (ArchiMate, TOGAF, C4, custom). Name your layers, elements,
+#     and relationships however you want — the UI adapts automatically.
 #   - Graceful degradation: every field & relationship is optional
 #   - Extensible: add a new element = add one entry here, zero code
 #
 # HOW TO READ:
 #   element_key:
 #     label         — human-friendly name for UI
-#     layer         — which EMM layer it sits in
+#     layer         — which layer it sits in (you define layers below)
 #     folder        — relative path under registry-v2/
 #     id_field      — which frontmatter field is the file's identity
-#     archimate     — ArchiMate 3.x element type
+#     archimate     — (optional) ArchiMate 3.x type, for reference only
 #     graph_rank    — left-to-right position (0 = anchor, higher = right)
 #     icon          — short emoji/icon for compact rendering
 #     fields        — every frontmatter key the FE should look for
@@ -32,7 +35,7 @@
 #     relationships — arrows going OUT of this element
 #       key:          (frontmatter field name)
 #         target      — element_key this points to
-#         type        — archimate relationship type
+#         type        — relationship type (e.g., composition, realization)
 #         cardinality — one | many
 #         resolve_by  — slug | name | abbreviation (how to match target)
 #         inverse     — field name on the target type that points back
@@ -52,7 +55,7 @@ site:
   logo_text: A
 
 # ─────────────────────────────────────────────────────────────
-# Layer Definitions — ArchiMate standard layers
+# Layer Definitions — name these however you want
 # ─────────────────────────────────────────────────────────────
 layers:
   products_and_services:
@@ -77,7 +80,9 @@ layers:
     icon: I
 
 # ─────────────────────────────────────────────────────────────
-# ArchiMate Relationship Types — verbs for outgoing / incoming
+# Relationship Types — verbs for outgoing / incoming edges
+# These names are used as the `type` value in element relationships.
+# ArchiMate-inspired defaults are provided; rename freely.
 # ─────────────────────────────────────────────────────────────
 relationship_types:
   composition:
@@ -121,7 +126,9 @@ domain_color_palette:
   - "#6366f1"
 
 # ─────────────────────────────────────────────────────────────
-# Elements
+# Elements — define your element types here
+# The `archimate:` field is optional metadata for reference.
+# It is NOT used by the UI or loader — only for documentation.
 # ─────────────────────────────────────────────────────────────
 elements:
 
@@ -1147,7 +1154,9 @@ elements:
 # ═══════════════════════════════════════════════════════════════
 # Relationship Type Reference
 # ═══════════════════════════════════════════════════════════════
-# Quick lookup: ArchiMate arrow type → visual semantics for rendering
+# Quick lookup: relationship type → visual semantics for rendering
+# These are ArchiMate-inspired defaults. You can rename, add, or
+# remove types freely — the UI reads them from this file.
 #
 # type          │ arrow    │ direction │ layout │ notes
 # ──────────────┼──────────┼───────────┼────────┼─────────────────────
