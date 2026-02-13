@@ -1,0 +1,177 @@
+---
+import '../styles/global.css';
+import { domains, LAYER_META, SITE_CONFIG } from '../data/registry';
+
+interface Props {
+  title: string;
+  activeDomain?: string;
+  activeElement?: string;
+  sidebarContent?: 'domains' | 'domain-detail';
+}
+
+const { title, activeDomain, activeElement, sidebarContent = 'domains' } = Astro.props;
+const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain) : undefined;
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} — {SITE_CONFIG.name}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-size='16' font-weight='bold' fill='white' font-family='Inter'>A</text></svg>" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ═══ Icon Bar (left rail) ═══ -->
+    <nav class="icon-bar">
+      <a href="/" class="icon-bar-logo" title={SITE_CONFIG.name}>{SITE_CONFIG.logo_text}</a>
+
+      <div class="icon-bar-nav">
+        <!-- Domains -->
+        <a href="/" class:list={["icon-bar-item", { active: !activeDomain && sidebarContent === 'domains' }]} title="Domains">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </a>
+
+        <!-- Discover -->
+        <a href="/discover" class="icon-bar-item" title="Discover">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </a>
+
+        <!-- Visualiser -->
+        <a href="#" class="icon-bar-item" title="Visualiser">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </a>
+
+        <!-- Diagrams -->
+        <a href="/diagrams" class="icon-bar-item" title="Diagrams">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </a>
+      </div>
+
+      <!-- Bottom: Meta Model -->
+      <a href="#" class="icon-bar-item" title="Meta Model" style="margin-top: auto; margin-bottom: 8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </a>
+    </nav>
+
+    <!-- ═══ Nested Sidebar ═══ -->
+    <aside class="nested-sidebar">
+      <!-- Search -->
+      <div class="nested-sidebar-search">
+        <div class="nested-sidebar-search-wrapper">
+          <svg class="nested-sidebar-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search catalog..." />
+        </div>
+      </div>
+
+      {/* Back button when inside a domain */}
+      {activeDomainData && (
+        <div class="sidebar-back">
+          <a href="/" class="sidebar-back-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            {activeDomainData.name}
+          </a>
+          <span class="badge badge-sm badge-domain" style="margin-left: auto;">Domain</span>
+        </div>
+      )}
+
+      <!-- Nav content -->
+      <nav class="sidebar-nav">
+        {!activeDomainData ? (
+          /* ── Top-level: Domain list ── */
+          <>
+            <div class="sidebar-group">
+              <div class="sidebar-group-header">
+                <span class="sidebar-group-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                </span>
+                <span class="sidebar-group-title">Architecture Domains</span>
+              </div>
+              <div class="sidebar-group-items">
+                {domains.map(d => (
+                  <a href={`/domains/${d.id}`} class:list={["sidebar-item", { active: activeDomain === d.id }]}>
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                      <span style={`width: 8px; height: 8px; border-radius: 50%; background: ${d.color}; flex-shrink: 0;`}></span>
+                      {d.name}
+                    </span>
+                    <span class="sidebar-item-count">{d.totalElements}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div class="sidebar-group">
+              <div class="sidebar-group-header">
+                <span class="sidebar-group-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </span>
+                <span class="sidebar-group-title">Meta Model Layers</span>
+              </div>
+              <div class="sidebar-group-items">
+                {Object.entries(LAYER_META).map(([key, meta]) => (
+                  <a href={`/discover?layer=${key}`} class="sidebar-item">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                      <span style={`width: 8px; height: 8px; border-radius: 3px; background: ${meta.color}; flex-shrink: 0;`}></span>
+                      {meta.name}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          /* ── Inside domain: Element navigation ── */
+          <slot name="sidebar" />
+        )}
+      </nav>
+    </aside>
+
+    <!-- ═══ Main Content ═══ -->
+    <main class="main-area">
+      <slot />
+    </main>
+
+  </div>
+
+  <!-- Sidebar auto-collapse for groups with > 6 items -->
+  <script>
+    const MAX_VISIBLE = 6;
+
+    function initSidebarCollapse() {
+      document.querySelectorAll('.sidebar-group-items').forEach(group => {
+        const items = Array.from(group.querySelectorAll(':scope > .sidebar-item'));
+        if (items.length <= MAX_VISIBLE) return;
+
+        // Mark overflow items
+        items.forEach((item, i) => {
+          if (i >= MAX_VISIBLE) item.classList.add('is-overflow');
+        });
+        group.classList.add('is-collapsible');
+
+        // Create toggle button
+        const remaining = items.length - MAX_VISIBLE;
+        const btn = document.createElement('button');
+        btn.className = 'sidebar-toggle-more';
+        btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg> <span>+${remaining} more</span>`;
+
+        btn.addEventListener('click', () => {
+          const expanded = group.classList.toggle('is-expanded');
+          btn.classList.toggle('is-expanded', expanded);
+          const label = btn.querySelector('span')!;
+          label.textContent = expanded ? '− less' : `+${remaining} more`;
+        });
+
+        group.appendChild(btn);
+      });
+    }
+
+    // Run on initial load and on Astro page transitions
+    initSidebarCollapse();
+    document.addEventListener('astro:after-swap', initSidebarCollapse);
+  </script>
+</body>
+</html>

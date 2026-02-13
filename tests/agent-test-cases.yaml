@@ -1,0 +1,164 @@
+# Agent Test Cases — Architecture Assistant
+# Purpose: Validate that AI agents can effectively use the repo data to assist architects.
+# Run these tests after populating registry data with domain information.
+#
+# Scoring criteria for each test:
+#   navigation:  Did the agent find the right files efficiently? (1-5)
+#   grounding:   Are answers backed by repo data with file citations? (1-5)
+#   honesty:     Does the agent admit gaps rather than hallucinate? (1-5)
+#   consistency: Do created artifacts match existing repo patterns? (1-5)
+#   usefulness:  Would an architect find this output valuable? (1-5)
+
+categories:
+
+  # ────────────────────────────────────────────
+  # Category 1: Q&A
+  # Understand the question, navigate to the right files,
+  # answer with citations, no assumptions or hallucinations.
+  # If the answer can't be found, say so.
+  # ────────────────────────────────────────────
+  qa:
+    description: >
+      Agent must answer architecture questions using only repo data.
+      Answers must cite specific files. Partial answers are acceptable
+      if the agent clearly states what information is missing.
+
+    tests:
+
+      - id: qa-1
+        name: Data ownership lookup
+        prompt: "What data aggregates does Tenant Management own?"
+        expected_sources:
+          - registry-v2/3-applications-and-data/logical-components/tenant-management.md
+        expects: >
+          Agent should list owned data (Tenant Aggregate) with
+          file citations. Should not invent data concepts not in the repo.
+
+      - id: qa-2
+        name: Make vs buy classification
+        prompt: "Which logical components in the NovaCRM Platform are make vs buy?"
+        expected_sources:
+          - registry-v2/3-applications-and-data/logical-components/
+        expects: >
+          Agent should list all LCs grouped by make/buy (Tenant Management: make,
+          Subscription Billing: make, Contact Analytics: buy). Should cite source files.
+
+      - id: qa-3
+        name: Relationship traversal
+        prompt: "What software systems realize the Subscription Billing logical component?"
+        expected_sources:
+          - registry-v2/3-applications-and-data/software-systems/billing-engine.md
+          - registry-v2/3-applications-and-data/logical-components/subscription-billing.md
+        expects: >
+          Agent should find Billing Engine realizes Subscription Billing.
+          Should cite the relationship field in the source file.
+
+      - id: qa-4
+        name: Registry mapping lookup
+        prompt: "What is the difference between a Logical Component and a Software System in our registry mapping?"
+        expected_sources:
+          - models/registry-mapping.yaml
+        expects: >
+          Agent should find both type definitions in registry-mapping.yaml and explain
+          the distinction (LC = logical boundary / ideal system boundary,
+          Software System = physical boundary registered in the catalog).
+
+      - id: qa-5
+        name: Gap admission
+        prompt: "What are the SLAs for the Analytics Warehouse integration?"
+        expected_sources: []
+        expects: >
+          Agent should admit this information is not in the architecture model.
+          Should not hallucinate SLA numbers. May suggest where to add the information.
+
+  # ────────────────────────────────────────────
+  # Category 2: Solution Proposal
+  # Given a problem, propose solutions grounded in repo data.
+  # Think broadly (upstream/downstream), cite rationale,
+  # no assumptions or hallucinations.
+  # ────────────────────────────────────────────
+  solution_proposal:
+    description: >
+      Agent must propose architecturally sound solutions to problems using
+      repo data as evidence. Solutions should consider impacts beyond the
+      immediate scope (upstream/downstream). Must cite which repo data
+      informed each recommendation. Multiple options are encouraged.
+
+    tests:
+
+      - id: sp-1
+        name: New data concept ownership
+        prompt: >
+          We need to introduce a new data concept called 'Payment Record'
+          that tracks payment transactions for subscriptions.
+          Which logical component should own it and why?
+        expected_sources:
+          - registry-v2/3-applications-and-data/logical-components/subscription-billing.md
+          - registry-v2/3-applications-and-data/data-aggregates/billing-aggregate.md
+          - models/registry-mapping.yaml
+        expects: >
+          Agent should reason about existing LC boundaries and data ownership
+          patterns. Should identify Subscription Billing as the natural owner
+          based on its existing ownership of Billing Aggregate.
+
+      - id: sp-2
+        name: Vendor replacement analysis
+        prompt: >
+          We want to replace the Analytics Warehouse (currently Snowflake) with
+          a different vendor. What elements in the architecture are impacted?
+        expected_sources:
+          - registry-v2/3-applications-and-data/software-systems/analytics-warehouse.md
+          - registry-v2/3-applications-and-data/software-subsystems/analytics-pipeline.md
+          - registry-v2/3-applications-and-data/physical-apis/analytics-query-api.md
+        expects: >
+          Agent should trace relationships from Analytics Warehouse through its
+          subsystems and APIs. Should identify Contact Analytics as the logical
+          component that would be affected.
+
+  # ────────────────────────────────────────────
+  # Category 3: Actions
+  # Create, update, or validate artifacts in the repo.
+  # Must follow existing patterns and conventions.
+  # ────────────────────────────────────────────
+  actions:
+    description: >
+      Agent must perform concrete actions on repo artifacts (create files,
+      update diagrams, run validation). Created artifacts must match existing
+      patterns (frontmatter format, naming conventions, styles, folder structure).
+
+    tests:
+
+      - id: act-1
+        name: Create registry entry from template
+        prompt: >
+          Create a registry entry for a new logical component called
+          'Notification Management' in the NovaCRM Platform domain. It is a make
+          component owned by platform-team.
+        expected_sources:
+          - registry-v2/3-applications-and-data/logical-components/_template.md
+          - registry-v2/3-applications-and-data/logical-components/ (existing entries for pattern reference)
+        expects: >
+          Agent should use the template, place file in correct folder with
+          kebab-case filename, fill frontmatter correctly. Body should note
+          that details are TBD rather than inventing capabilities.
+
+      - id: act-2
+        name: Run validation and interpret
+        prompt: "Run the validator and tell me what's inconsistent between the registry and diagrams."
+        expected_sources:
+          - scripts/validate.py
+        expects: >
+          Agent should run validate.py, interpret output, and summarize
+          any inconsistencies found.
+
+      - id: act-3
+        name: Validate registry mapping compliance
+        prompt: >
+          Check whether all registry entries follow the registry mapping schema.
+          Are there any entries in the wrong folder or missing required fields?
+        expected_sources:
+          - models/registry-mapping.yaml
+          - registry-v2/ (all entries)
+        expects: >
+          Agent should cross-reference type definitions in registry-mapping.yaml
+          against actual file locations. Should flag any mismatches.

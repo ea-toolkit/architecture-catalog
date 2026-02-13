@@ -1,0 +1,148 @@
+---
+// catalog-ui/src/pages/diagrams/[id].astro
+// Diagram detail page - renders the diagram viewer with domain sidebar
+
+import Layout from '../../layouts/Layout.astro';
+import { DiagramViewer } from '../../components/diagrams';
+import { diagrams, getDiagramById, getDiagramsByDomain } from '../../data/diagrams-mock';
+import { domains, getElementsByDomain, LAYER_META, type LayerKey } from '../../data/registry';
+
+export function getStaticPaths() {
+  return diagrams.map(d => ({
+    params: { id: d.id },
+  }));
+}
+
+const { id } = Astro.params;
+const diagram = getDiagramById(id!)!;
+const domain = domains.find(d => d.id === diagram.domain);
+const domainDiagrams = getDiagramsByDomain(diagram.domain);
+const domainElements = getElementsByDomain(diagram.domain);
+
+// Group elements by layer for sidebar
+type GroupedElements = Record<string, { type: string; typeLabel: string; elements: typeof domainElements }[]>;
+const elementsByLayer: GroupedElements = {};
+
+for (const el of domainElements) {
+  if (!elementsByLayer[el.layer]) elementsByLayer[el.layer] = [];
+  const existing = elementsByLayer[el.layer].find(g => g.type === el.type);
+  if (existing) {
+    existing.elements.push(el);
+  } else {
+    elementsByLayer[el.layer].push({
+      type: el.type, typeLabel: el.typeLabel,
+      elements: [el],
+    });
+  }
+}
+
+// Format badge colors
+const formatColors = {
+  plantuml: { bg: '#fef3c7', color: '#92400e' },
+  bpmn: { bg: '#ecfdf5', color: '#065f46' },
+  drawio: { bg: '#eff6ff', color: '#3b82f6' },
+};
+const fc = formatColors[diagram.format];
+---
+
+<Layout title={diagram.name} activeDomain={diagram.domain} sidebarContent="domain-detail">
+  <!-- Domain sidebar -->
+  <Fragment slot="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+        </span>
+        <span class="sidebar-group-title">Overview</span>
+      </div>
+      <div class="sidebar-group-items">
+        <a href={`/domains/${diagram.domain}`} class="sidebar-item">
+          <span>Architecture Overview</span>
+        </a>
+        <a href={`/domains/${diagram.domain}/context-map`} class="sidebar-item">
+          <span>Domain Context Map</span>
+        </a>
+      </div>
+    </div>
+
+    {/* Diagrams section */}
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon" style="background: #f59e0b15; color: #f59e0b;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </span>
+        <span class="sidebar-group-title">Diagrams</span>
+      </div>
+      <div class="sidebar-group-items">
+        {domainDiagrams.map(d => (
+          <a href={`/diagrams/${d.id}`} class:list={["sidebar-item", { active: d.id === id }]}>
+            <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{d.name}</span>
+            <span class="sidebar-type-label">{d.format}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    {/* Element layers */}
+    {Object.entries(elementsByLayer).map(([layerKey, groups]) => {
+      const layer = LAYER_META[layerKey as LayerKey];
+      return (
+        <div class="sidebar-group">
+          <div class="sidebar-group-header">
+            <span class="sidebar-group-icon" style={`background: ${layer.color}15; color: ${layer.color};`}>
+              <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${layer.color};`}></span>
+            </span>
+            <span class="sidebar-group-title">{layer.name}</span>
+          </div>
+          <div class="sidebar-group-items">
+            {groups.map(group => (
+              group.elements.map(el => (
+                <a href={`/catalog/${el.id}`} class="sidebar-item">
+                  <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{el.name}</span>
+                  <span class="sidebar-type-label">{group.typeLabel}</span>
+                </a>
+              ))
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </Fragment>
+
+  <div class="page-header">
+    <div class="page-header-breadcrumb">
+      <a href={`/domains/${diagram.domain}`}>{domain?.name || diagram.domain}</a>
+      <span>/</span>
+      <span>Diagrams</span>
+      <span>/</span>
+      <span>{diagram.name}</span>
+    </div>
+    
+    <div style="display: flex; align-items: flex-start; gap: 16px;">
+      <div style="flex: 1;">
+        <h1>{diagram.name}</h1>
+        <p class="page-header-summary">{diagram.description}</p>
+      </div>
+      <span style={`padding: 6px 14px; border-radius: 8px; background: ${fc.bg}; color: ${fc.color}; font-size: 12px; font-weight: 600; text-transform: uppercase;`}>
+        {diagram.format}
+      </span>
+    </div>
+    
+    <div style="display: flex; gap: 8px; margin-top: 12px;">
+      {diagram.tags.map(tag => (
+        <span style="padding: 4px 10px; border-radius: 6px; background: rgb(var(--ec-bg-muted)); font-size: 11px; color: rgb(var(--ec-page-text-muted));">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+  
+  <div class="page-body" style="padding: 16px 24px;">
+    <DiagramViewer
+      client:only="react"
+      format={diagram.format}
+      content={diagram.content}
+      name={diagram.name}
+    />
+  </div>
+</Layout>

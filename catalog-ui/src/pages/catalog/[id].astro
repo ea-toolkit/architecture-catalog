@@ -1,0 +1,342 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { elements, getElementById, getDomainById, getElementsByDomain, LAYER_META, TYPE_BADGES, REL_TYPE_LABELS, type LayerKey } from '../../data/registry';
+import ElementContextGraph from '../../components/graphs/ElementContextGraph';
+
+export function getStaticPaths() {
+  return elements.map(e => ({ params: { id: e.id } }));
+}
+
+const { id } = Astro.params;
+const element = getElementById(id!)!;
+const domain = getDomainById(element.domain);
+const layer = LAYER_META[element.layer];
+const domainElements = domain ? getElementsByDomain(domain.id) : [];
+
+// Badge categories derived from mapping YAML — no hardcoded type list
+const typeToBadge = TYPE_BADGES;
+
+// ── Relationship grouping (schema-driven, zero hardcoding) ──
+
+// ArchiMate relationship type labels from mapping YAML
+
+// Group outgoing by relationship type
+type OutgoingGroup = { type: string; label: string; icon: string; items: typeof element.relationships };
+const outgoingGroups: OutgoingGroup[] = [];
+const outGroupMap = new Map<string, OutgoingGroup>();
+for (const rel of element.relationships) {
+  let grp = outGroupMap.get(rel.type);
+  if (!grp) {
+    const meta = REL_TYPE_LABELS[rel.type] ?? { outgoing: rel.type, incoming: rel.type, icon: '·' };
+    grp = { type: rel.type, label: meta.outgoing, icon: meta.icon, items: [] };
+    outGroupMap.set(rel.type, grp);
+    outgoingGroups.push(grp);
+  }
+  grp.items.push(rel);
+}
+
+// Group incoming by relationship type
+const incomingRels = element.incomingRelationships ?? [];
+type IncomingGroup = { type: string; label: string; icon: string; items: typeof incomingRels };
+const incomingGroups: IncomingGroup[] = [];
+const inGroupMap = new Map<string, IncomingGroup>();
+for (const rel of incomingRels) {
+  let grp = inGroupMap.get(rel.type);
+  if (!grp) {
+    const meta = REL_TYPE_LABELS[rel.type] ?? { outgoing: rel.type, incoming: rel.type, icon: '·' };
+    grp = { type: rel.type, label: meta.incoming, icon: meta.icon, items: [] };
+    inGroupMap.set(rel.type, grp);
+    incomingGroups.push(grp);
+  }
+  grp.items.push(rel);
+}
+
+const hasRelationships = outgoingGroups.length > 0 || incomingGroups.length > 0;
+
+type GroupedElements = Record<string, { type: string; typeLabel: string; badgeClass: string; elements: typeof domainElements }[]>;
+const elementsByLayer: GroupedElements = {};
+for (const el of domainElements) {
+  if (!elementsByLayer[el.layer]) elementsByLayer[el.layer] = [];
+  const existing = elementsByLayer[el.layer].find(g => g.type === el.type);
+  if (existing) { existing.elements.push(el); }
+  else { elementsByLayer[el.layer].push({ type: el.type, typeLabel: el.typeLabel, badgeClass: typeToBadge[el.type] || 'default', elements: [el] }); }
+}
+---
+
+<Layout title={element.name} activeDomain={element.domain} sidebarContent="domain-detail">
+  <!-- Sidebar slot -->
+  <Fragment slot="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+        </span>
+        <span class="sidebar-group-title">Overview</span>
+      </div>
+      <div class="sidebar-group-items">
+        <a href={domain ? `/domains/${domain.id}` : '/'} class="sidebar-item">Architecture Overview</a>
+        <a href={domain ? `/domains/${domain.id}/context-map` : '/'} class="sidebar-item">Domain Context Map</a>
+      </div>
+    </div>
+
+    {Object.entries(elementsByLayer).map(([layerKey, groups]) => {
+      const l = LAYER_META[layerKey as LayerKey];
+      return (
+        <div class="sidebar-group">
+          <div class="sidebar-group-header">
+            <span class="sidebar-group-icon" style={`background: ${l.color}15; color: ${l.color};`}>
+              <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${l.color};`}></span>
+            </span>
+            <span class="sidebar-group-title">{l.name}</span>
+          </div>
+          <div class="sidebar-group-items">
+            {groups.flatMap(g => g.elements.map(el => (
+              <a href={`/catalog/${el.id}`} class:list={["sidebar-item", { active: el.id === id }]}>
+                <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{el.name}</span>
+                <span class="sidebar-type-label">{g.typeLabel}</span>
+              </a>
+            )))}
+          </div>
+        </div>
+      );
+    })}
+  </Fragment>
+
+  <!-- Page Content -->
+  <div class="page-header">
+    <div class="page-header-breadcrumb">
+      <a href="/">Domains</a>
+      <span>/</span>
+      {domain && <><a href={`/domains/${domain.id}`}>{domain.name}</a><span>/</span></>}
+      <span>{element.typeLabel}</span>
+    </div>
+    <div class="page-header-title">
+      <h1>{element.name}</h1>
+    </div>
+    <p class="page-header-summary">{element.description}</p>
+    <div class="page-header-badges">
+      <span class={`badge badge-${typeToBadge[element.type] || 'default'}`}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        {element.typeLabel}
+      </span>
+      <span class="badge" style={`background: ${layer.color}12; border-color: ${layer.color}33; color: ${layer.color};`}>
+        <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${layer.color}; display: inline-block;`}></span>
+        {layer.name}
+      </span>
+      <span class={`badge badge-${element.status}`}>{element.status}</span>
+      {element.make_or_buy && <span class={`badge badge-${element.make_or_buy}`}>{element.make_or_buy}</span>}
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="detail-layout">
+      <!-- Main Content -->
+      <div class="detail-main">
+        <!-- Markdown content area -->
+        <div class="detail-section">
+          <div style="padding: 24px; background: rgb(var(--ec-content-hover)); border-radius: 10px; font-size: 14px; line-height: 1.7; color: rgb(var(--ec-page-text));">
+            <p>{element.description}</p>
+            {element.aggregate && (
+              <p style="margin-top: 12px;">
+                <strong>Data Aggregate:</strong> {element.aggregate}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <!-- Relationships — grouped by ArchiMate type + direction -->
+        {hasRelationships && (
+          <div class="detail-section">
+            <h3 class="detail-section-title">Relationships</h3>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+
+              {/* ── Outgoing relationship groups ── */}
+              {outgoingGroups.map(grp => (
+                <div class="rel-group">
+                  <div class="rel-group-header">
+                    <span class="rel-group-icon rel-group-outgoing">{grp.icon}</span>
+                    <span class="rel-group-label">{grp.label}</span>
+                    <span class="rel-group-direction">outgoing</span>
+                    <span class="rel-group-count">{grp.items.length}</span>
+                  </div>
+                  <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 8px; overflow: hidden;">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>Target Element</th>
+                          <th>Element Type</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {grp.items.map(rel => {
+                          const targetEl = getElementById(rel.target);
+                          return (
+                            <tr>
+                              <td>
+                                <a href={`/catalog/${rel.target}`} class="table-link">{rel.targetName}</a>
+                              </td>
+                              <td>
+                                {targetEl
+                                  ? <span class={`badge badge-sm badge-${typeToBadge[targetEl.type] || 'default'}`}>{targetEl.typeLabel}</span>
+                                  : <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">unknown</span>
+                                }
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+
+              {/* ── Incoming relationship groups ── */}
+              {incomingGroups.map(grp => (
+                <div class="rel-group">
+                  <div class="rel-group-header">
+                    <span class="rel-group-icon rel-group-incoming">{grp.icon}</span>
+                    <span class="rel-group-label">{grp.label}</span>
+                    <span class="rel-group-direction">incoming</span>
+                    <span class="rel-group-count">{grp.items.length}</span>
+                  </div>
+                  <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 8px; overflow: hidden;">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>Source Element</th>
+                          <th>Element Type</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {grp.items.map(rel => {
+                          const sourceEl = getElementById(rel.source);
+                          return (
+                            <tr>
+                              <td>
+                                <a href={`/catalog/${rel.source}`} class="table-link">{rel.sourceName}</a>
+                              </td>
+                              <td>
+                                {sourceEl
+                                  ? <span class={`badge badge-sm badge-${typeToBadge[sourceEl.type] || 'default'}`}>{sourceEl.typeLabel}</span>
+                                  : <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">unknown</span>
+                                }
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+
+            </div>
+          </div>
+        )}
+
+        <!-- Architecture Context Graph -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Architecture Context</h3>
+          <ElementContextGraph 
+            client:only="react" 
+            element={element} 
+            allElements={elements} 
+            height={320}
+          />
+        </div>
+
+        <!-- Appears in Diagrams -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Diagrams</h3>
+          {domain && domain.diagramCount > 0 ? (
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid rgb(var(--ec-page-border)); border-radius: 10px; transition: background 0.12s;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--ec-icon-color))" stroke-width="1.5"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <div>
+                  <div style="font-size: 13px; font-weight: 500; color: rgb(var(--ec-page-text));">Domain Context Map</div>
+                  <div style="font-size: 11px; color: rgb(var(--ec-page-text-muted));">views/{domain.id}/technology/Domain_Context_map.drawio</div>
+                </div>
+              </a>
+            </div>
+          ) : (
+            <div style="padding: 32px; text-align: center; color: rgb(var(--ec-page-text-muted)); font-size: 13px; background: rgb(var(--ec-content-hover)); border-radius: 10px;">
+              Not yet referenced in any diagram
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="detail-aside">
+        <div class="detail-section">
+          <h3 class="detail-section-title">Properties</h3>
+          <div class="property-list">
+            <div class="property-row">
+              <span class="property-label">Type</span>
+              <span class="property-value">{element.typeLabel}</span>
+            </div>
+            <div class="property-row">
+              <span class="property-label">Layer</span>
+              <span class="property-value" style={`color: ${layer.color};`}>{layer.name}</span>
+            </div>
+            <div class="property-row">
+              <span class="property-label">Domain</span>
+              <span class="property-value">{domain?.name || 'Cross-cutting'}</span>
+            </div>
+            <div class="property-row">
+              <span class="property-label">Status</span>
+              <span class="property-value">{element.status}</span>
+            </div>
+            {element.make_or_buy && (
+              <div class="property-row">
+                <span class="property-label">Make / Buy</span>
+                <span class="property-value">{element.make_or_buy}</span>
+              </div>
+            )}
+            {element.owner && (
+              <div class="property-row">
+                <span class="property-label">Owner</span>
+                <span class="property-value">{element.owner}</span>
+              </div>
+            )}
+            {element.aggregate && (
+              <div class="property-row">
+                <span class="property-label">Aggregate</span>
+                <span class="property-value">{element.aggregate}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Meta Model Position -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Meta Model</h3>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            {Object.entries(LAYER_META).map(([key, meta]) => {
+              const isActive = key === element.layer;
+              return (
+                <div style={`padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-size: 12px; transition: all 0.12s; ${isActive ? `background: ${meta.color}10; border: 1px solid ${meta.color}30; font-weight: 600; color: ${meta.color};` : `opacity: 0.35; color: rgb(var(--ec-page-text-muted));`}`}>
+                  <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${meta.color}; flex-shrink: 0;`}></span>
+                  {meta.name}
+                  {isActive && <span style="margin-left: auto; font-size: 10px; opacity: 0.7;">current</span>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Actions</h3>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            {['View in draw.io', 'Edit registry file', 'View git history'].map(action => (
+              <button style="padding: 8px 12px; border: 1px solid rgb(var(--ec-page-border)); border-radius: 8px; background: rgb(var(--ec-card-bg)); font-size: 12px; text-align: left; color: rgb(var(--ec-page-text)); transition: background 0.12s;">
+                {action}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,375 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { domains, getElementsByDomain, getDomainById, LAYER_META, TYPE_BADGES, getRelFieldLabel, type LayerKey } from '../../../data/registry';
+import { getDiagramsByDomain } from '../../../data/diagrams-mock';
+
+export function getStaticPaths() {
+  return domains.map(d => ({ params: { id: d.id } }));
+}
+
+const { id } = Astro.params;
+const domain = getDomainById(id!)!;
+const domainElements = getElementsByDomain(id!);
+const domainDiagrams = getDiagramsByDomain(id!);
+
+// Group elements by layer → type
+type GroupedElements = Record<string, { type: string; typeLabel: string; badgeClass: string; elements: typeof domainElements }[]>;
+const elementsByLayer: GroupedElements = {};
+
+// Badge categories from mapping YAML — no hardcoded type list
+const typeToBadge = TYPE_BADGES;
+
+for (const el of domainElements) {
+  if (!elementsByLayer[el.layer]) elementsByLayer[el.layer] = [];
+  const existing = elementsByLayer[el.layer].find(g => g.type === el.type);
+  if (existing) {
+    existing.elements.push(el);
+  } else {
+    elementsByLayer[el.layer].push({
+      type: el.type, typeLabel: el.typeLabel,
+      badgeClass: typeToBadge[el.type] || 'default',
+      elements: [el],
+    });
+  }
+}
+
+const maturityColor: Record<string, string> = {
+  Excellent: '#10b981', Good: '#3b82f6', Developing: '#f59e0b', Initial: '#94a3b8',
+};
+
+/**
+ * For a group of elements, discover which relationship fieldKeys exist
+ * and build column definitions. Labels derived from mapping YAML via
+ * ArchiMate type verbs + target type labels — zero hardcoding.
+ */
+function getRelationshipColumns(groupElements: typeof domainElements) {
+  // Outgoing columns
+  const outFieldKeys = new Map<string, string>(); // fieldKey → label
+  for (const el of groupElements) {
+    for (const rel of el.relationships) {
+      const fk = rel.fieldKey ?? rel.type;
+      if (!outFieldKeys.has(fk)) {
+        outFieldKeys.set(fk, getRelFieldLabel(fk, 'out'));
+      }
+    }
+  }
+  // Incoming columns
+  const inFieldKeys = new Map<string, string>();
+  for (const el of groupElements) {
+    for (const rel of (el.incomingRelationships ?? [])) {
+      const fk = `in:${rel.fieldKey ?? rel.type}`;
+      if (!inFieldKeys.has(fk)) {
+        const raw = rel.fieldKey ?? rel.type;
+        inFieldKeys.set(fk, getRelFieldLabel(raw, 'in'));
+      }
+    }
+  }
+  return { outgoing: outFieldKeys, incoming: inFieldKeys };
+}
+
+// Pre-compute per-group relationship columns and per-element lookups
+// (Astro templates can't declare variables inside JSX expressions)
+type GroupRelData = {
+  outCols: [string, string][];      // [fieldKey, label]
+  inCols: [string, string][];
+  hasOut: boolean;
+  hasIn: boolean;
+  // Per-element: Map<fieldKey, names[]>
+  elementOut: Map<string, Map<string, string[]>>;
+  elementIn: Map<string, Map<string, string[]>>;
+};
+
+const groupRelDataByLayer = new Map<string, Map<string, GroupRelData>>();
+
+for (const [layerKey, groups] of Object.entries(elementsByLayer)) {
+  const layerMap = new Map<string, GroupRelData>();
+  for (const group of groups) {
+    const cols = getRelationshipColumns(group.elements);
+    const outCols = [...cols.outgoing.entries()];
+    const inCols = [...cols.incoming.entries()];
+
+    const elementOut = new Map<string, Map<string, string[]>>();
+    const elementIn = new Map<string, Map<string, string[]>>();
+
+    for (const el of group.elements) {
+      // Outgoing
+      const oMap = new Map<string, string[]>();
+      for (const rel of el.relationships) {
+        const fk = rel.fieldKey ?? rel.type;
+        const list = oMap.get(fk) ?? [];
+        list.push(rel.targetName);
+        oMap.set(fk, list);
+      }
+      elementOut.set(el.id, oMap);
+
+      // Incoming
+      const iMap = new Map<string, string[]>();
+      for (const rel of (el.incomingRelationships ?? [])) {
+        const fk = `in:${rel.fieldKey ?? rel.type}`;
+        const list = iMap.get(fk) ?? [];
+        list.push(rel.sourceName);
+        iMap.set(fk, list);
+      }
+      elementIn.set(el.id, iMap);
+    }
+
+    layerMap.set(group.type, {
+      outCols, inCols,
+      hasOut: outCols.length > 0,
+      hasIn: inCols.length > 0,
+      elementOut, elementIn,
+    });
+  }
+  groupRelDataByLayer.set(layerKey, layerMap);
+}
+---
+
+<Layout title={`${domain.name} – Overview`} activeDomain={id} sidebarContent="domain-detail">
+  <!-- Sidebar slot: domain element navigation -->
+  <Fragment slot="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+        </span>
+        <span class="sidebar-group-title">Overview</span>
+      </div>
+      <div class="sidebar-group-items">
+        <a href={`/domains/${id}`} class="sidebar-item active">
+          <span>Architecture Overview</span>
+        </a>
+        <a href={`/domains/${id}/context-map`} class="sidebar-item">
+          <span>Domain Context Map</span>
+        </a>
+      </div>
+    </div>
+
+    {/* Diagrams section in sidebar */}
+    {domainDiagrams.length > 0 && (
+      <div class="sidebar-group">
+        <div class="sidebar-group-header">
+          <span class="sidebar-group-icon" style="background: #f59e0b15; color: #f59e0b;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <span class="sidebar-group-title">Diagrams</span>
+        </div>
+        <div class="sidebar-group-items">
+          {domainDiagrams.map(d => (
+            <a href={`/diagrams/${d.id}`} class="sidebar-item">
+              <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{d.name}</span>
+              <span class="sidebar-type-label">{d.format}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {Object.entries(elementsByLayer).map(([layerKey, groups]) => {
+      const layer = LAYER_META[layerKey as LayerKey];
+      return (
+        <div class="sidebar-group">
+          <div class="sidebar-group-header">
+            <span class="sidebar-group-icon" style={`background: ${layer.color}15; color: ${layer.color};`}>
+              <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${layer.color};`}></span>
+            </span>
+            <span class="sidebar-group-title">{layer.name}</span>
+          </div>
+          <div class="sidebar-group-items">
+            {groups.map(group => (
+              group.elements.map(el => (
+                <a href={`/catalog/${el.id}`} class="sidebar-item">
+                  <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{el.name}</span>
+                  <span class="sidebar-type-label">{group.typeLabel}</span>
+                </a>
+              ))
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </Fragment>
+
+  <!-- Page Content -->
+  <div class="page-header" style={`border-top: 3px solid ${domain.color};`}>
+    <div class="page-header-breadcrumb">
+      <a href="/">Domains</a>
+      <span>/</span>
+    </div>
+    <div class="page-header-title">
+      <h1>{domain.name}</h1>
+      <span class={`badge badge-sm badge-${domain.maturity.toLowerCase()}`}>{domain.maturity}</span>
+    </div>
+    <p class="page-header-summary">{domain.description}</p>
+    <div class="page-header-badges">
+      <span class="badge badge-domain">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Domain
+      </span>
+      <span class="badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Platform Team
+      </span>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <!-- Stats -->
+    <div class="stat-row">
+      {Object.entries(domain.counts).map(([label, count]) => (
+        <div class="stat-card">
+          <div class="stat-value" style="font-size: 24px;">{count}</div>
+          <div class="stat-label">{label}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Quick link to Context Map -->
+    <div class="detail-section" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05)); border: 1px dashed rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; color: rgb(var(--ec-page-text));">Domain Context Map</h3>
+        <p style="font-size: 13px; color: rgb(var(--ec-page-text-muted)); margin: 0;">Visualize the relationships between all elements in this domain</p>
+      </div>
+      <a href={`/domains/${id}/context-map`} class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgb(59, 130, 246); color: white; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        View Context Map
+      </a>
+    </div>
+
+    {/* Diagrams Section */}
+    {domainDiagrams.length > 0 && (
+      <div class="detail-section">
+        <div class="detail-section-header">
+          <span class="detail-section-icon" style="background: #f59e0b15; color: #f59e0b;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <span class="detail-section-title">Diagrams</span>
+          <span class="detail-section-count">{domainDiagrams.length}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;">
+          {domainDiagrams.map(d => {
+            const bgColor = d.format === 'plantuml' ? '#fef3c7' : d.format === 'bpmn' ? '#ecfdf5' : '#eff6ff';
+            const textColor = d.format === 'plantuml' ? '#92400e' : d.format === 'bpmn' ? '#065f46' : '#3b82f6';
+            return (
+              <a href={`/diagrams/${d.id}`} class="card" style="padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <div style={`width: 36px; height: 36px; border-radius: 8px; background: ${bgColor}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;`}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={textColor} stroke-width="1.5">
+                    <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-size: 13px; font-weight: 600; color: rgb(var(--ec-page-text)); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{d.name}</div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style={`padding: 2px 6px; border-radius: 4px; background: ${bgColor}; color: ${textColor}; font-size: 9px; font-weight: 600; text-transform: uppercase;`}>{d.format}</span>
+                    <span style="font-size: 11px; color: rgb(var(--ec-page-text-muted));">{d.tags.slice(0, 2).join(', ')}</span>
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    )}
+
+    <!-- Elements by Layer -->
+    {Object.entries(elementsByLayer).map(([layerKey, groups]) => {
+      const layer = LAYER_META[layerKey as LayerKey];
+      return (
+        <div class="detail-section">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <span style={`width: 12px; height: 12px; border-radius: 3px; background: ${layer.color};`}></span>
+            <h2 style="font-size: 15px; font-weight: 600; color: rgb(var(--ec-page-text));">{layer.name}</h2>
+          </div>
+
+          {groups.map(group => {
+            const grd = groupRelDataByLayer.get(layerKey)?.get(group.type);
+            const outCols = grd?.outCols ?? [];
+            const inCols = grd?.inCols ?? [];
+            const hasOut = outCols.length > 0;
+            const hasIn = inCols.length > 0;
+            return (
+            <div style="margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                <span class={`badge badge-sm badge-${group.badgeClass}`}>{group.typeLabel}</span>
+                <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">{group.elements.length} items</span>
+              </div>
+              <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 10px; overflow-x: auto;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Status</th>
+                      {group.elements.some(e => e.make_or_buy) && <th>Make / Buy</th>}
+                      {group.elements.some(e => e.aggregate) && <th>Aggregate</th>}
+                      {outCols.map(([_fk, label]) => (
+                        <th>
+                          <span style="display: flex; align-items: center; gap: 4px;">
+                            <span class="rel-col-dot rel-col-out"></span>
+                            {label}
+                          </span>
+                        </th>
+                      ))}
+                      {inCols.map(([_fk, label]) => (
+                        <th>
+                          <span style="display: flex; align-items: center; gap: 4px;">
+                            <span class="rel-col-dot rel-col-in"></span>
+                            {label}
+                          </span>
+                        </th>
+                      ))}
+                      {!hasOut && !hasIn && <th>Relationships</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.elements.map(el => {
+                      const elOut = grd?.elementOut.get(el.id);
+                      const elIn = grd?.elementIn.get(el.id);
+                      return (
+                      <tr>
+                        <td><a href={`/catalog/${el.id}`} class="table-link">{el.name}</a></td>
+                        <td><span class={`badge badge-sm badge-${el.status}`}>{el.status}</span></td>
+                        {group.elements.some(e => e.make_or_buy) && (
+                          <td>{el.make_or_buy ? <span class={`badge badge-sm badge-${el.make_or_buy}`}>{el.make_or_buy}</span> : <span style="color: rgb(var(--ec-page-text-muted));">—</span>}</td>
+                        )}
+                        {group.elements.some(e => e.aggregate) && (
+                          <td style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">{el.aggregate || '—'}</td>
+                        )}
+                        {outCols.map(([fk]) => {
+                          const names = elOut?.get(fk);
+                          return (
+                            <td style="font-size: 12px;">
+                              {names && names.length > 0
+                                ? <span class="rel-cell-pills">{names.map(n => <span class="rel-pill rel-pill-out">{n}</span>)}</span>
+                                : <span style="color: rgb(var(--ec-page-text-muted));">—</span>
+                              }
+                            </td>
+                          );
+                        })}
+                        {inCols.map(([fk]) => {
+                          const names = elIn?.get(fk);
+                          return (
+                            <td style="font-size: 12px;">
+                              {names && names.length > 0
+                                ? <span class="rel-cell-pills">{names.map(n => <span class="rel-pill rel-pill-in">{n}</span>)}</span>
+                                : <span style="color: rgb(var(--ec-page-text-muted));">—</span>
+                              }
+                            </td>
+                          );
+                        })}
+                        {!hasOut && !hasIn && (
+                          <td style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">—</td>
+                        )}
+                      </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            );
+          })}
+        </div>
+      );
+    })}
+  </div>
+</Layout>

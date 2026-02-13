@@ -1,0 +1,30 @@
+{
+  "name": "architecture-catalog",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.1.0",
+    "@types/dagre": "^0.7.53",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@xyflow/react": "^12.10.0",
+    "astro": "^5.1.0",
+    "bpmn-js": "^18.12.0",
+    "dagre": "^0.8.5",
+    "js-yaml": "^4.1.1",
+    "pako": "^2.1.0",
+    "plantuml-encoder": "^1.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/pako": "^2.0.4",
+    "@types/plantuml-encoder": "^1.4.2"
+  }
+}

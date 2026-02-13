@@ -1,0 +1,917 @@
+# ═══════════════════════════════════════════════════════════════
+# Registry Mapping — the wiring manifest
+# ═══════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+#   Maps the enterprise meta model (conceptual) to the registry-v2
+#   folder structure (physical). This file is the single contract
+#   consumed by:
+#     1. registry-loader.ts   — builds the in-memory graph for FE
+#     2. validate.py          — lints consistency & maturity scoring
+#     3. SaaS data pipelines  — know which .md files to write
+#
+# DESIGN PRINCIPLES:
+#   - Schema-driven: FE never hard-codes element types or field names
+#   - Graceful degradation: every field & relationship is optional
+#   - Extensible: add a new element = add one entry here, zero code
+#
+# HOW TO READ:
+#   element_key:
+#     label         — human-friendly name for UI
+#     layer         — which EMM layer it sits in
+#     folder        — relative path under registry-v2/
+#     id_field      — which frontmatter field is the file's identity
+#     archimate     — ArchiMate 3.x element type
+#     graph_rank    — left-to-right position (0 = anchor, higher = right)
+#     icon          — short emoji/icon for compact rendering
+#     fields        — every frontmatter key the FE should look for
+#       key:
+#         type      — string | string[] | number | boolean | object[]
+#         required  — true if absence should trigger a lint warning
+#         label     — human label shown in detail panels
+#     relationships — arrows going OUT of this element
+#       key:          (frontmatter field name)
+#         target      — element_key this points to
+#         type        — archimate relationship type
+#         cardinality — one | many
+#         resolve_by  — slug | name | abbreviation (how to match target)
+#         inverse     — field name on the target type that points back
+#         required    — false = orphan is allowed, true = lint error
+#
+# ═══════════════════════════════════════════════════════════════
+
+version: "1.0"
+registry_root: registry-v2
+
+# ─────────────────────────────────────────────────────────────
+# Site Branding — change these for white-label deployment
+# ─────────────────────────────────────────────────────────────
+site:
+  name: Architecture Catalog
+  description: Enterprise architecture registry
+  logo_text: A
+
+# ─────────────────────────────────────────────────────────────
+# Layer Definitions — ArchiMate standard layers
+# ─────────────────────────────────────────────────────────────
+layers:
+  products_and_services:
+    name: Products & Services
+    color: "#a855f7"
+    bg: "#faf5ff"
+    icon: P
+  process_and_organisation:
+    name: Process & Organisation
+    color: "#f59e0b"
+    bg: "#fffbeb"
+    icon: O
+  applications_and_data:
+    name: Applications & Data
+    color: "#3b82f6"
+    bg: "#eff6ff"
+    icon: A
+  infrastructure_and_hosting:
+    name: Infrastructure & Hosting
+    color: "#10b981"
+    bg: "#ecfdf5"
+    icon: I
+
+# ─────────────────────────────────────────────────────────────
+# ArchiMate Relationship Types — verbs for outgoing / incoming
+# ─────────────────────────────────────────────────────────────
+relationship_types:
+  composition:
+    outgoing: Composes
+    incoming: Part of
+    icon: "◇"
+  aggregation:
+    outgoing: Owns
+    incoming: Owned by
+    icon: "◆"
+  realization:
+    outgoing: Realizes
+    incoming: Realized by
+    icon: "▲"
+  serving:
+    outgoing: Serves
+    incoming: Served by
+    icon: "→"
+  assignment:
+    outgoing: Assigned to
+    incoming: Assigned from
+    icon: "⊕"
+  access:
+    outgoing: Accesses
+    incoming: Accessed by
+    icon: "⊙"
+
+# ─────────────────────────────────────────────────────────────
+# Domain Color Palette — auto-assigned to domains in order
+# ─────────────────────────────────────────────────────────────
+domain_color_palette:
+  - "#3b82f6"
+  - "#8b5cf6"
+  - "#ec4899"
+  - "#f59e0b"
+  - "#06b6d4"
+  - "#84cc16"
+  - "#f97316"
+  - "#10b981"
+  - "#ef4444"
+  - "#6366f1"
+
+# ─────────────────────────────────────────────────────────────
+# Elements
+# ─────────────────────────────────────────────────────────────
+elements:
+
+  # ══════════════════════════════════════════════
+  # Business Capability (Layer 2)
+  # ══════════════════════════════════════════════
+  business_capability:
+    label: Business Capability
+    layer: process_and_organisation
+    folder: 2-process-and-organisation/capabilities
+    id_field: name
+    archimate: business-function
+    graph_rank: 1
+    icon: 🎯
+    badge_category: capability
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+    relationships:
+      realized_by_logical_components:
+        target: logical_component
+        type: realization
+        cardinality: many
+        resolve_by: name
+        inverse: realizes_business_capability
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Business Process (Layer 2)
+  # ══════════════════════════════════════════════
+  business_process:
+    label: Business Process
+    layer: process_and_organisation
+    folder: 2-process-and-organisation/processes
+    id_field: name
+    archimate: business-process
+    graph_rank: 1
+    icon: 🔄
+    badge_category: process
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      specialization:
+        type: string
+        required: false
+        label: Specialization
+      value_stream:
+        type: string
+        required: false
+        label: Value Stream
+    relationships:
+      triggers_events:
+        target: domain_event
+        type: serving
+        cardinality: many
+        resolve_by: name
+        inverse: ~
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Architecture Area Domain
+  # ══════════════════════════════════════════════
+  architecture_area_domain:
+    label: Architecture Area Domain
+    layer: applications_and_data
+    folder: 3-applications-and-data/architecture-area-domains
+    id_field: name
+    archimate: application-function
+    graph_rank: 0
+    icon: 🏛️
+    badge_category: domain
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      status:
+        type: string
+        required: false
+        label: Status
+      aliases:
+        type: string[]
+        required: false
+        label: Aliases
+    relationships:
+      composes_logical_components:
+        target: logical_component
+        type: composition
+        cardinality: many
+        resolve_by: slug
+        inverse: parent_architecture_area_domain
+        required: false
+      owns_data_concepts:
+        target: data_concept
+        type: aggregation
+        cardinality: many
+        resolve_by: slug
+        inverse: ~
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Logical Component
+  # ══════════════════════════════════════════════
+  logical_component:
+    label: Logical Component
+    layer: applications_and_data
+    folder: 3-applications-and-data/logical-components
+    id_field: name
+    archimate: application-function
+    graph_rank: 1
+    icon: 🧩
+    badge_category: component
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      make_or_buy:
+        type: string
+        required: false
+        label: Make or Buy
+    relationships:
+      parent_architecture_area_domain:
+        target: architecture_area_domain
+        type: composition
+        cardinality: one
+        resolve_by: name
+        inverse: composes_logical_components
+        required: false
+      composes_logical_components:
+        target: logical_component
+        type: composition
+        cardinality: many
+        resolve_by: name
+        inverse: ~
+        required: false
+      realized_by_software_systems:
+        target: software_system
+        type: realization
+        cardinality: many
+        resolve_by: name
+        inverse: realizes_logical_components
+        required: false
+      realizes_logical_apis:
+        target: logical_business_api
+        type: serving
+        cardinality: many
+        resolve_by: name
+        inverse: realized_by_logical_component
+        required: false
+      owns_data_aggregates:
+        target: data_aggregate
+        type: aggregation
+        cardinality: many
+        resolve_by: name
+        inverse: owned_by_logical_component
+        required: false
+      realizes_business_capability:
+        target: business_capability
+        type: realization
+        cardinality: many
+        resolve_by: name
+        inverse: ~
+        required: false  # Cross-layer link — target type not yet mapped
+
+  # ══════════════════════════════════════════════
+  # Software System
+  # ══════════════════════════════════════════════
+  software_system:
+    label: Software System
+    layer: applications_and_data
+    folder: 3-applications-and-data/software-systems
+    id_field: name
+    archimate: application-component
+    graph_rank: 2
+    icon: 🖥️
+    badge_category: system
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      full_name:
+        type: string
+        required: false
+        label: Full Name
+      abbreviation:
+        type: string
+        required: false
+        label: Abbreviation
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      make_or_buy:
+        type: string
+        required: false
+        label: Make or Buy
+      catalog_id:
+        type: string
+        required: false
+        label: Catalog ID
+      system_type:
+        type: string
+        required: false
+        label: System Type
+      vendor:
+        type: string
+        required: false
+        label: Vendor
+    relationships:
+      composes_software_subsystems:
+        target: software_subsystem
+        type: composition
+        cardinality: many
+        resolve_by: slug
+        inverse: parent_software_system
+        required: false
+      realizes_logical_components:
+        target: logical_component
+        type: realization
+        cardinality: many
+        resolve_by: name
+        inverse: realized_by_software_systems
+        required: false
+      # Legacy singular field — loader normalizes to array
+      realizes_logical_component:
+        target: logical_component
+        type: realization
+        cardinality: one
+        resolve_by: name
+        inverse: realized_by_software_systems
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Software Subsystem
+  # ══════════════════════════════════════════════
+  software_subsystem:
+    label: Software Subsystem
+    layer: applications_and_data
+    folder: 3-applications-and-data/software-subsystems
+    id_field: name
+    archimate: application-component
+    graph_rank: 3
+    icon: 📦
+    badge_category: subsystem
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      environments:
+        type: string[]
+        required: false
+        label: Environments
+    relationships:
+      parent_software_system:
+        target: software_system
+        type: composition
+        cardinality: one
+        resolve_by: name
+        inverse: composes_software_subsystems
+        required: false
+      composes_physical_apis:
+        target: physical_business_api
+        type: composition
+        cardinality: many
+        resolve_by: slug
+        inverse: parent_software_subsystem
+        required: false
+      consumes_apis:
+        target: physical_business_api
+        type: serving
+        cardinality: many
+        resolve_by: slug
+        inverse: ~
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Logical Business API
+  # ══════════════════════════════════════════════
+  logical_business_api:
+    label: Logical Business API
+    layer: applications_and_data
+    folder: 3-applications-and-data/logical-apis
+    id_field: name
+    archimate: application-service
+    graph_rank: 2
+    icon: 📋
+    badge_category: api
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+    relationships:
+      realized_by_logical_component:
+        target: logical_component
+        type: realization
+        cardinality: one
+        resolve_by: name
+        inverse: realizes_logical_apis
+        required: false
+      implemented_by_physical_apis:
+        target: physical_business_api
+        type: realization
+        cardinality: many
+        resolve_by: slug
+        inverse: implements_logical_api
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Physical Business API
+  # ══════════════════════════════════════════════
+  physical_business_api:
+    label: Physical Business API
+    layer: applications_and_data
+    folder: 3-applications-and-data/physical-apis
+    id_field: name
+    archimate: application-interface
+    graph_rank: 3
+    icon: 🔌
+    badge_category: api
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      protocol:
+        type: string
+        required: false
+        label: Protocol
+      environments:
+        type: string[]
+        required: false
+        label: Environments
+    relationships:
+      parent_software_subsystem:
+        target: software_subsystem
+        type: composition
+        cardinality: one
+        resolve_by: slug
+        inverse: composes_physical_apis
+        required: false
+      implements_logical_api:
+        target: logical_business_api
+        type: realization
+        cardinality: one
+        resolve_by: name
+        inverse: implemented_by_physical_apis
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Data Concept
+  # ══════════════════════════════════════════════
+  data_concept:
+    label: Data Concept
+    layer: applications_and_data
+    folder: 3-applications-and-data/data-concepts
+    id_field: name
+    archimate: data-object
+    graph_rank: 1
+    icon: 💡
+    badge_category: data
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      classification:
+        type: string
+        required: false
+        label: Classification
+      source_system:
+        type: string
+        required: false
+        label: Source System
+      logical_component:
+        type: string
+        required: false
+        label: Logical Component
+    relationships:
+      detailed_by_data_aggregates:
+        target: data_aggregate
+        type: composition
+        cardinality: many
+        resolve_by: name
+        inverse: parent_data_concept
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Data Aggregate
+  # ══════════════════════════════════════════════
+  data_aggregate:
+    label: Data Aggregate
+    layer: applications_and_data
+    folder: 3-applications-and-data/data-aggregates
+    id_field: name
+    archimate: data-object
+    graph_rank: 2
+    icon: 🗃️
+    badge_category: data
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      lifecycle_states:
+        type: string[]
+        required: false
+        label: Lifecycle States
+    relationships:
+      parent_data_concept:
+        target: data_concept
+        type: composition
+        cardinality: one
+        resolve_by: name
+        inverse: detailed_by_data_aggregates
+        required: false
+      owned_by_logical_component:
+        target: logical_component
+        type: aggregation
+        cardinality: one
+        resolve_by: name
+        inverse: owns_data_aggregates
+        required: false
+      composes_data_entities:
+        target: data_entity
+        type: composition
+        cardinality: many
+        resolve_by: name
+        inverse: parent_data_aggregate
+        required: false
+      owned_by_software_subsystem:
+        target: software_subsystem
+        type: aggregation
+        cardinality: one
+        resolve_by: slug
+        inverse: ~
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Data Entity
+  # ══════════════════════════════════════════════
+  data_entity:
+    label: Data Entity
+    layer: applications_and_data
+    folder: 3-applications-and-data/data-entities
+    id_field: name
+    archimate: data-object
+    graph_rank: 3
+    icon: 📝
+    badge_category: data
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      entity_type:
+        type: string
+        required: false
+        label: Entity Type
+      attributes:
+        type: object[]
+        required: false
+        label: Attributes
+    relationships:
+      parent_data_aggregate:
+        target: data_aggregate
+        type: composition
+        cardinality: one
+        resolve_by: name
+        inverse: composes_data_entities
+        required: false
+
+  # ══════════════════════════════════════════════
+  # Domain Event
+  # ══════════════════════════════════════════════
+  domain_event:
+    label: Domain Event
+    layer: applications_and_data
+    folder: 3-applications-and-data/domain-events
+    id_field: name
+    archimate: application-event
+    graph_rank: 3
+    icon: ⚡
+    badge_category: event
+    fields:
+      type:
+        type: string
+        required: false
+        label: Element Type
+      name:
+        type: string
+        required: true
+        label: Name
+      description:
+        type: string
+        required: false
+        label: Description
+      owner:
+        type: string
+        required: false
+        label: Owner
+      domain:
+        type: string
+        required: false
+        label: Domain
+      status:
+        type: string
+        required: false
+        label: Status
+      event_format:
+        type: string
+        required: false
+        label: Event Format
+      schema_registry:
+        type: string
+        required: false
+        label: Schema Registry
+    relationships:
+      published_by_physical_apis:
+        target: physical_business_api
+        type: serving
+        cardinality: many
+        resolve_by: slug
+        inverse: ~
+        required: false
+      consumed_by_physical_apis:
+        target: physical_business_api
+        type: serving
+        cardinality: many
+        resolve_by: slug
+        inverse: ~
+        required: false
+      realizes_business_event:
+        target: business_event
+        type: realization
+        cardinality: one
+        resolve_by: name
+        inverse: ~
+        required: false  # Cross-layer link — target type not yet mapped
+
+# ═══════════════════════════════════════════════════════════════
+# Relationship Type Reference
+# ═══════════════════════════════════════════════════════════════
+# Quick lookup: ArchiMate arrow type → visual semantics for rendering
+#
+# type          │ arrow    │ direction │ layout │ notes
+# ──────────────┼──────────┼───────────┼────────┼─────────────────────
+# composition   │ ◆ filled │ parent→child │ yes │ structural containment
+# aggregation   │ ◇ open   │ whole→part   │ yes │ grouping, ownership
+# realization   │ ⇢ dashed │ impl→abstract│ yes │ direction reversed in layout
+# serving       │ → solid  │ provider→consumer│ no│ API exposure, consumption
+# assignment    │ → solid  │ active→passive │ yes│ infra assignment
+# access        │ → dotted │ component→data │ no│ data read/write
+# flow          │ → solid  │ from→to   │ no   │ data/event flow
+# association   │ — line   │ bidirectional│ no  │ loose coupling
+# ═══════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════
+# Reference Resolution Strategies
+# ═══════════════════════════════════════════════════════════════
+#
+# resolve_by: slug
+#   Match the target's .md filename (without .md extension).
+#   e.g., "billing-worker" → software-subsystems/billing-worker.md
+#
+# resolve_by: name
+#   Match the target's `name:` frontmatter field (case-insensitive).
+#   e.g., "Tenant Management" → logical-components/tenant-management.md
+#
+# resolve_by: abbreviation
+#   Match the target's `abbreviation:` frontmatter field.
+#   e.g., "NOVA" → software-systems/novacrm-core.md (abbreviation: NOVA)
+#
+# When a reference can't be resolved:
+#   - Loader returns { resolved: false, raw: "the-value" }
+#   - Renderer shows the node with a ⚠️ broken-link indicator
+#   - Linter flags it as a warning (not an error)
+# ═══════════════════════════════════════════════════════════════

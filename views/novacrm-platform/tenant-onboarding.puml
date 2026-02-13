@@ -1,0 +1,48 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+title Tenant Onboarding Sequence
+
+actor "Sales Rep" as Sales
+participant "CRM API\nGateway" as GW #E8F4FD
+participant "Tenant\nManagement" as TM #E8F4FD
+participant "Billing\nWorker" as BW #E8F4FD
+database "Tenant\nDB" as DB #F5F5F5
+queue "Event\nBus" as EB #FFF3E0
+
+Sales -> GW: POST /api/v1/tenants
+activate GW
+GW -> TM: Create Tenant
+activate TM
+
+TM -> DB: Insert tenant record
+DB --> TM: tenant_id
+
+TM -> TM: Provision default config
+TM -> BW: Create trial subscription
+activate BW
+BW --> TM: subscription_id
+deactivate BW
+
+TM -> EB: Publish "Tenant Created"
+activate EB
+EB --> TM: ack
+deactivate EB
+
+TM --> GW: 201 Created {tenant_id}
+deactivate TM
+GW --> Sales: Tenant provisioned
+deactivate GW
+
+... Trial period (14 days) ...
+
+EB -> BW: Consume "Tenant Created"
+activate BW
+BW -> BW: Schedule trial expiry check
+BW --> EB: ack
+deactivate BW
+
+@enduml

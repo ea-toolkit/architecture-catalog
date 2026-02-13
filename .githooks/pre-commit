@@ -1,0 +1,5 @@
+#!/bin/sh
+# Pre-commit hook: validate architecture diagrams against the registry.
+# Setup: git config core.hooksPath .githooks
+
+python3 scripts/validate.py

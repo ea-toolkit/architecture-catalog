@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { domains, elements, LAYER_META, getModelStats, SITE_CONFIG } from '../data/registry';
+
+const stats = getModelStats();
+
+const maturityPercent: Record<string, number> = {
+  Excellent: 90, Good: 65, Developing: 40, Initial: 15,
+};
+const maturityColor: Record<string, string> = {
+  Excellent: '#10b981', Good: '#3b82f6', Developing: '#f59e0b', Initial: '#94a3b8',
+};
+---
+
+<Layout title="Dashboard">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-title">
+      <h1>Architecture Catalog</h1>
+    </div>
+    <p class="page-header-summary">
+      {SITE_CONFIG.description} — {domains.length} domains, {elements.length} registered elements
+    </p>
+  </div>
+
+  <div class="page-body">
+    <!-- Stats -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-value">{stats.totalElements}</div>
+        <div class="stat-label">Registered Elements</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.totalDomains}</div>
+        <div class="stat-label">Architecture Domains</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.totalDiagrams}</div>
+        <div class="stat-label">Diagrams</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{stats.enrichedElements}</div>
+        <div class="stat-label">Enriched Elements</div>
+      </div>
+    </div>
+
+    <!-- Layer Distribution Bar -->
+    <div style="margin-bottom: 36px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: rgb(var(--ec-page-text));">Layer Distribution</h2>
+      <div style="display: flex; gap: 3px; height: 28px; border-radius: 8px; overflow: hidden;">
+        {Object.entries(LAYER_META).map(([key, meta]) => {
+          const count = stats.layerCounts[key as keyof typeof stats.layerCounts];
+          const pct = stats.totalElements > 0 ? (count / stats.totalElements) * 100 : 0;
+          return pct > 0 ? (
+            <div style={`background: ${meta.color}; width: ${Math.max(pct, 8)}%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600; border-radius: 4px;`}>
+              {count}
+            </div>
+          ) : null;
+        })}
+      </div>
+      <div style="display: flex; gap: 20px; margin-top: 10px;">
+        {Object.entries(LAYER_META).map(([, meta]) => (
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgb(var(--ec-page-text-muted));">
+            <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${meta.color};`}></span>
+            {meta.name}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Domain Grid -->
+    <h2 style="font-size: 15px; font-weight: 600; margin-bottom: 16px; color: rgb(var(--ec-page-text));">Domains</h2>
+    <div class="card-grid">
+      {domains.map(d => (
+        <a href={`/domains/${d.id}`} class="card" style="cursor: pointer; display: block;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+            <span style={`width: 10px; height: 10px; border-radius: 50%; background: ${d.color}; flex-shrink: 0;`}></span>
+            <h3 style="font-size: 15px; font-weight: 600; color: rgb(var(--ec-page-text));">{d.name}</h3>
+            <span class={`badge badge-sm badge-${d.maturity.toLowerCase()}`} style="margin-left: auto;">{d.maturity}</span>
+          </div>
+          <p style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); line-height: 1.5; margin-bottom: 12px;">
+            {d.description}
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px;">
+            {Object.entries(d.counts).map(([label, count]) => (
+              <span>
+                <span style="font-weight: 600; color: rgb(var(--ec-page-text));">{count}</span>
+                {' '}
+                <span style="color: rgb(var(--ec-page-text-muted));">{label}</span>
+              </span>
+            ))}
+          </div>
+          <div class="maturity-bar">
+            <div class="maturity-fill" style={`width: ${maturityPercent[d.maturity]}%; background: ${maturityColor[d.maturity]};`}></div>
+          </div>
+          {/* AI & Quality Insights */}
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgb(var(--ec-page-border)); font-size: 11px;">
+            <span style="display: flex; align-items: center; gap: 4px; color: rgb(var(--ec-page-text-muted));">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              Linter <span style="font-weight: 600; color: rgb(var(--ec-page-text));">{Math.round(maturityPercent[d.maturity] * 0.95)}%</span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 4px; color: rgb(var(--ec-page-text-muted));">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4c0 1.95-2 4-4 8-2-4-4-6.05-4-8a4 4 0 014-4z"/><circle cx="12" cy="18" r="3"/></svg>
+              AI Score <span style="font-weight: 600; color: rgb(var(--ec-page-text));">{Math.round(maturityPercent[d.maturity] * 0.88)}%</span>
+            </span>
+            <span style="margin-left: auto; display: flex; align-items: center; gap: 3px; color: rgb(var(--ec-accent-text, 59 130 246)); font-weight: 500; cursor: pointer;" onclick="event.preventDefault();">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              AI Recommendations
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

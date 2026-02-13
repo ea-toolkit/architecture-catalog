@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { elements, domains, LAYER_META, TYPE_BADGES, type LayerKey } from '../data/registry';
+
+// Badge category derived from mapping YAML — no hardcoded type list
+const typeToBadge = TYPE_BADGES;
+
+// Group by type for filter chips
+const typeCounts: Record<string, number> = {};
+for (const el of elements) {
+  typeCounts[el.typeLabel] = (typeCounts[el.typeLabel] || 0) + 1;
+}
+const sortedTypes = Object.entries(typeCounts).sort((a, b) => b[1] - a[1]);
+
+const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
+---
+
+<Layout title="Discover">
+  <div class="page-header">
+    <div class="page-header-title">
+      <h1>Discover</h1>
+    </div>
+    <p class="page-header-summary">
+      Browse all {elements.length} registered architecture elements across {domains.length} domains
+    </p>
+  </div>
+
+  <div class="page-body">
+    <!-- Filter chips -->
+    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; align-items: center;">
+      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Filter:</span>
+      {sortedTypes.map(([type, count]) => (
+        <button style="padding: 5px 12px; border: 1px solid rgb(var(--ec-page-border)); border-radius: 9999px; background: rgb(var(--ec-card-bg)); font-size: 12px; color: rgb(var(--ec-page-text)); transition: all 0.12s; cursor: pointer;">
+          {type} <span style="color: rgb(var(--ec-page-text-muted)); font-size: 11px;">({count})</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Table -->
+    <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 10px; overflow: hidden;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Layer</th>
+            <th>Domain</th>
+            <th>Make / Buy</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {elements.map(el => {
+            const elLayer = LAYER_META[el.layer];
+            const dom = domainMap[el.domain];
+            return (
+              <tr>
+                <td><a href={`/catalog/${el.id}`} class="table-link">{el.name}</a></td>
+                <td><span class={`badge badge-sm badge-${typeToBadge[el.type] || 'default'}`}>{el.typeLabel}</span></td>
+                <td>
+                  <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px;">
+                    <span style={`width: 6px; height: 6px; border-radius: 2px; background: ${elLayer.color};`}></span>
+                    {elLayer.name}
+                  </span>
+                </td>
+                <td>
+                  {dom ? (
+                    <a href={`/domains/${dom.id}`} style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: rgb(var(--ec-accent));">
+                      <span style={`width: 6px; height: 6px; border-radius: 50%; background: ${dom.color};`}></span>
+                      {dom.name}
+                    </a>
+                  ) : (
+                    <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">Cross-cutting</span>
+                  )}
+                </td>
+                <td>
+                  {el.make_or_buy
+                    ? <span class={`badge badge-sm badge-${el.make_or_buy}`}>{el.make_or_buy}</span>
+                    : <span style="color: rgb(var(--ec-page-text-muted));">—</span>
+                  }
+                </td>
+                <td><span class={`badge badge-sm badge-${el.status}`}>{el.status}</span></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="SubscriptionLifecycle" name="Subscription Lifecycle Process" isExecutable="true">
+    <bpmn:startEvent id="Start" name="Tenant Selects Plan">
+      <bpmn:outgoing>Flow1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:task id="Task1" name="Validate Payment Method">
+      <bpmn:incoming>Flow1</bpmn:incoming>
+      <bpmn:outgoing>Flow2</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task2" name="Calculate Charges">
+      <bpmn:incoming>Flow2</bpmn:incoming>
+      <bpmn:outgoing>Flow3</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway1" name="Upgrade or New?">
+      <bpmn:incoming>Flow3</bpmn:incoming>
+      <bpmn:outgoing>Flow4a</bpmn:outgoing>
+      <bpmn:outgoing>Flow4b</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task3a" name="Prorate Existing Plan">
+      <bpmn:incoming>Flow4a</bpmn:incoming>
+      <bpmn:outgoing>Flow5a</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task3b" name="Create New Subscription">
+      <bpmn:incoming>Flow4b</bpmn:incoming>
+      <bpmn:outgoing>Flow5b</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway2">
+      <bpmn:incoming>Flow5a</bpmn:incoming>
+      <bpmn:incoming>Flow5b</bpmn:incoming>
+      <bpmn:outgoing>Flow6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task4" name="Process Payment">
+      <bpmn:incoming>Flow6</bpmn:incoming>
+      <bpmn:outgoing>Flow7</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task5" name="Activate Subscription">
+      <bpmn:incoming>Flow7</bpmn:incoming>
+      <bpmn:outgoing>Flow8</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task6" name="Publish Subscription Renewed">
+      <bpmn:incoming>Flow8</bpmn:incoming>
+      <bpmn:outgoing>Flow9</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="End" name="Subscription Active">
+      <bpmn:incoming>Flow9</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow1" sourceRef="Start" targetRef="Task1"/>
+    <bpmn:sequenceFlow id="Flow2" sourceRef="Task1" targetRef="Task2"/>
+    <bpmn:sequenceFlow id="Flow3" sourceRef="Task2" targetRef="Gateway1"/>
+    <bpmn:sequenceFlow id="Flow4a" name="Upgrade" sourceRef="Gateway1" targetRef="Task3a"/>
+    <bpmn:sequenceFlow id="Flow4b" name="New" sourceRef="Gateway1" targetRef="Task3b"/>
+    <bpmn:sequenceFlow id="Flow5a" sourceRef="Task3a" targetRef="Gateway2"/>
+    <bpmn:sequenceFlow id="Flow5b" sourceRef="Task3b" targetRef="Gateway2"/>
+    <bpmn:sequenceFlow id="Flow6" sourceRef="Gateway2" targetRef="Task4"/>
+    <bpmn:sequenceFlow id="Flow7" sourceRef="Task4" targetRef="Task5"/>
+    <bpmn:sequenceFlow id="Flow8" sourceRef="Task5" targetRef="Task6"/>
+    <bpmn:sequenceFlow id="Flow9" sourceRef="Task6" targetRef="End"/>
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SubscriptionLifecycle">
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
+        <dc:Bounds x="152" y="192" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="125" y="235" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task1_di" bpmnElement="Task1">
+        <dc:Bounds x="240" y="170" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task2_di" bpmnElement="Task2">
+        <dc:Bounds x="390" y="170" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway1_di" bpmnElement="Gateway1" isMarkerVisible="true">
+        <dc:Bounds x="545" y="185" width="50" height="50"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="525" y="155" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task3a_di" bpmnElement="Task3a">
+        <dc:Bounds x="650" y="90" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task3b_di" bpmnElement="Task3b">
+        <dc:Bounds x="650" y="250" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway2_di" bpmnElement="Gateway2" isMarkerVisible="true">
+        <dc:Bounds x="805" y="185" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task4_di" bpmnElement="Task4">
+        <dc:Bounds x="910" y="170" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task5_di" bpmnElement="Task5">
+        <dc:Bounds x="1060" y="170" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task6_di" bpmnElement="Task6">
+        <dc:Bounds x="1210" y="170" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End">
+        <dc:Bounds x="1362" y="192" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="1335" y="235" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow1_di" bpmnElement="Flow1">
+        <di:waypoint x="188" y="210"/><di:waypoint x="240" y="210"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow2_di" bpmnElement="Flow2">
+        <di:waypoint x="340" y="210"/><di:waypoint x="390" y="210"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow3_di" bpmnElement="Flow3">
+        <di:waypoint x="490" y="210"/><di:waypoint x="545" y="210"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow4a_di" bpmnElement="Flow4a">
+        <di:waypoint x="570" y="185"/><di:waypoint x="570" y="130"/><di:waypoint x="650" y="130"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow4b_di" bpmnElement="Flow4b">
+        <di:waypoint x="570" y="235"/><di:waypoint x="570" y="290"/><di:waypoint x="650" y="290"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow5a_di" bpmnElement="Flow5a">
+        <di:waypoint x="750" y="130"/><di:waypoint x="830" y="130"/><di:waypoint x="830" y="185"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow5b_di" bpmnElement="Flow5b">
+        <di:waypoint x="750" y="290"/><di:waypoint x="830" y="290"/><di:waypoint x="830" y="235"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow6_di" bpmnElement="Flow6">
+        <di:waypoint x="855" y="210"/><di:waypoint x="910" y="210"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow7_di" bpmnElement="Flow7">
+        <di:waypoint x="1010" y="210"/><di:waypoint x="1060" y="210"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow8_di" bpmnElement="Flow8">
+        <di:waypoint x="1160" y="210"/><di:waypoint x="1210" y="210"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow9_di" bpmnElement="Flow9">
+        <di:waypoint x="1310" y="210"/><di:waypoint x="1362" y="210"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

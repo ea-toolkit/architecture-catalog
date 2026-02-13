@@ -1,0 +1,41 @@
+name: Validate Architecture Model
+
+on:
+  pull_request:
+    paths:
+      - 'registry-v2/**'
+      - 'views/**'
+      - 'scripts/validate.py'
+  push:
+    branches: [main, master]
+    paths:
+      - 'registry-v2/**'
+      - 'views/**'
+      - 'scripts/validate.py'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml python-frontmatter
+
+      - name: Run architecture validation
+        run: python3 scripts/validate.py
+
+      - name: Generate JSON report
+        if: always()
+        run: python3 scripts/validate.py --format json > validation-report.json
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: validation-report.json

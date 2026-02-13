@@ -1,0 +1,245 @@
+---
+// catalog-ui/src/pages/diagrams/index.astro
+// Diagram listing page - shows all diagrams grouped by domain
+
+import Layout from '../../layouts/Layout.astro';
+import { diagrams } from '../../data/diagrams-mock';
+import { domains } from '../../data/registry';
+
+// Group diagrams by domain
+const diagramsByDomain = diagrams.reduce((acc, d) => {
+  if (!acc[d.domain]) acc[d.domain] = [];
+  acc[d.domain].push(d);
+  return acc;
+}, {} as Record<string, typeof diagrams>);
+
+// Format badge colors
+const formatColors = {
+  plantuml: { bg: '#fef3c7', color: '#92400e' },
+  bpmn: { bg: '#ecfdf5', color: '#065f46' },
+  drawio: { bg: '#eff6ff', color: '#3b82f6' },
+};
+---
+
+<Layout title="Diagrams">
+  <div class="page-header">
+    <h1>Diagrams</h1>
+    <p class="page-header-summary">
+      {diagrams.length} architecture diagrams across all domains
+    </p>
+  </div>
+  
+  <div class="page-body">
+    <!-- Format filter pills -->
+    <div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
+      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); padding: 6px 0;">Filter:</span>
+      <button class="filter-pill active" data-format="all">All ({diagrams.length})</button>
+      <button class="filter-pill" data-format="plantuml">
+        PlantUML ({diagrams.filter(d => d.format === 'plantuml').length})
+      </button>
+      <button class="filter-pill" data-format="bpmn">
+        BPMN ({diagrams.filter(d => d.format === 'bpmn').length})
+      </button>
+      <button class="filter-pill" data-format="drawio">
+        Draw.io ({diagrams.filter(d => d.format === 'drawio').length})
+      </button>
+    </div>
+
+    {Object.entries(diagramsByDomain).map(([domainId, domainDiagrams]) => {
+      const domain = domains.find(d => d.id === domainId);
+      return (
+        <div class="detail-section">
+          <div class="detail-section-header">
+            <span class="detail-section-icon" style={`background: ${domain?.color || '#3b82f6'}15; color: ${domain?.color || '#3b82f6'};`}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+              </svg>
+            </span>
+            <span class="detail-section-title">{domain?.name || domainId}</span>
+            <span class="detail-section-count">{domainDiagrams.length}</span>
+          </div>
+          
+          <div class="diagram-grid">
+            {domainDiagrams.map(d => {
+              const fc = formatColors[d.format];
+              return (
+                <a href={`/diagrams/${d.id}`} class="diagram-card" data-format={d.format}>
+                  <div class="diagram-card-header">
+                    <div class="diagram-card-icon">
+                      {d.format === 'plantuml' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                      )}
+                      {d.format === 'bpmn' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <rect x="3" y="3" width="18" height="18" rx="2"/>
+                          <path d="M3 9h18M9 21V9"/>
+                        </svg>
+                      )}
+                      {d.format === 'drawio' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <rect x="3" y="3" width="7" height="7" rx="1"/>
+                          <rect x="14" y="3" width="7" height="7" rx="1"/>
+                          <rect x="3" y="14" width="7" height="7" rx="1"/>
+                          <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                      )}
+                    </div>
+                    <span class="diagram-format-badge" style={`background: ${fc.bg}; color: ${fc.color};`}>
+                      {d.format}
+                    </span>
+                  </div>
+                  <div class="diagram-card-body">
+                    <div class="diagram-card-name">{d.name}</div>
+                    <div class="diagram-card-description">{d.description}</div>
+                  </div>
+                  <div class="diagram-card-tags">
+                    {d.tags.slice(0, 3).map(tag => (
+                      <span class="diagram-tag">{tag}</span>
+                    ))}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</Layout>
+
+<style>
+  .filter-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgb(var(--ec-border));
+    background: white;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgb(var(--ec-page-text-muted));
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-pill:hover {
+    border-color: rgb(var(--ec-primary));
+    color: rgb(var(--ec-primary));
+  }
+  .filter-pill.active {
+    background: rgb(var(--ec-primary));
+    border-color: rgb(var(--ec-primary));
+    color: white;
+  }
+  
+  .diagram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+  
+  .diagram-card {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid rgb(var(--ec-border));
+    border-radius: 10px;
+    padding: 16px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .diagram-card:hover {
+    border-color: rgb(var(--ec-primary));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+  
+  .diagram-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  
+  .diagram-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgb(var(--ec-bg-muted));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(var(--ec-icon-color));
+  }
+  
+  .diagram-format-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  
+  .diagram-card-body {
+    flex: 1;
+  }
+  
+  .diagram-card-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(var(--ec-page-text));
+    margin-bottom: 6px;
+  }
+  
+  .diagram-card-description {
+    font-size: 12px;
+    color: rgb(var(--ec-page-text-muted));
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .diagram-card-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .diagram-tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgb(var(--ec-bg-muted));
+    font-size: 10px;
+    color: rgb(var(--ec-page-text-muted));
+  }
+</style>
+
+<script>
+  // Filter functionality
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const format = pill.getAttribute('data-format');
+      
+      // Update active state
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      
+      // Filter cards
+      document.querySelectorAll('.diagram-card').forEach(card => {
+        const cardFormat = card.getAttribute('data-format');
+        if (format === 'all' || cardFormat === format) {
+          (card as HTMLElement).style.display = 'flex';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

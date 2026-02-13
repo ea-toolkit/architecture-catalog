@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.idea/
+*.iml
+.DS_Store
+.venv/
+node_modules/
+.astro/
+_reference/
+dist/
+dashboard.html
