@@ -35,9 +35,8 @@ const edgeTypes = {
   relationshipEdge: RelationshipEdge,
 };
 
-// Status filter options
-const STATUS_OPTIONS = ['all', 'active', 'planned', 'deprecated'] as const;
-type StatusFilter = typeof STATUS_OPTIONS[number];
+// Status filter options — derived from actual data, not hardcoded
+type StatusFilter = string;
 
 interface DomainContextMapProps {
   domain: Domain;
@@ -201,13 +200,17 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
     img.src = url;
   }, [domain.name]);
 
-  // Status counts for filter pills
-  const statusCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: elements.length, active: 0, planned: 0, deprecated: 0 };
+  // Status options and counts — derived from actual element data
+  const { statusOptions, statusCounts } = useMemo(() => {
+    const counts: Record<string, number> = {};
     for (const el of elements) {
-      if (el.status && counts[el.status] !== undefined) counts[el.status]++;
+      const s = el.status || 'active';
+      counts[s] = (counts[s] || 0) + 1;
     }
-    return counts;
+    return {
+      statusOptions: ['all', ...Object.keys(counts)],
+      statusCounts: { all: elements.length, ...counts },
+    };
   }, [elements]);
 
   // Legend items from node types in the graph
@@ -313,7 +316,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
 
               {/* Status filter + Export row */}
               <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                {STATUS_OPTIONS.map(s => (
+                {statusOptions.map(s => (
                   <button
                     key={s}
                     onClick={() => setStatusFilter(s)}

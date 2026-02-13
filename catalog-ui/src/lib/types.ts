@@ -205,8 +205,8 @@ export interface LegacyElement {
   layer: string;
   domain: string;
   description: string;
-  make_or_buy?: 'make' | 'buy' | 'mixed';
-  status: 'active' | 'planned' | 'deprecated';
+  make_or_buy?: string;
+  status: string;
   owner?: string;
   aggregate?: string;
   /** Schema-derived: left-to-right rank from registry-mapping.yaml graph_rank */

@@ -263,8 +263,8 @@ export default function BaseNode({ data, id }: NodeProps) {
                 fontWeight: 500,
                 padding: '2px 8px',
                 borderRadius: 4,
-                background: d.status === 'active' ? '#dcfce7' : d.status === 'planned' ? '#dbeafe' : '#fee2e2',
-                color: d.status === 'active' ? '#166534' : d.status === 'planned' ? '#1e40af' : '#991b1b',
+                background: '#f1f5f9',
+                color: '#475569',
               }}
             >
               {d.status}
@@ -277,15 +277,15 @@ export default function BaseNode({ data, id }: NodeProps) {
                 fontWeight: 500,
                 padding: '2px 8px',
                 borderRadius: 4,
-                background: d.makeBuy === 'make' ? '#f3e8ff' : d.makeBuy === 'buy' ? '#fef3c7' : '#e0e7ff',
-                color: d.makeBuy === 'make' ? '#7c3aed' : d.makeBuy === 'buy' ? '#b45309' : '#4338ca',
+                background: '#f5f3ff',
+                color: '#6d28d9',
               }}
             >
               {d.makeBuy}
             </span>
           )}
           {!d.status && !d.makeBuy && (
-            <span style={{ fontSize: 10, color: '#94a3b8' }}>—</span>
+            <span style={{ fontSize: 10, color: '#94a3b8' }}></span>
           )}
         </div>
 
