@@ -12,7 +12,7 @@ export interface BaseNodeData {
   catalogUrl: string;
   style?: NodeStyle;
   status?: string;
-  makeBuy?: string;
+  sourcing?: string;
   color?: string;
   isFocusCenter?: boolean;
   opacity?: number;
@@ -270,7 +270,7 @@ export default function BaseNode({ data, id }: NodeProps) {
               {d.status}
             </span>
           )}
-          {d.makeBuy && (
+          {d.sourcing && (
             <span
               style={{
                 fontSize: 10,
@@ -281,10 +281,10 @@ export default function BaseNode({ data, id }: NodeProps) {
                 color: '#6d28d9',
               }}
             >
-              {d.makeBuy}
+              {d.sourcing}
             </span>
           )}
-          {!d.status && !d.makeBuy && (
+          {!d.status && !d.sourcing && (
             <span style={{ fontSize: 10, color: '#94a3b8' }}></span>
           )}
         </div>

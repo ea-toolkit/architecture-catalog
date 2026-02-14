@@ -32,8 +32,8 @@ npm run build
 You should see output like:
 
 ```
-Registry loaded: 32 elements, 69 edges
-  Healthy: 32  |  Connected: 32  |  Orphans: 0
+Registry loaded: 34 elements, 69 edges
+  Healthy: 34  |  Connected: 34  |  Orphans: 0
   Broken refs: 0
 ```
 
@@ -43,7 +43,7 @@ Registry loaded: 32 elements, 69 edges
 npm run dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321). You should see the dashboard with the NovaCRM Platform sample domain.
+Open [http://localhost:4321](http://localhost:4321). You should see the dashboard with the Customer Management, Billing & Payments, and Analytics & Insights sample domains.
 
 ## Brand it for your organization
 

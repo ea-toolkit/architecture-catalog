@@ -299,7 +299,7 @@ for (const [layerKey, groups] of Object.entries(elementsByLayer)) {
                     <tr>
                       <th>Name</th>
                       <th>Status</th>
-                      {group.elements.some(e => e.make_or_buy) && <th>Make / Buy</th>}
+                      {group.elements.some(e => e.sourcing) && <th>Sourcing</th>}
                       {group.elements.some(e => e.aggregate) && <th>Aggregate</th>}
                       {outCols.map(([_fk, label]) => (
                         <th>
@@ -328,8 +328,8 @@ for (const [layerKey, groups] of Object.entries(elementsByLayer)) {
                       <tr>
                         <td><a href={`/catalog/${el.id}`} class="table-link">{el.name}</a></td>
                         <td><span class={`badge badge-sm badge-${el.status}`}>{el.status}</span></td>
-                        {group.elements.some(e => e.make_or_buy) && (
-                          <td>{el.make_or_buy ? <span class={`badge badge-sm badge-${el.make_or_buy}`}>{el.make_or_buy}</span> : <span style="color: rgb(var(--ec-page-text-muted));">—</span>}</td>
+                        {group.elements.some(e => e.sourcing) && (
+                          <td>{el.sourcing ? <span class={`badge badge-sm badge-${el.sourcing}`}>{el.sourcing}</span> : <span style="color: rgb(var(--ec-page-text-muted));">—</span>}</td>
                         )}
                         {group.elements.some(e => e.aggregate) && (
                           <td style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">{el.aggregate || '—'}</td>

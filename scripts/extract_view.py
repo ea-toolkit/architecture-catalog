@@ -4,7 +4,7 @@ Extract structured YAML from draw.io diagram files.
 
 Parses .drawio XML and produces a compact, AI-readable YAML summary
 alongside the original file. Uses domain-reference.yaml to enrich
-elements with descriptions, make/buy decisions, and data catalog links.
+elements with descriptions, sourcing decisions, and data catalog links.
 
 Supports multiple view types:
   - domain-context: Logical components, data concepts, integrations, adjacent domains
@@ -259,8 +259,8 @@ def enrich_element(label, ref):
         if label in names:
             desc = lc.get("description") or ""
             result = {"type": "logical_component", "description": desc.strip()}
-            if lc.get("make_or_buy"):
-                result["make_or_buy"] = lc["make_or_buy"]
+            if lc.get("sourcing"):
+                result["sourcing"] = lc["sourcing"]
             if lc.get("sub_components"):
                 result["sub_components"] = lc["sub_components"]
             return result
@@ -539,8 +539,8 @@ def _extract_logical_component(cid, cell, cells, edges, children_of, ref):
     if enrichment:
         if enrichment.get("description"):
             lc["description"] = enrichment["description"]
-        if enrichment.get("make_or_buy"):
-            lc["make_or_buy"] = enrichment["make_or_buy"]
+        if enrichment.get("sourcing"):
+            lc["sourcing"] = enrichment["sourcing"]
         if enrichment.get("sub_components"):
             lc["contains"] = enrichment["sub_components"]
 

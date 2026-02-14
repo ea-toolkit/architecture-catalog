@@ -23,7 +23,7 @@ import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import FocusModeModal from './FocusModeModal';
 import { applyDagreLayout } from './utils/layout';
 import { buildDomainGraph } from './utils/graph-data';
-import { NODE_STYLES, EDGE_STYLES } from './utils/colors';
+import { NODE_STYLES, EDGE_STYLES, getNodeStyle } from './utils/colors';
 import type { Domain, Element } from '../../data/registry';
 
 // Custom node and edge types
@@ -219,7 +219,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
     types.add('domain');
     return Array.from(types).map(type => ({
       type,
-      style: NODE_STYLES[type] || NODE_STYLES['logical_component'],
+      style: NODE_STYLES[type] || getNodeStyle(type),
       label: type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
     }));
   }, [elements]);

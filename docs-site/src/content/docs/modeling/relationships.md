@@ -32,7 +32,7 @@ In your element's Markdown:
 
 ```yaml
 ---
-name: NovaCRM Core
+name: Platform Core
 composes_software_subsystems:
   - crm-api-gateway
   - billing-worker

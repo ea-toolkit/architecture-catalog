@@ -23,7 +23,7 @@ Generate the HTML dashboard and summarize key metrics.
 **Summary:**
 | Domain | Maturity | Elements |
 |--------|----------|----------|
-| novacrm-platform | X/5 | X |
+| customer-management | X/5 | X |
 | ... | ... | ... |
 
 **Layer Distribution:**

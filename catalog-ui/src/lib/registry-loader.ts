@@ -416,7 +416,7 @@ function buildGraphIndexes(
 
     // By domain — normalize to slug format so "NovaCRM Platform" and "novacrm-platform" resolve to the same key
     const rawDomain = (el.fields.domain as string) ?? 'unknown';
-    const domain = rawDomain === 'unknown' ? 'unknown' : rawDomain.toLowerCase().replace(/\s+/g, '-');
+    const domain = rawDomain === 'unknown' ? 'unknown' : rawDomain.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
     const domainList = byDomain.get(domain) ?? [];
     domainList.push(el);
     byDomain.set(domain, domainList);
@@ -495,7 +495,7 @@ export function toLegacyElements(
       layer: el.layer as LegacyElement['layer'],
       domain: domainId,
       description: (el.fields.description as string) ?? '',
-      make_or_buy: (el.fields.make_or_buy as string) || undefined,
+      sourcing: (el.fields.sourcing as string) || undefined,
       status: (el.fields.status as string) ?? 'active',
       owner: el.fields.owner as string | undefined,
       graphRank: typeDef?.graph_rank ?? 1,

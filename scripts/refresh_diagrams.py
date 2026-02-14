@@ -2,13 +2,13 @@
 """
 Refresh draw.io diagrams with metadata from the registry.
 
-Syncs enriched registry data (logical_component, make_or_buy, etc.)
+Syncs enriched registry data (logical_component, sourcing, etc.)
 into diagram shapes as custom properties, so the data appears when
 you inspect shapes in draw.io and in extracted YAMLs.
 
 Usage:
     python scripts/refresh_diagrams.py                    # Refresh all diagrams
-    python scripts/refresh_diagrams.py views/novacrm-platform/*.drawio  # Specific files
+    python scripts/refresh_diagrams.py views/customer-management/*.drawio  # Specific files
     python scripts/refresh_diagrams.py --dry-run          # Preview changes
 """
 
@@ -37,7 +37,7 @@ SYNC_FIELDS = {
     "classification": "classification",
     # Logical components
     "parent_domain": "parent_domain",
-    "make_or_buy": "make_or_buy",
+    "sourcing": "sourcing",
     # Software systems
     "vendor": "vendor",
     # Common

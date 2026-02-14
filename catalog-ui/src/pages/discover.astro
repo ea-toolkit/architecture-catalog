@@ -51,7 +51,7 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
             <th>Type</th>
             <th>Layer</th>
             <th>Domain</th>
-            <th>Make / Buy</th>
+            <th>Sourcing</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -80,8 +80,8 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
                   )}
                 </td>
                 <td>
-                  {el.make_or_buy
-                    ? <span class={`badge badge-sm badge-${el.make_or_buy}`}>{el.make_or_buy}</span>
+                  {el.sourcing
+                    ? <span class={`badge badge-sm badge-${el.sourcing}`}>{el.sourcing}</span>
                     : <span style="color: rgb(var(--ec-page-text-muted));">—</span>
                   }
                 </td>

@@ -499,10 +499,10 @@ button { font-family: inherit; cursor: pointer; }
 .badge-deprecated { background: rgb(254 226 226); color: rgb(153 27 27); border-color: transparent; }
 .badge-draft { background: rgb(var(--ec-badge-default-bg)); color: rgb(var(--ec-badge-default-text)); border-color: transparent; }
 
-/* Make/Buy badges */
-.badge-make { background: rgb(219 234 254); color: rgb(29 78 216); border-color: transparent; }
-.badge-buy { background: rgb(254 243 199); color: rgb(146 64 14); border-color: transparent; }
-.badge-mixed, .badge-hybrid { background: rgb(237 233 254); color: rgb(109 40 217); border-color: transparent; }
+/* Sourcing badges */
+.badge-in-house { background: rgb(219 234 254); color: rgb(29 78 216); border-color: transparent; }
+.badge-vendor { background: rgb(254 243 199); color: rgb(146 64 14); border-color: transparent; }
+.badge-hybrid { background: rgb(237 233 254); color: rgb(109 40 217); border-color: transparent; }
 
 /* Maturity badges */
 .badge-excellent { background: rgb(220 252 231); color: rgb(22 101 52); border-color: transparent; }

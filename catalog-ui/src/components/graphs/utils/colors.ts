@@ -144,7 +144,8 @@ export function getNodeStyle(type: string, fallback?: { bg: string; border: stri
       icon: '?',
     };
   }
-  return NODE_STYLES['logical_component'];
+  // Generic fallback — no dependency on any specific type name
+  return { bg: '#f8fafc', border: '#94a3b8', text: '#334155', borderStyle: 'solid', borderRadius: '8px', icon: '?' };
 }
 
 export function getEdgeStyle(relationship: string): EdgeStyle {

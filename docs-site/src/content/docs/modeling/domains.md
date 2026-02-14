@@ -64,7 +64,7 @@ Domains are sorted by element count (largest first), and colors are assigned in 
 The domain ID is derived from the `domain:` field value by lowercasing and replacing spaces with hyphens:
 
 ```
-"NovaCRM Platform" -> "novacrm-platform"
+"Customer Management" -> "customer-management"
 ```
 
-This slug is used in URLs: `/domains/novacrm-platform/`
+This slug is used in URLs: `/domains/customer-management/`

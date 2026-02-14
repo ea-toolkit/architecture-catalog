@@ -13,12 +13,12 @@ Usage:
 
 Output structure:
     libraries/
-      novacrm-platform/
+      customer-management/
         components.xml
         data-objects.xml
         functions.xml
         actors.xml
-      novacrm-platform/
+      billing-and-payments/
         components.xml
         functions.xml
       cross-cutting/

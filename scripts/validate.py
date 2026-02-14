@@ -87,7 +87,9 @@ LAYER_ORDER = [
 
 # Known domains (derived from views folder structure)
 KNOWN_DOMAINS = [
-    "novacrm-platform",
+    "customer-management",
+    "billing-and-payments",
+    "analytics-and-insights",
 ]
 
 # Required view types for domain maturity

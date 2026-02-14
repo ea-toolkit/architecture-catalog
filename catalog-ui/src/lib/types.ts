@@ -205,7 +205,7 @@ export interface LegacyElement {
   layer: string;
   domain: string;
   description: string;
-  make_or_buy?: string;
+  sourcing?: string;
   status: string;
   owner?: string;
   aggregate?: string;

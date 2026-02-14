@@ -55,7 +55,7 @@ export interface Element {
   layer: LayerKey;
   domain: string;
   description: string;
-  make_or_buy?: string;
+  sourcing?: string;
   status: string;
   owner?: string;
   aggregate?: string;
@@ -194,7 +194,7 @@ export function getModelStats() {
     totalElements: elements.length,
     totalDomains: domains.length,
     totalDiagrams: domains.reduce((sum, d) => sum + d.diagramCount, 0),
-    enrichedElements: elements.filter((e) => e.make_or_buy || e.aggregate).length,
+    enrichedElements: elements.filter((e) => e.sourcing || e.aggregate).length,
     layerCounts,
   };
 }

@@ -24,19 +24,19 @@ If arguments not provided, ask the user:
 
 | Type | Folder |
 |------|--------|
-| architecture-area-domain | registry-v2/3-applications-and-data/architecture-area-domains/ |
-| logical-component | registry-v2/3-applications-and-data/logical-components/ |
-| software-system | registry-v2/3-applications-and-data/software-systems/ |
-| software-subsystem | registry-v2/3-applications-and-data/software-subsystems/ |
-| physical-api | registry-v2/3-applications-and-data/physical-apis/ |
-| logical-api | registry-v2/3-applications-and-data/logical-apis/ |
-| domain-event | registry-v2/3-applications-and-data/domain-events/ |
-| data-concept | registry-v2/3-applications-and-data/data-concepts/ |
-| data-aggregate | registry-v2/3-applications-and-data/data-aggregates/ |
-| data-entity | registry-v2/3-applications-and-data/data-entities/ |
-| capability | registry-v2/2-process-and-organisation/capabilities/ |
-| process | registry-v2/2-process-and-organisation/processes/ |
-| actor | registry-v2/2-process-and-organisation/actors/ |
+| architecture-area-domain | registry-v2/3-application/architecture-area-domains/ |
+| logical-component | registry-v2/3-application/logical-components/ |
+| software-system | registry-v2/3-application/software-systems/ |
+| software-subsystem | registry-v2/3-application/software-subsystems/ |
+| physical-api | registry-v2/3-application/physical-apis/ |
+| logical-api | registry-v2/3-application/logical-apis/ |
+| domain-event | registry-v2/3-application/domain-events/ |
+| data-concept | registry-v2/3-application/data-concepts/ |
+| data-aggregate | registry-v2/3-application/data-aggregates/ |
+| data-entity | registry-v2/3-application/data-entities/ |
+| capability | registry-v2/2-organization/capabilities/ |
+| process | registry-v2/2-organization/processes/ |
+| actor | registry-v2/2-organization/actors/ |
 
 ## Workflow
 
@@ -55,7 +55,7 @@ If arguments not provided, ask the user:
 ## Response Format
 
 ```
-**Created:** registry-v2/3-applications-and-data/data-entities/payment-record.md
+**Created:** registry-v2/3-application/data-entities/payment-record.md
 
 **Frontmatter:**
 ---
@@ -81,8 +81,8 @@ For **data** elements (concepts, aggregates, entities), also include:
 - classification: internal/business-confidential/pii
 
 For **software** elements (systems, subsystems), also include:
-- make_or_buy: make/buy/hybrid
-- vendor: (if buy)
+- sourcing: in-house/vendor/hybrid
+- vendor: (if vendor)
 - realizes_logical_component: Which LC this system supports
 
 ## Notes

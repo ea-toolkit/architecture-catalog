@@ -30,7 +30,9 @@ VIEWS_DIR = REPO_ROOT / "views"
 
 # Known domains
 KNOWN_DOMAINS = [
-    "novacrm-platform",
+    "customer-management",
+    "billing-and-payments",
+    "analytics-and-insights",
 ]
 
 # Layer display order
@@ -62,7 +64,7 @@ def load_registry():
                 "domain": post.metadata.get("domain", ""),
                 "status": post.metadata.get("status", ""),
                 "specialization": post.metadata.get("specialization", ""),
-                "make_or_buy": post.metadata.get("make_or_buy", ""),
+                "sourcing": post.metadata.get("sourcing", ""),
                 "layer": layer,
                 "element_type": element_type,
                 "file": str(md_file.relative_to(REPO_ROOT)),
@@ -93,8 +95,8 @@ def calculate_domain_stats(elements):
         "total": 0,
         "by_layer": defaultdict(int),
         "by_type": defaultdict(int),
-        "make_count": 0,
-        "buy_count": 0,
+        "in_house_count": 0,
+        "vendor_count": 0,
         "owners": set(),
     })
 
@@ -105,10 +107,10 @@ def calculate_domain_stats(elements):
         stats[domain]["by_type"][elem["element_type"]] += 1
         if elem["owner"]:
             stats[domain]["owners"].add(elem["owner"])
-        if elem["make_or_buy"] == "make":
-            stats[domain]["make_count"] += 1
-        elif elem["make_or_buy"] == "buy":
-            stats[domain]["buy_count"] += 1
+        if elem["sourcing"] == "in-house":
+            stats[domain]["in_house_count"] += 1
+        elif elem["sourcing"] == "vendor":
+            stats[domain]["vendor_count"] += 1
 
     # Convert sets to counts
     for domain in stats:

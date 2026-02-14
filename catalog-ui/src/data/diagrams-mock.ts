@@ -68,7 +68,7 @@ const platformDataFlow = `@startuml
 !theme plain
 skinparam backgroundColor #FEFEFE
 
-title NovaCRM Platform Data Flow
+title Platform Data Flow
 
 package "Tenant Domain" {
   [Tenant Management] as TM
@@ -267,7 +267,7 @@ export const diagrams: Diagram[] = [
   {
     id: 'tenant-onboarding-sequence',
     name: 'Tenant Onboarding Sequence',
-    domain: 'novacrm-platform',
+    domain: 'customer-management',
     format: 'plantuml',
     description: 'Sequence diagram showing the tenant onboarding flow from sales request to provisioning.',
     tags: ['sequence', 'tenant', 'onboarding', 'api'],
@@ -276,7 +276,7 @@ export const diagrams: Diagram[] = [
   {
     id: 'platform-data-flow',
     name: 'Platform Data Flow',
-    domain: 'novacrm-platform',
+    domain: 'customer-management',
     format: 'plantuml',
     description: 'Component diagram showing data flow between platform services and event bus.',
     tags: ['component', 'data-flow', 'events'],
@@ -285,7 +285,7 @@ export const diagrams: Diagram[] = [
   {
     id: 'analytics-query-sequence',
     name: 'Analytics Query Flow',
-    domain: 'novacrm-platform',
+    domain: 'customer-management',
     format: 'plantuml',
     description: 'Sequence diagram showing how analytics queries are processed through the pipeline.',
     tags: ['sequence', 'analytics', 'query', 'graphql'],
@@ -296,7 +296,7 @@ export const diagrams: Diagram[] = [
   {
     id: 'subscription-lifecycle',
     name: 'Subscription Lifecycle Process',
-    domain: 'novacrm-platform',
+    domain: 'customer-management',
     format: 'bpmn',
     description: 'BPMN diagram showing the subscription lifecycle from plan selection to activation.',
     tags: ['bpmn', 'process', 'subscription', 'billing'],

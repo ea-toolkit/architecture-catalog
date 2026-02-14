@@ -124,7 +124,7 @@ for (const el of domainElements) {
         {layer.name}
       </span>
       <span class={`badge badge-${element.status}`}>{element.status}</span>
-      {element.make_or_buy && <span class={`badge badge-${element.make_or_buy}`}>{element.make_or_buy}</span>}
+      {element.sourcing && <span class={`badge badge-${element.sourcing}`}>{element.sourcing}</span>}
     </div>
   </div>
 
@@ -287,10 +287,10 @@ for (const el of domainElements) {
               <span class="property-label">Status</span>
               <span class="property-value">{element.status}</span>
             </div>
-            {element.make_or_buy && (
+            {element.sourcing && (
               <div class="property-row">
-                <span class="property-label">Make / Buy</span>
-                <span class="property-value">{element.make_or_buy}</span>
+                <span class="property-label">Sourcing</span>
+                <span class="property-value">{element.sourcing}</span>
               </div>
             )}
             {element.owner && (

@@ -10,9 +10,9 @@ architecture-catalog/
 │   └── registry-mapping.yaml    <- THE schema: defines types, fields, relationships
 |
 ├── registry-v2/                 <- YOUR DATA: one .md file per architecture element
-│   ├── 1-products-and-services/
-│   ├── 2-process-and-organisation/
-│   ├── 3-applications-and-data/
+│   ├── 1-business/
+│   ├── 2-organization/
+│   ├── 3-application/
 │   │   ├── architecture-area-domains/
 │   │   ├── logical-components/
 │   │   ├── software-systems/
@@ -23,7 +23,7 @@ architecture-catalog/
 │   │   ├── data-aggregates/
 │   │   ├── data-entities/
 │   │   └── domain-events/
-│   └── 4-infrastructure-and-hosting/
+│   └── 4-technology/
 |
 ├── catalog-ui/                  <- THE UI: Astro + React static site
 │   └── src/
@@ -44,7 +44,7 @@ architecture-catalog/
 │   └── generate_dashboard.py       <- Generate HTML health dashboard
 |
 ├── views/                       <- DIAGRAMS: architecture diagrams by domain
-│   └── novacrm-platform/
+│   └── customer-management/
 |
 └── docs-site/                   <- THIS DOCS SITE: Starlight (Astro)
 ```

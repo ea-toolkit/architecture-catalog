@@ -58,26 +58,26 @@ site:
 # Layer Definitions — name these however you want
 # ─────────────────────────────────────────────────────────────
 layers:
-  products_and_services:
-    name: Products & Services
+  business:
+    name: Business
     color: "#a855f7"
     bg: "#faf5ff"
-    icon: P
-  process_and_organisation:
-    name: Process & Organisation
+    icon: B
+  organization:
+    name: Organization
     color: "#f59e0b"
     bg: "#fffbeb"
     icon: O
-  applications_and_data:
-    name: Applications & Data
+  application:
+    name: Application
     color: "#3b82f6"
     bg: "#eff6ff"
     icon: A
-  infrastructure_and_hosting:
-    name: Infrastructure & Hosting
+  technology:
+    name: Technology
     color: "#10b981"
     bg: "#ecfdf5"
-    icon: I
+    icon: T
 
 # ─────────────────────────────────────────────────────────────
 # Relationship Types — verbs for outgoing / incoming edges
@@ -137,8 +137,8 @@ elements:
   # ══════════════════════════════════════════════
   product:
     label: Product
-    layer: products_and_services
-    folder: 1-products-and-services/products
+    layer: business
+    folder: 1-business/products
     id_field: name
     archimate: product
     graph_rank: -1
@@ -194,8 +194,8 @@ elements:
   # ══════════════════════════════════════════════
   customer_segment:
     label: Customer Segment
-    layer: products_and_services
-    folder: 1-products-and-services/customer-segments
+    layer: business
+    folder: 1-business/customer-segments
     id_field: name
     archimate: business-actor
     graph_rank: -2
@@ -240,8 +240,8 @@ elements:
   # ══════════════════════════════════════════════
   business_service:
     label: Business Service
-    layer: products_and_services
-    folder: 1-products-and-services/business-services
+    layer: business
+    folder: 1-business/business-services
     id_field: name
     archimate: business-service
     graph_rank: -1
@@ -293,8 +293,8 @@ elements:
   # ══════════════════════════════════════════════
   business_capability:
     label: Business Capability
-    layer: process_and_organisation
-    folder: 2-process-and-organisation/capabilities
+    layer: organization
+    folder: 2-organization/capabilities
     id_field: name
     archimate: business-function
     graph_rank: 1
@@ -339,8 +339,8 @@ elements:
   # ══════════════════════════════════════════════
   business_process:
     label: Business Process
-    layer: process_and_organisation
-    folder: 2-process-and-organisation/processes
+    layer: organization
+    folder: 2-organization/processes
     id_field: name
     archimate: business-process
     graph_rank: 1
@@ -393,8 +393,8 @@ elements:
   # ══════════════════════════════════════════════
   architecture_area_domain:
     label: Architecture Area Domain
-    layer: applications_and_data
-    folder: 3-applications-and-data/architecture-area-domains
+    layer: application
+    folder: 3-application/architecture-area-domains
     id_field: name
     archimate: application-function
     graph_rank: 0
@@ -446,8 +446,8 @@ elements:
   # ══════════════════════════════════════════════
   logical_component:
     label: Logical Component
-    layer: applications_and_data
-    folder: 3-applications-and-data/logical-components
+    layer: application
+    folder: 3-application/logical-components
     id_field: name
     archimate: application-function
     graph_rank: 1
@@ -478,10 +478,10 @@ elements:
         type: string
         required: false
         label: Status
-      make_or_buy:
+      sourcing:
         type: string
         required: false
-        label: Make or Buy
+        label: Sourcing
     relationships:
       parent_architecture_area_domain:
         target: architecture_area_domain
@@ -531,8 +531,8 @@ elements:
   # ══════════════════════════════════════════════
   software_system:
     label: Software System
-    layer: applications_and_data
-    folder: 3-applications-and-data/software-systems
+    layer: application
+    folder: 3-application/software-systems
     id_field: name
     archimate: application-component
     graph_rank: 2
@@ -571,10 +571,10 @@ elements:
         type: string
         required: false
         label: Status
-      make_or_buy:
+      sourcing:
         type: string
         required: false
-        label: Make or Buy
+        label: Sourcing
       catalog_id:
         type: string
         required: false
@@ -616,8 +616,8 @@ elements:
   # ══════════════════════════════════════════════
   software_subsystem:
     label: Software Subsystem
-    layer: applications_and_data
-    folder: 3-applications-and-data/software-subsystems
+    layer: application
+    folder: 3-application/software-subsystems
     id_field: name
     archimate: application-component
     graph_rank: 3
@@ -680,8 +680,8 @@ elements:
   # ══════════════════════════════════════════════
   logical_business_api:
     label: Logical Business API
-    layer: applications_and_data
-    folder: 3-applications-and-data/logical-apis
+    layer: application
+    folder: 3-application/logical-apis
     id_field: name
     archimate: application-service
     graph_rank: 2
@@ -733,8 +733,8 @@ elements:
   # ══════════════════════════════════════════════
   physical_business_api:
     label: Physical Business API
-    layer: applications_and_data
-    folder: 3-applications-and-data/physical-apis
+    layer: application
+    folder: 3-application/physical-apis
     id_field: name
     archimate: application-interface
     graph_rank: 3
@@ -794,8 +794,8 @@ elements:
   # ══════════════════════════════════════════════
   data_concept:
     label: Data Concept
-    layer: applications_and_data
-    folder: 3-applications-and-data/data-concepts
+    layer: application
+    folder: 3-application/data-concepts
     id_field: name
     archimate: data-object
     graph_rank: 1
@@ -852,8 +852,8 @@ elements:
   # ══════════════════════════════════════════════
   data_aggregate:
     label: Data Aggregate
-    layer: applications_and_data
-    folder: 3-applications-and-data/data-aggregates
+    layer: application
+    folder: 3-application/data-aggregates
     id_field: name
     archimate: data-object
     graph_rank: 2
@@ -923,8 +923,8 @@ elements:
   # ══════════════════════════════════════════════
   data_entity:
     label: Data Entity
-    layer: applications_and_data
-    folder: 3-applications-and-data/data-entities
+    layer: application
+    folder: 3-application/data-entities
     id_field: name
     archimate: data-object
     graph_rank: 3
@@ -977,8 +977,8 @@ elements:
   # ══════════════════════════════════════════════
   domain_event:
     label: Domain Event
-    layer: applications_and_data
-    folder: 3-applications-and-data/domain-events
+    layer: application
+    folder: 3-application/domain-events
     id_field: name
     archimate: application-event
     graph_rank: 3
@@ -1045,8 +1045,8 @@ elements:
   # ══════════════════════════════════════════════
   hosting_node:
     label: Hosting Node
-    layer: infrastructure_and_hosting
-    folder: 4-infrastructure-and-hosting/hosting-nodes
+    layer: technology
+    folder: 4-technology/hosting-nodes
     id_field: name
     archimate: node
     graph_rank: 4
@@ -1099,8 +1099,8 @@ elements:
   # ══════════════════════════════════════════════
   technology_infrastructure:
     label: Technology Infrastructure
-    layer: infrastructure_and_hosting
-    folder: 4-infrastructure-and-hosting/technology-infrastructure
+    layer: technology
+    folder: 4-technology/technology-infrastructure
     id_field: name
     archimate: system-software
     graph_rank: 4
@@ -1184,7 +1184,7 @@ elements:
 #
 # resolve_by: abbreviation
 #   Match the target's `abbreviation:` frontmatter field.
-#   e.g., "NOVA" → software-systems/novacrm-core.md (abbreviation: NOVA)
+#   e.g., "NOVA" → software-systems/platform-core.md (abbreviation: NOVA)
 #
 # When a reference can't be resolved:
 #   - Loader returns { resolved: false, raw: "the-value" }

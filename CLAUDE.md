@@ -26,8 +26,8 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 ### Registry (registry-v2/)
 - **4-layer structure** — flat layers, each with typed sub-folders
 - **Template-driven** — each element type has a `_template.md` with typed YAML frontmatter
-- **Example domain**: "NovaCRM Platform" — a fictional B2B SaaS CRM with 32 elements across all 4 layers
-- **Health:** 32 healthy, 32 connected, 0 orphans, 0 broken refs, 41 pages
+- **Example domains**: "Customer Management", "Billing & Payments", "Analytics & Insights" — 3 fictional B2B SaaS CRM domains with 71 elements across all 4 layers
+- **Health:** 71 healthy, 71 connected, 0 orphans, 0 broken refs, 84 pages
 
 ### Catalog UI (catalog-ui/)
 - **Astro 5 + React** static site for browsing the registry
@@ -84,13 +84,13 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
   settings.json                     # Hook configuration
 
 registry-v2/                # Element registry — one .md file per architecture element
-  1-products-and-services/   # Layer 1
-  2-process-and-organisation/# Layer 2
-  3-applications-and-data/   # Layer 3 (primary focus)
-  4-infrastructure-and-hosting/ # Layer 4
+  1-business/                # Layer 1: Business
+  2-organization/            # Layer 2: Organization
+  3-application/             # Layer 3: Application (primary focus)
+  4-technology/              # Layer 4: Technology
 
 views/                       # Architecture diagrams by domain
-  novacrm-platform/          # Example domain diagrams
+  customer-management/       # Example domain diagrams
 
 models/
   registry-mapping.yaml        # Schema mapping (types → folders → UI) — THE source of truth
@@ -147,7 +147,7 @@ The UI is fully schema-driven via `models/registry-mapping.yaml`. Adding a new e
 1. Create skill: `.claude/skills/<domain>-archi/SKILL.md`
 2. Create sub-agent: `.claude/agents/<domain>.md`
 3. Create views folder: `views/<domain>/`
-4. Create registry entries in `registry-v2/3-applications-and-data/`
+4. Create registry entries in `registry-v2/3-application/`
 5. Update welcome hook to show new skill
 
 See `docs-site/src/content/docs/contributing/how-to-contribute.md` for detailed instructions.

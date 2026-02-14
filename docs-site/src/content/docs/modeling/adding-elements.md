@@ -20,9 +20,9 @@ type: software-subsystem
 name: CRM API Gateway
 description: API gateway for tenant and contact management
 owner: Platform Team
-domain: NovaCRM Platform
+domain: Customer Management
 status: active
-parent_software_system: novacrm-core
+parent_software_system: platform-core
 composes_physical_apis:
   - tenant-api
 ---
@@ -38,7 +38,7 @@ tenant provisioning, contact lookups, and authentication flows.
 - **ADR-002**: JWT-based tenant isolation
 ```
 
-Save as `registry-v2/3-applications-and-data/software-subsystems/crm-api-gateway.md`.
+Save as `registry-v2/3-application/software-subsystems/crm-api-gateway.md`.
 
 ## Frontmatter fields
 
@@ -47,10 +47,10 @@ Every `.md` file has a YAML frontmatter block between `---` markers:
 ```yaml
 ---
 type: software-system          # matches an element key in the mapping
-name: NovaCRM Core             # required - the element's identity
+name: Platform Core             # required - the element's identity
 description: Core CRM platform # optional - shown in cards and detail
 owner: Platform Team           # optional - ownership info
-domain: NovaCRM Platform       # optional - auto-groups into domains
+domain: Customer Management    # optional - auto-groups into domains
 status: active                 # optional - free-text status value
 ---
 ```
@@ -95,6 +95,6 @@ The `--` separator prevents collisions. Different element types can have files w
 Every type folder should have a `_template.md` with all available fields pre-filled as empty values. This makes it easy to create new elements:
 
 ```bash
-cp registry-v2/3-applications-and-data/software-systems/_template.md \
-   registry-v2/3-applications-and-data/software-systems/my-new-system.md
+cp registry-v2/3-application/software-systems/_template.md \
+   registry-v2/3-application/software-systems/my-new-system.md
 ```

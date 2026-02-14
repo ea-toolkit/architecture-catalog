@@ -73,7 +73,7 @@ export function buildDomainGraph(
         elementType: el.typeLabel,
         catalogUrl: `/catalog/${el.id}`,
         status: el.status,
-        makeBuy: el.make_or_buy,
+        sourcing: el.sourcing,
         mappingIcon: el.mappingIcon,
         style,
         rank,
@@ -230,7 +230,7 @@ export function buildElementGraph(
   // Outgoing relationships (this element → target)
   for (const rel of element.relationships) {
     const targetEl = elementById.get(rel.target);
-    const tStyle = targetEl ? getElementStyle(targetEl) : getNodeStyle('logical_component');
+    const tStyle = targetEl ? getElementStyle(targetEl) : getNodeStyle('_unknown');
     const tRank = targetEl ? getElementGraphRank(targetEl) : 1;
     const semantics = getRelationshipSemantics(rel.type);
 
@@ -245,7 +245,7 @@ export function buildElementGraph(
           elementType: targetEl?.typeLabel || 'Element',
           catalogUrl: `/catalog/${rel.target}`,
           status: targetEl?.status,
-          makeBuy: targetEl?.make_or_buy,
+          sourcing: targetEl?.sourcing,
           mappingIcon: targetEl?.mappingIcon,
           style: tStyle,
           rank: tRank,
@@ -297,7 +297,7 @@ export function buildElementGraph(
               elementType: other.typeLabel,
               catalogUrl: `/catalog/${other.id}`,
               status: other.status,
-              makeBuy: other.make_or_buy,
+              sourcing: other.sourcing,
               mappingIcon: other.mappingIcon,
               style: oStyle,
               rank: oRank,
