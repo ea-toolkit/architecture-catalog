@@ -389,6 +389,8 @@ button { font-family: inherit; cursor: pointer; }
   margin-left: 371px; /* 56 + 315 */
   flex: 1;
   min-height: 100vh;
+  min-width: 0;
+  overflow-x: hidden;
   background: rgb(var(--ec-page-bg));
 }
 

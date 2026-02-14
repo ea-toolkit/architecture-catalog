@@ -2,7 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { domains, getElementsByDomain, getDomainById, LAYER_META, TYPE_BADGES, type LayerKey } from '../../../data/registry';
 import { getDiagramsByDomain } from '../../../data/diagrams-mock';
-import DomainContextMap from '../../../components/graphs/DomainContextMap';
+import { marked } from 'marked';
 
 export function getStaticPaths() {
   return domains.map(d => ({ params: { id: d.id } }));
@@ -17,7 +17,6 @@ const domainDiagrams = getDiagramsByDomain(id!);
 type GroupedElements = Record<string, { type: string; typeLabel: string; badgeClass: string; elements: typeof domainElements }[]>;
 const elementsByLayer: GroupedElements = {};
 
-// Badge categories from mapping YAML
 const typeToBadge = TYPE_BADGES;
 
 for (const el of domainElements) {
@@ -35,7 +34,7 @@ for (const el of domainElements) {
 }
 ---
 
-<Layout title={`${domain.name} – Context Map`} activeDomain={id} sidebarContent="domain-detail">
+<Layout title={`${domain.name} – Documentation`} activeDomain={id} sidebarContent="domain-detail">
   <!-- Sidebar slot: domain element navigation -->
   <Fragment slot="sidebar">
     <div class="sidebar-group">
@@ -49,11 +48,12 @@ for (const el of domainElements) {
         <a href={`/domains/${id}`} class="sidebar-item">
           <span>Architecture Overview</span>
         </a>
-        <a href={`/domains/${id}/context-map`} class="sidebar-item active">
+        <a href={`/domains/${id}/context-map`} class="sidebar-item">
           <span>Domain Context Map</span>
         </a>
-        <a href={`/domains/${id}/docs`} class="sidebar-item">
+        <a href={`/domains/${id}/docs`} class="sidebar-item active">
           <span>Documentation</span>
+          {!domain.docs && <span class="sidebar-type-label" style="font-size: 9px; opacity: 0.5;">empty</span>}
         </a>
       </div>
     </div>
@@ -103,125 +103,38 @@ for (const el of domainElements) {
     })}
   </Fragment>
 
-  <!-- Full-page Context Map -->
-  <div class="context-map-fullpage">
-    <div class="context-map-header">
-      <div class="context-map-header-left">
-        <a href={`/domains/${id}`} class="context-map-back">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-          Back to Overview
-        </a>
-        <div class="context-map-title">
-          <span class="context-map-domain-dot" style={`background: ${domain.color};`}></span>
-          <h1>{domain.name}</h1>
-          <span class="badge badge-sm badge-domain">Context Map</span>
+  <!-- Page Content -->
+  <div class="page-header" style={`border-top: 3px solid ${domain.color};`}>
+    <div class="page-header-breadcrumb">
+      <a href="/">Domains</a>
+      <span>/</span>
+      <a href={`/domains/${id}`}>{domain.name}</a>
+      <span>/</span>
+    </div>
+    <div class="page-header-title">
+      <h1>Documentation</h1>
+    </div>
+    <p class="page-header-summary">{domain.name} domain documentation</p>
+  </div>
+
+  <div class="page-body">
+    {domain.docs ? (
+      <div class="detail-body" style="padding: 24px; background: rgb(var(--ec-content-hover)); border-radius: 10px; font-size: 14px; line-height: 1.7; color: rgb(var(--ec-page-text));">
+        <Fragment set:html={marked(domain.docs)} />
+      </div>
+    ) : (
+      <div style="padding: 40px 24px; text-align: center; background: rgb(var(--ec-content-hover)); border-radius: 10px; border: 1px dashed rgb(var(--ec-page-border));">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--ec-page-text-muted))" stroke-width="1" style="margin: 0 auto 12px; display: block; opacity: 0.4;">
+          <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <div style="font-size: 14px; font-weight: 500; color: rgb(var(--ec-page-text-muted)); margin-bottom: 6px;">No documentation yet</div>
+        <div style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); opacity: 0.7;">
+          Add a <code style="background: rgb(var(--ec-page-border) / 0.4); padding: 1px 5px; border-radius: 4px; font-size: 11px;">docs.md</code> file at <code style="background: rgb(var(--ec-page-border) / 0.4); padding: 1px 5px; border-radius: 4px; font-size: 11px;">views/{id}/docs.md</code> to populate this section.
         </div>
       </div>
-      <div class="context-map-header-right">
-        <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">
-          {domainElements.length} elements
-        </span>
-      </div>
-    </div>
-
-    <div class="context-map-container">
-      <DomainContextMap 
-        client:only="react" 
-        domain={domain} 
-        elements={domainElements} 
-      />
-    </div>
-
-    <div class="context-map-footer">
-      <p>Click any node to enter focus mode. Click the document icon to view element details.</p>
-    </div>
+    )}
   </div>
 </Layout>
-
-<style>
-  .context-map-fullpage {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 20px);
-    background: rgb(var(--ec-page-bg));
-    overflow: hidden;
-  }
-
-  .context-map-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 24px;
-    border-bottom: 1px solid rgb(var(--ec-page-border));
-    background: rgb(var(--ec-page-surface));
-    flex-shrink: 0;
-  }
-
-  .context-map-header-left {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .context-map-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: rgb(var(--ec-page-text-muted));
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-
-  .context-map-back:hover {
-    color: rgb(59, 130, 246);
-  }
-
-  .context-map-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .context-map-domain-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .context-map-title h1 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0;
-    color: rgb(var(--ec-page-text));
-  }
-
-  .context-map-container {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Make the ReactFlow container fill available space */
-  .context-map-container > div {
-    flex: 1;
-    min-height: 0;
-  }
-
-  .context-map-footer {
-    padding: 8px 24px;
-    border-top: 1px solid rgb(var(--ec-page-border));
-    background: rgb(var(--ec-page-surface));
-    flex-shrink: 0;
-  }
-
-  .context-map-footer p {
-    font-size: 12px;
-    color: rgb(var(--ec-page-text-muted));
-    margin: 0;
-    text-align: center;
-  }
-</style>

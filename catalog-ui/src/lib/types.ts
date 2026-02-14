@@ -241,4 +241,6 @@ export interface LegacyDomain {
   counts: Record<string, number>;
   totalElements: number;
   diagramCount: number;
+  /** Domain documentation markdown from views/<domain>/docs.md */
+  docs: string;
 }

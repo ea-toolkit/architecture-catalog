@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { domains, getElementsByDomain, getDomainById, LAYER_META, TYPE_BADGES, getRelFieldLabel, type LayerKey } from '../../../data/registry';
 import { getDiagramsByDomain } from '../../../data/diagrams-mock';
 
+
 export function getStaticPaths() {
   return domains.map(d => ({ params: { id: d.id } }));
 }
@@ -140,6 +141,10 @@ for (const [layerKey, groups] of Object.entries(elementsByLayer)) {
         </a>
         <a href={`/domains/${id}/context-map`} class="sidebar-item">
           <span>Domain Context Map</span>
+        </a>
+        <a href={`/domains/${id}/docs`} class="sidebar-item">
+          <span>Documentation</span>
+          {!domain.docs && <span class="sidebar-type-label" style="font-size: 9px; opacity: 0.5;">empty</span>}
         </a>
       </div>
     </div>

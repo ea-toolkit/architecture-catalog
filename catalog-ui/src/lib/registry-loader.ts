@@ -566,6 +566,15 @@ export function toLegacyDomains(graph: RegistryGraph): LegacyDomain[] {
     const maturity: LegacyDomain['maturity'] =
       ratio > 0.8 ? 'Excellent' : ratio > 0.6 ? 'Good' : ratio > 0.3 ? 'Developing' : 'Initial';
 
+    // Read domain documentation from views/<domainId>/docs.md
+    const docsPath = join(WORKSPACE_ROOT, 'views', domainId, 'docs.md');
+    let docs = '';
+    if (existsSync(docsPath)) {
+      const raw = readFileSync(docsPath, 'utf-8');
+      const parsed = parseFrontmatter(raw);
+      docs = parsed ? parsed.body : raw.trim();
+    }
+
     domains.push({
       id: domainId,
       name: domainElement ? (domainElement.fields.name as string) ?? domainId : domainId,
@@ -575,6 +584,7 @@ export function toLegacyDomains(graph: RegistryGraph): LegacyDomain[] {
       counts,
       totalElements: elements.length,
       diagramCount: 0,  // Diagrams are a separate concern
+      docs,
     });
     colorIdx++;
   }
