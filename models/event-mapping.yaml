@@ -1,0 +1,16 @@
+# Event Catalog View Mapping
+# Maps registry element types to semantic event-flow roles.
+# This file is OPTIONAL — if absent, no Events tab appears.
+#
+# Values are element type KEYS from registry-mapping.yaml.
+# The loader auto-traverses intermediate hops (e.g. event → API → subsystem)
+# so you don't need to configure the chain explicitly.
+
+service_type: software_subsystem
+event_type: domain_event
+publishes_field: published_by_physical_apis
+consumes_field: consumed_by_physical_apis
+
+# Optional display label overrides (defaults to type label from registry-mapping.yaml):
+# service_label: Service
+# event_label: Domain Event

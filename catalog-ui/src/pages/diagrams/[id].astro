@@ -5,7 +5,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { DiagramViewer } from '../../components/diagrams';
 import { diagrams, getDiagramById, getDiagramsByDomain } from '../../data/diagrams-mock';
-import { domains, getElementsByDomain, LAYER_META, type LayerKey } from '../../data/registry';
+import { domains, getElementsByDomain, LAYER_META, eventMappingEnabled, type LayerKey } from '../../data/registry';
 
 export function getStaticPaths() {
   return diagrams.map(d => ({
@@ -65,6 +65,11 @@ const fc = formatColors[diagram.format];
         <a href={`/domains/${diagram.domain}/docs`} class="sidebar-item">
           <span>Documentation</span>
         </a>
+        {eventMappingEnabled && (
+          <a href={`/domains/${diagram.domain}/events`} class="sidebar-item">
+            <span>Event Map</span>
+          </a>
+        )}
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { domains, getElementsByDomain, getDomainById, LAYER_META, TYPE_BADGES, getRelFieldLabel, type LayerKey } from '../../../data/registry';
+import { domains, getElementsByDomain, getDomainById, LAYER_META, TYPE_BADGES, getRelFieldLabel, eventMappingEnabled, type LayerKey } from '../../../data/registry';
 import { getDiagramsByDomain } from '../../../data/diagrams-mock';
 
 
@@ -146,6 +146,11 @@ for (const [layerKey, groups] of Object.entries(elementsByLayer)) {
           <span>Documentation</span>
           {!domain.docs && <span class="sidebar-type-label" style="font-size: 9px; opacity: 0.5;">empty</span>}
         </a>
+        {eventMappingEnabled && (
+          <a href={`/domains/${id}/events`} class="sidebar-item">
+            <span>Event Map</span>
+          </a>
+        )}
       </div>
     </div>
 

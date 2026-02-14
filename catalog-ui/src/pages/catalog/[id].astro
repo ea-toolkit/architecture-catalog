@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { elements, getElementById, getDomainById, getElementsByDomain, LAYER_META, TYPE_BADGES, REL_TYPE_LABELS, getExtraFields, type LayerKey } from '../../data/registry';
+import { elements, getElementById, getDomainById, getElementsByDomain, LAYER_META, TYPE_BADGES, REL_TYPE_LABELS, getExtraFields, eventMappingEnabled, type LayerKey } from '../../data/registry';
 import ElementContextGraph from '../../components/graphs/ElementContextGraph';
 import { marked } from 'marked';
 
@@ -79,6 +79,9 @@ for (const el of domainElements) {
         <a href={domain ? `/domains/${domain.id}` : '/'} class="sidebar-item">Architecture Overview</a>
         <a href={domain ? `/domains/${domain.id}/context-map` : '/'} class="sidebar-item">Domain Context Map</a>
         <a href={domain ? `/domains/${domain.id}/docs` : '/'} class="sidebar-item">Documentation</a>
+        {eventMappingEnabled && domain && (
+          <a href={`/domains/${domain.id}/events`} class="sidebar-item">Event Map</a>
+        )}
       </div>
     </div>
 

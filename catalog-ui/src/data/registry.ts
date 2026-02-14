@@ -29,6 +29,7 @@ import {
   getRelTypelabels,
 } from '../lib/registry-loader';
 import type { RegistryGraph, SiteConfig, LayerDef, RelationshipTypeDef } from '../lib/types';
+import { loadEventMapping, resolveEventFlows, type EventFlow, type EventMappingConfig } from '../lib/event-mapping-loader';
 
 // ─────────────────────────────────────────────────────────────
 // Types — self-contained, no dependency on mock.ts
@@ -84,6 +85,8 @@ let _graph: RegistryGraph | null = null;
 let _domains: Domain[] = [];
 let _elements: Element[] = [];
 let _loadError: string | null = null;
+let _eventMapping: EventMappingConfig | null = null;
+const _eventFlowCache = new Map<string, EventFlow | null>();
 
 try {
   _graph = await loadRegistry();
@@ -122,6 +125,12 @@ try {
     console.log(`   → ${type}: ${stats.total} total, ${stats.healthy} healthy, ${stats.connected} connected`);
   }
   console.log('');
+
+  // Load optional event mapping
+  _eventMapping = loadEventMapping();
+  if (_eventMapping) {
+    console.log(`🔔 Event mapping loaded: ${_eventMapping.event_type} → ${_eventMapping.service_type}`);
+  }
 } catch (err) {
   _loadError = err instanceof Error ? err.message : String(err);
   console.error(`\n❌ Registry load failed: ${_loadError}`);
@@ -243,3 +252,30 @@ export function getExtraFields(element: Element): { key: string; label: string; 
   }
   return extras;
 }
+
+// ─────────────────────────────────────────────────────────────
+// Event Flow API — optional, driven by event-mapping.yaml
+// ─────────────────────────────────────────────────────────────
+
+/** Whether event mapping is configured (event-mapping.yaml exists and is valid) */
+export const eventMappingEnabled: boolean = _eventMapping !== null;
+
+/**
+ * Get the resolved event flows for a domain.
+ * Returns null if event mapping is not configured or no events exist in the domain.
+ * Results are cached per domain.
+ */
+export function getEventFlows(domainId: string): EventFlow | null {
+  if (!_graph || !_eventMapping) return null;
+
+  if (_eventFlowCache.has(domainId)) {
+    return _eventFlowCache.get(domainId)!;
+  }
+
+  const result = resolveEventFlows(_graph, _eventMapping, domainId);
+  _eventFlowCache.set(domainId, result);
+  return result;
+}
+
+// Re-export types for consumers
+export type { EventFlow, EventNode, ServiceNode, EventEdge } from '../lib/event-mapping-loader';

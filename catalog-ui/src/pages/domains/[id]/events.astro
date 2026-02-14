@@ -1,0 +1,261 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { domains, getElementsByDomain, getDomainById, LAYER_META, TYPE_BADGES, eventMappingEnabled, getEventFlows, type LayerKey } from '../../../data/registry';
+import { getDiagramsByDomain } from '../../../data/diagrams-mock';
+import EventFlowGraph from '../../../components/graphs/EventFlowGraph';
+
+export function getStaticPaths() {
+  // Only generate events pages if event mapping is configured
+  if (!eventMappingEnabled) return [];
+  return domains.map(d => ({ params: { id: d.id } }));
+}
+
+const { id } = Astro.params;
+const domain = getDomainById(id!)!;
+const domainElements = getElementsByDomain(id!);
+const domainDiagrams = getDiagramsByDomain(id!);
+const eventFlow = getEventFlows(id!);
+
+// Group elements by layer → type (for sidebar)
+type GroupedElements = Record<string, { type: string; typeLabel: string; badgeClass: string; elements: typeof domainElements }[]>;
+const elementsByLayer: GroupedElements = {};
+
+const typeToBadge = TYPE_BADGES;
+
+for (const el of domainElements) {
+  if (!elementsByLayer[el.layer]) elementsByLayer[el.layer] = [];
+  const existing = elementsByLayer[el.layer].find(g => g.type === el.type);
+  if (existing) {
+    existing.elements.push(el);
+  } else {
+    elementsByLayer[el.layer].push({
+      type: el.type, typeLabel: el.typeLabel,
+      badgeClass: typeToBadge[el.type] || 'default',
+      elements: [el],
+    });
+  }
+}
+
+// Build publisher/consumer lookup for the table
+const publishersByEvent = new Map<string, string[]>();
+const consumersByEvent = new Map<string, string[]>();
+
+if (eventFlow) {
+  for (const edge of eventFlow.edges) {
+    const svc = eventFlow.services.find(s => s.id === edge.serviceId);
+    const svcName = svc?.name ?? edge.serviceId;
+    if (edge.type === 'publishes') {
+      const list = publishersByEvent.get(edge.eventId) ?? [];
+      list.push(svcName);
+      publishersByEvent.set(edge.eventId, list);
+    } else {
+      const list = consumersByEvent.get(edge.eventId) ?? [];
+      list.push(svcName);
+      consumersByEvent.set(edge.eventId, list);
+    }
+  }
+}
+---
+
+<Layout title={`${domain.name} – Event Map`} activeDomain={id} sidebarContent="domain-detail">
+  <!-- Sidebar slot: domain element navigation -->
+  <Fragment slot="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+        </span>
+        <span class="sidebar-group-title">Overview</span>
+      </div>
+      <div class="sidebar-group-items">
+        <a href={`/domains/${id}`} class="sidebar-item">
+          <span>Architecture Overview</span>
+        </a>
+        <a href={`/domains/${id}/context-map`} class="sidebar-item">
+          <span>Domain Context Map</span>
+        </a>
+        <a href={`/domains/${id}/docs`} class="sidebar-item">
+          <span>Documentation</span>
+        </a>
+        {eventMappingEnabled && (
+          <a href={`/domains/${id}/events`} class="sidebar-item active">
+            <span>Event Map</span>
+          </a>
+        )}
+      </div>
+    </div>
+
+    {/* Diagrams section in sidebar */}
+    {domainDiagrams.length > 0 && (
+      <div class="sidebar-group">
+        <div class="sidebar-group-header">
+          <span class="sidebar-group-icon" style="background: #f59e0b15; color: #f59e0b;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <span class="sidebar-group-title">Diagrams</span>
+        </div>
+        <div class="sidebar-group-items">
+          {domainDiagrams.map(d => (
+            <a href={`/diagrams/${d.id}`} class="sidebar-item">
+              <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{d.name}</span>
+              <span class="sidebar-type-label">{d.format}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {Object.entries(elementsByLayer).map(([layerKey, groups]) => {
+      const layer = LAYER_META[layerKey as LayerKey];
+      return (
+        <div class="sidebar-group">
+          <div class="sidebar-group-header">
+            <span class="sidebar-group-icon" style={`background: ${layer.color}15; color: ${layer.color};`}>
+              <span style={`width: 8px; height: 8px; border-radius: 2px; background: ${layer.color};`}></span>
+            </span>
+            <span class="sidebar-group-title">{layer.name}</span>
+          </div>
+          <div class="sidebar-group-items">
+            {groups.map(group => (
+              group.elements.map(el => (
+                <a href={`/catalog/${el.id}`} class="sidebar-item">
+                  <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{el.name}</span>
+                  <span class="sidebar-type-label">{group.typeLabel}</span>
+                </a>
+              ))
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </Fragment>
+
+  <!-- Page Content -->
+  <div class="page-header" style={`border-top: 3px solid ${domain.color};`}>
+    <div class="page-header-breadcrumb">
+      <a href="/">Domains</a>
+      <span>/</span>
+      <a href={`/domains/${id}`}>{domain.name}</a>
+      <span>/</span>
+    </div>
+    <div class="page-header-title">
+      <h1>Event Map</h1>
+      <span class="badge badge-sm badge-event">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Event Flow
+      </span>
+    </div>
+    <p class="page-header-summary">Domain event publish/subscribe flows for {domain.name}</p>
+  </div>
+
+  <div class="page-body">
+    {eventFlow ? (
+      <>
+        {/* Stats row */}
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-value" style="font-size: 24px;">{eventFlow.events.length}</div>
+            <div class="stat-label">{eventFlow.eventLabel}s</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="font-size: 24px;">{eventFlow.services.length}</div>
+            <div class="stat-label">{eventFlow.serviceLabel}s</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="font-size: 24px;">{eventFlow.edges.filter(e => e.type === 'publishes').length}</div>
+            <div class="stat-label">Publish Links</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="font-size: 24px;">{eventFlow.edges.filter(e => e.type === 'consumes').length}</div>
+            <div class="stat-label">Consume Links</div>
+          </div>
+        </div>
+
+        {/* Event Flow Diagram */}
+        <div class="detail-section">
+          <div class="detail-section-title">Event Flow Diagram</div>
+          <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 12px; overflow: hidden; height: 500px;">
+            <EventFlowGraph
+              client:only="react"
+              eventFlow={eventFlow}
+              domainName={domain.name}
+            />
+          </div>
+        </div>
+
+        {/* Events Table */}
+        <div class="detail-section">
+          <div class="detail-section-title">Events Summary</div>
+          <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 10px; overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Status</th>
+                  <th>Format</th>
+                  <th>
+                    <span style="display: flex; align-items: center; gap: 4px;">
+                      <span class="rel-col-dot" style="background: #3b82f6;"></span>
+                      Publishers
+                    </span>
+                  </th>
+                  <th>
+                    <span style="display: flex; align-items: center; gap: 4px;">
+                      <span class="rel-col-dot" style="background: #10b981;"></span>
+                      Consumers
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {eventFlow.events.map(evt => {
+                  const publishers = publishersByEvent.get(evt.id) ?? [];
+                  const consumers = consumersByEvent.get(evt.id) ?? [];
+                  return (
+                    <tr>
+                      <td>
+                        <a href={`/catalog/${evt.id}`} class="table-link" style="display: flex; align-items: center; gap: 6px;">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="flex-shrink: 0;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                          {evt.name}
+                        </a>
+                        {evt.description && (
+                          <div style="font-size: 11px; color: rgb(var(--ec-page-text-muted)); margin-top: 2px; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            {evt.description}
+                          </div>
+                        )}
+                      </td>
+                      <td><span class={`badge badge-sm badge-${evt.status}`}>{evt.status}</span></td>
+                      <td style="font-size: 12px; color: rgb(var(--ec-page-text-muted));">{evt.format || '—'}</td>
+                      <td style="font-size: 12px;">
+                        {publishers.length > 0
+                          ? <span class="rel-cell-pills">{publishers.map(n => <span class="rel-pill rel-pill-out">{n}</span>)}</span>
+                          : <span style="color: rgb(var(--ec-page-text-muted));">—</span>
+                        }
+                      </td>
+                      <td style="font-size: 12px;">
+                        {consumers.length > 0
+                          ? <span class="rel-cell-pills">{consumers.map(n => <span class="rel-pill rel-pill-in">{n}</span>)}</span>
+                          : <span style="color: rgb(var(--ec-page-text-muted));">—</span>
+                        }
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>
+    ) : (
+      <div style="padding: 40px 24px; text-align: center; background: rgb(var(--ec-content-hover)); border-radius: 10px; border: 1px dashed rgb(var(--ec-page-border));">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--ec-page-text-muted))" stroke-width="1" style="margin: 0 auto 12px; display: block; opacity: 0.4;">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        <div style="font-size: 14px; font-weight: 500; color: rgb(var(--ec-page-text-muted)); margin-bottom: 6px;">No events in this domain</div>
+        <div style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); opacity: 0.7;">
+          Events will appear here when domain event elements reference services via the configured publish/consume relationships.
+        </div>
+      </div>
+    )}
+  </div>
+</Layout>
