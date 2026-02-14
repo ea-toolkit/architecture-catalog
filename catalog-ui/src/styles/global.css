@@ -498,6 +498,7 @@ button { font-family: inherit; cursor: pointer; }
 .badge-planned { background: rgb(224 242 254); color: rgb(7 89 133); border-color: transparent; }
 .badge-deprecated { background: rgb(254 226 226); color: rgb(153 27 27); border-color: transparent; }
 .badge-draft { background: rgb(var(--ec-badge-default-bg)); color: rgb(var(--ec-badge-default-text)); border-color: transparent; }
+.badge-retired { background: rgb(243 244 246); color: rgb(107 114 128); border-color: transparent; }
 
 /* Sourcing badges */
 .badge-in-house { background: rgb(219 234 254); color: rgb(29 78 216); border-color: transparent; }
@@ -509,6 +510,71 @@ button { font-family: inherit; cursor: pointer; }
 .badge-good { background: rgb(219 234 254); color: rgb(29 78 216); border-color: transparent; }
 .badge-developing { background: rgb(254 243 199); color: rgb(146 64 14); border-color: transparent; }
 .badge-initial { background: rgb(var(--ec-badge-default-bg)); color: rgb(var(--ec-badge-default-text)); border-color: transparent; }
+
+/* ═══════════════════════════════════════════════════
+   MARKDOWN BODY (rendered from element .md files)
+   ═══════════════════════════════════════════════════ */
+
+.detail-body h2 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; color: rgb(var(--ec-page-text)); }
+.detail-body h3 { font-size: 14px; font-weight: 600; margin: 20px 0 6px; color: rgb(var(--ec-page-text)); }
+.detail-body p { margin: 0 0 12px; }
+.detail-body ul, .detail-body ol { margin: 0 0 12px; padding-left: 20px; }
+.detail-body li { margin-bottom: 4px; }
+.detail-body strong { font-weight: 600; }
+
+.detail-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 12px;
+  background: rgb(var(--ec-page-border) / 0.4);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.detail-body pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.detail-body pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.detail-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 16px;
+  font-size: 13px;
+}
+
+.detail-body th {
+  text-align: left;
+  padding: 8px 12px;
+  background: rgb(var(--ec-page-border) / 0.3);
+  font-weight: 600;
+  font-size: 12px;
+  border-bottom: 1px solid rgb(var(--ec-page-border));
+}
+
+.detail-body td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgb(var(--ec-page-border) / 0.5);
+}
+
+.detail-body blockquote {
+  border-left: 3px solid rgb(var(--ec-page-border));
+  margin: 0 0 12px;
+  padding: 4px 16px;
+  color: rgb(var(--ec-page-text-muted));
+}
 
 /* ═══════════════════════════════════════════════════
    CARDS

@@ -21,14 +21,22 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-size='16' font-weight='bold' fill='white' font-family='Inter'>A</text></svg>" />
+  {SITE_CONFIG.logo_image
+    ? <link rel="icon" href={SITE_CONFIG.logo_image} />
+    : <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-size='16' font-weight='bold' fill='white' font-family='Inter'>${SITE_CONFIG.logo_text}</text></svg>`} />
+  }
 </head>
 <body>
   <div class="app-shell">
 
     <!-- ═══ Icon Bar (left rail) ═══ -->
     <nav class="icon-bar">
-      <a href="/" class="icon-bar-logo" title={SITE_CONFIG.name}>{SITE_CONFIG.logo_text}</a>
+      <a href="/" class="icon-bar-logo" title={SITE_CONFIG.name}>
+        {SITE_CONFIG.logo_image
+          ? <img src={SITE_CONFIG.logo_image} alt={SITE_CONFIG.name} style="width: 28px; height: 28px; object-fit: contain;" />
+          : SITE_CONFIG.logo_text
+        }
+      </a>
 
       <div class="icon-bar-nav">
         <!-- Domains -->

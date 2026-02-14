@@ -67,6 +67,10 @@ export interface Element {
   layerBg: string;
   /** Schema-derived: icon emoji from registry-mapping.yaml icon field */
   mappingIcon: string;
+  /** Markdown body content below frontmatter */
+  body: string;
+  /** All raw frontmatter fields (for displaying additional properties) */
+  fields: Record<string, unknown>;
   relationships: { target: string; targetName: string; type: string; fieldKey?: string }[];
   incomingRelationships?: { source: string; sourceName: string; type: string; fieldKey: string }[];
 }
@@ -197,4 +201,43 @@ export function getModelStats() {
     enrichedElements: elements.filter((e) => e.sourcing || e.aggregate).length,
     layerCounts,
   };
+}
+
+/**
+ * Get additional frontmatter fields for an element that aren't already
+ * shown in the standard Properties panel. Filters out:
+ * - Fields already rendered (name, type, description, status, sourcing, owner, domain, aggregate)
+ * - Relationship fields (defined in the mapping YAML)
+ * This is schema-driven — new fields appear automatically.
+ */
+export function getExtraFields(element: Element): { key: string; label: string; value: unknown }[] {
+  // Standard fields already displayed in the Properties panel
+  const SHOWN_FIELDS = new Set([
+    'name', 'type', 'description', 'status', 'sourcing', 'owner', 'domain', 'aggregate', 'registered',
+  ]);
+
+  // Relationship field keys from the mapping YAML
+  const relFieldKeys = new Set<string>();
+  if (_graph) {
+    const typeDef = _graph.mapping.elements[element.type];
+    if (typeDef?.relationships) {
+      for (const key of Object.keys(typeDef.relationships)) {
+        relFieldKeys.add(key);
+      }
+    }
+  }
+
+  const extras: { key: string; label: string; value: unknown }[] = [];
+  for (const [key, value] of Object.entries(element.fields)) {
+    if (SHOWN_FIELDS.has(key)) continue;
+    if (relFieldKeys.has(key)) continue;
+    if (value === null || value === undefined || value === '') continue;
+    // Arrays that are empty are not interesting
+    if (Array.isArray(value) && value.length === 0) continue;
+
+    // Derive a human label: replace underscores with spaces, title-case
+    const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    extras.push({ key, label, value });
+  }
+  return extras;
 }

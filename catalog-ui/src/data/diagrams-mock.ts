@@ -259,6 +259,60 @@ const subscriptionLifecycleBpmn = `<?xml version="1.0" encoding="UTF-8"?>
 </bpmn:definitions>`;
 
 // ============================================
+// DRAW.IO DIAGRAMS (inline mxGraph XML)
+// ============================================
+
+const customerManagementContextDrawio = `<mxfile>
+  <diagram name="Customer Management Context" id="cm-context">
+    <mxGraphModel dx="1000" dy="600" grid="1" gridSize="10" guides="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Tenant Management" style="rounded=1;whiteSpace=wrap;fillColor=#dbeafe;strokeColor=#3b82f6;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Account Management" style="rounded=1;whiteSpace=wrap;fillColor=#dbeafe;strokeColor=#3b82f6;" vertex="1" parent="1">
+          <mxGeometry x="320" y="60" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="User Access Control" style="rounded=1;whiteSpace=wrap;fillColor=#dbeafe;strokeColor=#3b82f6;" vertex="1" parent="1">
+          <mxGeometry x="560" y="60" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Platform Core" style="rounded=1;whiteSpace=wrap;fillColor=#f0fdf4;strokeColor=#22c55e;" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="Tenant Aggregate" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#f59e0b;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="Account Aggregate" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#f59e0b;" vertex="1" parent="1">
+          <mxGeometry x="320" y="340" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="Tenant API" style="rounded=1;whiteSpace=wrap;fillColor=#ede9fe;strokeColor=#8b5cf6;" vertex="1" parent="1">
+          <mxGeometry x="440" y="200" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="strokeColor=#3b82f6;strokeWidth=2;" edge="1" source="2" target="5" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="strokeColor=#3b82f6;strokeWidth=2;" edge="1" source="3" target="5" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="strokeColor=#3b82f6;strokeWidth=2;" edge="1" source="4" target="8" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="owns" style="strokeColor=#f59e0b;strokeWidth=2;dashed=1;" edge="1" source="2" target="6" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="owns" style="strokeColor=#f59e0b;strokeWidth=2;dashed=1;" edge="1" source="3" target="7" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" style="strokeColor=#8b5cf6;strokeWidth=2;" edge="1" source="5" target="8" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+
+// ============================================
 // DIAGRAM REGISTRY
 // ============================================
 
@@ -301,6 +355,17 @@ export const diagrams: Diagram[] = [
     description: 'BPMN diagram showing the subscription lifecycle from plan selection to activation.',
     tags: ['bpmn', 'process', 'subscription', 'billing'],
     content: subscriptionLifecycleBpmn,
+  },
+
+  // draw.io diagrams
+  {
+    id: 'customer-management-context',
+    name: 'Customer Management Context',
+    domain: 'customer-management',
+    format: 'drawio',
+    description: 'draw.io architecture context diagram showing logical components, systems, aggregates, and APIs in the Customer Management domain.',
+    tags: ['context', 'architecture', 'customer-management', 'drawio'],
+    content: customerManagementContextDrawio,
   },
 ];
 

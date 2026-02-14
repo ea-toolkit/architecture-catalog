@@ -20,7 +20,7 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
     <div class="page-header-title">
       <h1>Discover</h1>
     </div>
-    <p class="page-header-summary">
+    <p class="page-header-summary" id="discover-summary">
       Browse all {elements.length} registered architecture elements across {domains.length} domains
     </p>
   </div>
@@ -32,11 +32,23 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
       </div>
     ) : (
     <Fragment>
-    <!-- Filter chips -->
+    <!-- Layer filter chips -->
+    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
+      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Layer:</span>
+      <button data-layer-filter="all" class="filter-chip active">All</button>
+      {Object.entries(LAYER_META).map(([key, meta]) => (
+        <button data-layer-filter={key} class="filter-chip">
+          <span style={`display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: ${meta.color}; margin-right: 4px; vertical-align: middle;`}></span>
+          {meta.name}
+        </button>
+      ))}
+    </div>
+
+    <!-- Type filter chips -->
     <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; align-items: center;">
-      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Filter:</span>
+      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Type:</span>
       {sortedTypes.map(([type, count]) => (
-        <button style="padding: 5px 12px; border: 1px solid rgb(var(--ec-page-border)); border-radius: 9999px; background: rgb(var(--ec-card-bg)); font-size: 12px; color: rgb(var(--ec-page-text)); transition: all 0.12s; cursor: pointer;">
+        <button data-type-filter={type} class="filter-chip">
           {type} <span style="color: rgb(var(--ec-page-text-muted)); font-size: 11px;">({count})</span>
         </button>
       ))}
@@ -44,7 +56,7 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
 
     <!-- Table -->
     <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 10px; overflow: hidden;">
-      <table class="data-table">
+      <table class="data-table" id="discover-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -60,7 +72,7 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
             const elLayer = LAYER_META[el.layer];
             const dom = domainMap[el.domain];
             return (
-              <tr>
+              <tr data-layer={el.layer} data-type-label={el.typeLabel}>
                 <td><a href={`/catalog/${el.id}`} class="table-link">{el.name}</a></td>
                 <td><span class={`badge badge-sm badge-${typeToBadge[el.type] || 'default'}`}>{el.typeLabel}</span></td>
                 <td>
@@ -92,7 +104,109 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
         </tbody>
       </table>
     </div>
+
+    <!-- No results message (hidden by default) -->
+    <div id="no-results" style="display: none; text-align: center; padding: 32px 24px; color: rgb(var(--ec-page-text-muted));">
+      <p style="font-size: 14px;">No elements match the current filters.</p>
+    </div>
     </Fragment>
     )}
   </div>
 </Layout>
+
+<style>
+  .filter-chip {
+    padding: 5px 12px;
+    border: 1px solid rgb(var(--ec-page-border));
+    border-radius: 9999px;
+    background: rgb(var(--ec-card-bg));
+    font-size: 12px;
+    color: rgb(var(--ec-page-text));
+    transition: all 0.12s;
+    cursor: pointer;
+  }
+  .filter-chip:hover {
+    border-color: rgb(var(--ec-accent));
+    color: rgb(var(--ec-accent));
+  }
+  .filter-chip.active {
+    background: rgb(var(--ec-accent));
+    color: white;
+    border-color: rgb(var(--ec-accent));
+  }
+</style>
+
+<script>
+  function initFilters() {
+    let activeLayer = 'all';
+    const activeTypes = new Set<string>();
+
+    const rows = document.querySelectorAll<HTMLTableRowElement>('#discover-table tbody tr');
+    const layerBtns = document.querySelectorAll<HTMLButtonElement>('[data-layer-filter]');
+    const typeBtns = document.querySelectorAll<HTMLButtonElement>('[data-type-filter]');
+    const noResults = document.getElementById('no-results');
+    const summary = document.getElementById('discover-summary');
+    const totalCount = rows.length;
+
+    function applyFilters() {
+      let visibleCount = 0;
+      rows.forEach(row => {
+        const rowLayer = row.dataset.layer;
+        const rowType = row.dataset.typeLabel;
+        const layerMatch = activeLayer === 'all' || rowLayer === activeLayer;
+        const typeMatch = activeTypes.size === 0 || activeTypes.has(rowType!);
+        const visible = layerMatch && typeMatch;
+        row.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
+      });
+      if (noResults) noResults.style.display = visibleCount === 0 ? '' : 'none';
+      if (summary) {
+        summary.textContent = visibleCount === totalCount
+          ? `Browse all ${totalCount} registered architecture elements`
+          : `Showing ${visibleCount} of ${totalCount} elements`;
+      }
+    }
+
+    // Layer filter clicks
+    layerBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeLayer = btn.dataset.layerFilter!;
+        layerBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      });
+    });
+
+    // Type filter clicks (toggle)
+    typeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.typeFilter!;
+        if (activeTypes.has(type)) {
+          activeTypes.delete(type);
+          btn.classList.remove('active');
+        } else {
+          activeTypes.add(type);
+          btn.classList.add('active');
+        }
+        applyFilters();
+      });
+    });
+
+    // Read ?layer= from URL on page load
+    const params = new URLSearchParams(window.location.search);
+    const layerParam = params.get('layer');
+    if (layerParam) {
+      const btn = document.querySelector<HTMLButtonElement>(`[data-layer-filter="${layerParam}"]`);
+      if (btn) {
+        activeLayer = layerParam;
+        layerBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      }
+    }
+  }
+
+  // Run on initial load and on Astro page transitions
+  initFilters();
+  document.addEventListener('astro:after-swap', initFilters);
+</script>

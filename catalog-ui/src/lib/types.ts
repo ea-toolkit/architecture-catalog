@@ -11,6 +11,7 @@ export interface SiteConfig {
   name: string;
   description: string;
   logo_text: string;
+  logo_image?: string;
 }
 
 /** Layer definition from the mapping YAML */
@@ -120,6 +121,8 @@ export interface RegistryElement {
   relationships: ResolvedRelationship[];
   /** Source file path (relative to registry root) */
   sourcePath: string;
+  /** Markdown body content below frontmatter */
+  body: string;
   /** Health indicators for rendering */
   health: ElementHealth;
 }
@@ -217,6 +220,10 @@ export interface LegacyElement {
   layerBg: string;
   /** Schema-derived: icon emoji from registry-mapping.yaml icon field */
   mappingIcon: string;
+  /** Markdown body content below frontmatter */
+  body: string;
+  /** All raw frontmatter fields (for displaying additional properties) */
+  fields: Record<string, unknown>;
   relationships: { target: string; targetName: string; type: string; fieldKey: string }[];
   /** Incoming edges — elements that point TO this element */
   incomingRelationships: { source: string; sourceName: string; type: string; fieldKey: string }[];

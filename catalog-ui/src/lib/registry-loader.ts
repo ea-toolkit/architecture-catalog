@@ -37,6 +37,7 @@ import type {
   ElementHealth,
   LegacyElement,
   LegacyDomain,
+  SiteConfig,
 } from './types';
 
 // ─────────────────────────────────────────────────────────────
@@ -47,12 +48,14 @@ import type {
  * Parse markdown frontmatter (between --- delimiters).
  * Returns null if no valid frontmatter found.
  */
-function parseFrontmatter(content: string): Record<string, unknown> | null {
+function parseFrontmatter(content: string): { frontmatter: Record<string, unknown>; body: string } | null {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
   if (!match) return null;
   try {
     const parsed = yaml.load(match[1]);
-    return (parsed && typeof parsed === 'object') ? parsed as Record<string, unknown> : null;
+    if (!parsed || typeof parsed !== 'object') return null;
+    const body = content.slice(match[0].length).trim();
+    return { frontmatter: parsed as Record<string, unknown>, body };
   } catch {
     return null;
   }
@@ -96,6 +99,7 @@ interface RawFile {
   path: string;          // full absolute path
   relativePath: string;  // relative to registry root
   frontmatter: Record<string, unknown>;
+  body: string;          // markdown content below frontmatter
 }
 
 /**
@@ -113,15 +117,16 @@ function scanFolder(folderPath: string, registryRoot: string): RawFile[] {
 
     const fullPath = join(folderPath, entry);
     const content = readFileSync(fullPath, 'utf-8');
-    const frontmatter = parseFrontmatter(content);
+    const parsed = parseFrontmatter(content);
 
-    if (!frontmatter) continue;
+    if (!parsed) continue;
 
     files.push({
       slug: entry.replace(/\.md$/, ''),
       path: fullPath,
       relativePath: fullPath.replace(registryRoot + '/', ''),
-      frontmatter,
+      frontmatter: parsed.frontmatter,
+      body: parsed.body,
     });
   }
 
@@ -349,6 +354,7 @@ export async function loadRegistry(
         fields: file.frontmatter,
         relationships,
         sourcePath: file.relativePath,
+        body: file.body,
         health,
       };
 
@@ -502,6 +508,8 @@ export function toLegacyElements(
       layerColor: layerDef?.color ?? '#6b7280',
       layerBg: layerDef?.bg ?? '#f9fafb',
       mappingIcon: typeDef?.icon ?? '▪',
+      body: el.body,
+      fields: el.fields,
       relationships: el.relationships.flatMap((rel) =>
         rel.refs
           .filter((ref) => ref.resolved && ref.targetId)
@@ -706,7 +714,7 @@ export function getLayerMeta(mapping: RegistryMapping): Record<string, { name: s
 /**
  * Get the site branding config from the mapping YAML.
  */
-export function getSiteConfig(mapping: RegistryMapping): { name: string; description: string; logo_text: string } {
+export function getSiteConfig(mapping: RegistryMapping): SiteConfig {
   return mapping.site ?? { name: 'Architecture Catalog', description: 'Enterprise architecture registry', logo_text: 'A' };
 }
 

@@ -199,7 +199,7 @@ function FocusModeContent({
         minZoom={0.3}
         maxZoom={2}
         proOptions={{ hideAttribution: true }}
-        nodesDraggable={false}
+        nodesDraggable
         nodesConnectable={false}
         elementsSelectable={false}
       >

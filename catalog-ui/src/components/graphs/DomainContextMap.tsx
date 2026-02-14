@@ -2,6 +2,7 @@
 // Full domain context map with ReactFlow - used on /domains/[id] page
 
 import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
+import { toPng } from 'html-to-image';
 import {
   ReactFlow,
   Background,
@@ -152,52 +153,28 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
     });
   }, []);
 
-  // PNG Export — renders the ReactFlow viewport to a canvas
+  // PNG Export — uses html-to-image to properly render foreignObject nodes
   const handleExportPng = useCallback(() => {
     const viewport = graphContainerRef.current?.querySelector('.react-flow__viewport') as HTMLElement | null;
     if (!viewport) return;
 
-    const canvas = document.createElement('canvas');
-    const svgEl = viewport.querySelector('svg');
-    const bounds = viewport.getBoundingClientRect();
-
-    // Use a higher resolution for crisp export
-    const scale = 2;
-    canvas.width = bounds.width * scale;
-    canvas.height = bounds.height * scale;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Draw white background
-    ctx.fillStyle = '#fafafa';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Serialize the SVG + foreign objects to an image
-    const svgData = new XMLSerializer().serializeToString(viewport);
-    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(svgBlob);
-
-    const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-
-      // Download
+    toPng(viewport, {
+      backgroundColor: '#fafafa',
+      pixelRatio: 2,
+      filter: (node) => {
+        // Exclude minimap and controls from the export
+        if (node?.classList?.contains('react-flow__minimap')) return false;
+        if (node?.classList?.contains('react-flow__controls')) return false;
+        return true;
+      },
+    }).then((dataUrl) => {
       const link = document.createElement('a');
       link.download = `${domain.name.replace(/\s+/g, '-').toLowerCase()}-context-map.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       link.click();
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      // Fallback: use SVG download if PNG rendering fails (CORS/foreignObject issues)
-      const fallbackLink = document.createElement('a');
-      fallbackLink.download = `${domain.name.replace(/\s+/g, '-').toLowerCase()}-context-map.svg`;
-      fallbackLink.href = url;
-      fallbackLink.click();
-    };
-    img.src = url;
+    }).catch((err) => {
+      console.error('PNG export failed:', err);
+    });
   }, [domain.name]);
 
   // Status options and counts — derived from actual element data

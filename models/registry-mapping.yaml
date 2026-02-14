@@ -53,6 +53,7 @@ site:
   name: Architecture Catalog
   description: Enterprise architecture registry
   logo_text: A
+  # logo_image: /logo.svg   # Optional: path to logo image in catalog-ui/public/
 
 # ─────────────────────────────────────────────────────────────
 # Layer Definitions — name these however you want

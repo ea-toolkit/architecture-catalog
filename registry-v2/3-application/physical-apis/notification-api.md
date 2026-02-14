@@ -3,7 +3,7 @@ type: physical-business-api
 name: Notification API
 description: REST API for managing notification preferences, delivery channels, and sending transactional notifications to tenant users.
 owner: Platform Team
-status: active
+status: draft
 domain: Customer Management
 registered: false
 protocol: REST/JSON

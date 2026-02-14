@@ -139,7 +139,7 @@ function ElementContextGraphInner({ element, allElements, height = 350 }: Elemen
         minZoom={0.3}
         maxZoom={1.5}
         proOptions={{ hideAttribution: true }}
-        nodesDraggable={false}
+        nodesDraggable
         nodesConnectable={false}
         panOnDrag
         zoomOnScroll

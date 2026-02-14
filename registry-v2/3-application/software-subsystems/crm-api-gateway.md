@@ -3,7 +3,7 @@ type: software-subsystem
 name: CRM API Gateway
 description: API gateway and routing layer for the NovaCRM Core system.
 owner: Platform Team
-status: active
+status: retired
 domain: Customer Management
 registered: false
 
