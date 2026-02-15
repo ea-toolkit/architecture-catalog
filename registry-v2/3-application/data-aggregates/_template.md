@@ -20,7 +20,7 @@ lifecycle_states: []  # e.g., [draft, submitted, approved, cancelled]
 parent_data_concept: 
 
 # Owns (← in): logical component that owns this (singular)
-owned_by_logical_component: 
+owned_by_component: 
 
 # Owns (← in): software subsystem that owns this (singular)
 owned_by_software_subsystem: 

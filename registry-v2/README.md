@@ -15,7 +15,7 @@ A simplified registry structure aligned 1:1 with the **Enterprise Meta Model**.
 ```
 registry-v2/
 ├── 1-business/                        # Layer 1: Business
-│   ├── customer-segments/
+│   ├── market-segments/
 │   ├── products/
 │   └── business-services/
 │
@@ -30,14 +30,14 @@ registry-v2/
 │   └── organisation-units/
 │
 ├── 3-application/                     # Layer 3: Application
-│   ├── architecture-area-domains/
-│   ├── logical-components/
+│   ├── domains/
+│   ├── components/
 │   ├── software-systems/
 │   ├── software-subsystems/
 │   ├── software-components/
 │   ├── domain-events/
-│   ├── logical-apis/
-│   ├── physical-apis/
+│   ├── api-contracts/
+│   ├── api-endpoints/
 │   ├── data-concepts/
 │   ├── data-aggregates/
 │   └── data-entities/
@@ -45,9 +45,9 @@ registry-v2/
 └── 4-technology/                      # Layer 4: Technology
     ├── infrastructure-functions/
     ├── application-infrastructure/
-    ├── technology-infrastructure/
+    ├── cloud-services/
     ├── infrastructure-apis/
-    ├── hosting-nodes/
+    ├── infra-nodes/
     ├── network-zones/
     └── networking-equipment/
 ```
@@ -151,7 +151,7 @@ Hierarchy is maintained via `parent_process` and `child_processes` relationships
 
 | EMM Element | Folder | Template |
 |-------------|--------|----------|
-| Customer / Market Segment | `1-business/customer-segments/` | [_template.md](1-business/customer-segments/_template.md) |
+| Market Segment | `1-business/market-segments/` | [_template.md](1-business/market-segments/_template.md) |
 | Product | `1-business/products/` | [_template.md](1-business/products/_template.md) |
 | Business Service | `1-business/business-services/` | [_template.md](1-business/business-services/_template.md) |
 | Actor | `2-organization/actors/` | [_template.md](2-organization/actors/_template.md) |
@@ -162,21 +162,21 @@ Hierarchy is maintained via `parent_process` and `child_processes` relationships
 | Value Stream | `2-organization/value-streams/` | [_template.md](2-organization/value-streams/_template.md) |
 | Process (E2E/Module/Task) | `2-organization/processes/` | [_template.md](2-organization/processes/_template.md) |
 | Organization Unit | `2-organization/organisation-units/` | [_template.md](2-organization/organisation-units/_template.md) |
-| Architecture Area Domain | `3-application/architecture-area-domains/` | [_template.md](3-application/architecture-area-domains/_template.md) |
-| Logical Component | `3-application/logical-components/` | [_template.md](3-application/logical-components/_template.md) |
+| Domain | `3-application/domains/` | [_template.md](3-application/domains/_template.md) |
+| Component | `3-application/components/` | [_template.md](3-application/components/_template.md) |
 | Software System | `3-application/software-systems/` | [_template.md](3-application/software-systems/_template.md) |
 | Software SubSystem | `3-application/software-subsystems/` | [_template.md](3-application/software-subsystems/_template.md) |
 | Software Component | `3-application/software-components/` | [_template.md](3-application/software-components/_template.md) |
 | Domain Event | `3-application/domain-events/` | [_template.md](3-application/domain-events/_template.md) |
-| Logical Business API | `3-application/logical-apis/` | [_template.md](3-application/logical-apis/_template.md) |
-| Physical Business API | `3-application/physical-apis/` | [_template.md](3-application/physical-apis/_template.md) |
+| API Contract | `3-application/api-contracts/` | [_template.md](3-application/api-contracts/_template.md) |
+| API Endpoint | `3-application/api-endpoints/` | [_template.md](3-application/api-endpoints/_template.md) |
 | Data Concept | `3-application/data-concepts/` | [_template.md](3-application/data-concepts/_template.md) |
 | Data Aggregate | `3-application/data-aggregates/` | [_template.md](3-application/data-aggregates/_template.md) |
 | Data Entity | `3-application/data-entities/` | [_template.md](3-application/data-entities/_template.md) |
 | Infrastructure Function | `4-technology/infrastructure-functions/` | [_template.md](4-technology/infrastructure-functions/_template.md) |
 | Application Infrastructure | `4-technology/application-infrastructure/` | [_template.md](4-technology/application-infrastructure/_template.md) |
-| Technology Infrastructure | `4-technology/technology-infrastructure/` | [_template.md](4-technology/technology-infrastructure/_template.md) |
+| Cloud Service | `4-technology/cloud-services/` | [_template.md](4-technology/cloud-services/_template.md) |
 | Infrastructure API | `4-technology/infrastructure-apis/` | [_template.md](4-technology/infrastructure-apis/_template.md) |
-| Hosting Node | `4-technology/hosting-nodes/` | [_template.md](4-technology/hosting-nodes/_template.md) |
+| Infrastructure Node | `4-technology/infra-nodes/` | [_template.md](4-technology/infra-nodes/_template.md) |
 | Network Zone | `4-technology/network-zones/` | [_template.md](4-technology/network-zones/_template.md) |
 | Networking Equipment | `4-technology/networking-equipment/` | [_template.md](4-technology/networking-equipment/_template.md) |

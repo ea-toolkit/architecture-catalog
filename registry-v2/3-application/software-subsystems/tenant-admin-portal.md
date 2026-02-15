@@ -10,7 +10,7 @@ environments:
   - staging
 
 parent_software_system: Platform Core
-composes_physical_apis:
+composes_api_endpoints:
   - notification-api
 
 archimate_type: application-component

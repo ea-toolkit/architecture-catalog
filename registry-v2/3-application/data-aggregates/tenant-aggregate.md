@@ -13,7 +13,7 @@ lifecycle_states:
   - deactivated
 
 parent_data_concept: Tenant Account
-owned_by_logical_component: Tenant Management
+owned_by_component: Tenant Management
 composes_data_entities:
   - Tenant
   - User Seat

@@ -36,7 +36,7 @@ const ELEMENT_ICONS: Record<string, React.ReactNode> = {
       <path d="M12 4v16" />
     </svg>
   ),
-  logical_component: (
+  component: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="4" y="4" width="16" height="16" rx="2" />
       <path d="M4 8h16" />
@@ -55,14 +55,14 @@ const ELEMENT_ICONS: Record<string, React.ReactNode> = {
       <path d="M8 17h8" />
     </svg>
   ),
-  logical_business_api: (
+  api_contract: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M4 4h16v16H4z" />
       <path d="M4 9h16" />
       <path d="M9 4v16" />
     </svg>
   ),
-  physical_business_api: (
+  api_endpoint: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M12 2l10 6v8l-10 6-10-6V8l10-6z" />
     </svg>
@@ -99,7 +99,7 @@ const ELEMENT_ICONS: Record<string, React.ReactNode> = {
       <line x1="12" y1="22.08" x2="12" y2="12" />
     </svg>
   ),
-  customer_segment: (
+  market_segment: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
       <circle cx="9" cy="7" r="4" />
@@ -113,7 +113,7 @@ const ELEMENT_ICONS: Record<string, React.ReactNode> = {
       <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
     </svg>
   ),
-  hosting_node: (
+  infra_node: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="2" y="2" width="20" height="8" rx="2" />
       <rect x="2" y="14" width="20" height="8" rx="2" />
@@ -121,7 +121,7 @@ const ELEMENT_ICONS: Record<string, React.ReactNode> = {
       <line x1="6" y1="18" x2="6.01" y2="18" />
     </svg>
   ),
-  technology_infrastructure: (
+  cloud_service: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
     </svg>

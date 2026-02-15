@@ -10,7 +10,7 @@ sourcing: in-house
 
 composes_software_subsystems:
   - billing-worker
-realizes_logical_component: Subscription Billing
+realizes_component: Subscription Billing
 
 archimate_type: application-component
 c4_type: System

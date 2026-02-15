@@ -1,5 +1,5 @@
 ---
-type: hosting_node
+type: infra_node
 name: GCP Production Cluster
 description: Google Kubernetes Engine cluster hosting NovaCRM production workloads
 owner: Platform Engineering

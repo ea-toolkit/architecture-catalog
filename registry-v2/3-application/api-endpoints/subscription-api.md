@@ -1,5 +1,5 @@
 ---
-type: physical-business-api
+type: api_endpoint
 name: Subscription API
 description: REST API for subscription plan management, billing cycle control, and invoice retrieval.
 owner: Billing Team
@@ -9,7 +9,7 @@ registered: false
 protocol: REST/JSON
 
 parent_software_subsystem: billing-worker
-implements_logical_api: ~
+implements_api_contract: ~
 
 archimate_type: application-interface
 c4_type: ~

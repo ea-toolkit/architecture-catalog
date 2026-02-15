@@ -1,5 +1,5 @@
 ---
-type: physical-business-api
+type: api_endpoint
 name: Analytics Query API
 description: GraphQL API for querying customer analytics, usage metrics, and engagement reports.
 owner: Analytics Team
@@ -9,7 +9,7 @@ registered: false
 protocol: GraphQL
 
 parent_software_subsystem: analytics-pipeline
-implements_logical_api: ~
+implements_api_contract: ~
 
 archimate_type: application-interface
 c4_type: ~

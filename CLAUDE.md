@@ -169,11 +169,11 @@ This project MUST remain vocabulary-agnostic. Users can use ArchiMate, TOGAF, C4
 
 **Rules for all code changes:**
 
-1. **No type-name conditionals** — Never write `if (type === 'logical_component')` or `type.includes('data')`. Behavior must be driven by schema properties (`graph_rank`, `layer`, `icon`) not by type key strings.
+1. **No type-name conditionals** — Never write `if (type === 'component')` or `type.includes('data')`. Behavior must be driven by schema properties (`graph_rank`, `layer`, `icon`) not by type key strings.
 2. **No layer-name conditionals** — Never write `if (layer === 'applications_and_data')`. Layer colors and metadata come from `registry-mapping.yaml`.
 3. **No relationship-name conditionals** — Never write `if (rel === 'composition')` in data/rendering logic. Relationship semantics come from `meta-model.config.ts` which reads from the YAML.
 4. **Hardcoded style maps are optional enrichments** — `NODE_STYLES`, `ELEMENT_ICONS`, `ELEMENT_HIERARCHY` in TypeScript provide rich styling for known types, but unknown types MUST fall back to schema-derived values (layer color, `graph_rank`, `icon` emoji from the YAML). A user who defines a brand-new element type in `registry-mapping.yaml` should see it render correctly without touching any `.ts` or `.tsx` file.
-5. **Domain anchor = `graph_rank: 0`** — The domain/area anchor element is identified by having `graph_rank: 0` in the YAML, not by checking for a specific type key like `architecture_area_domain`.
+5. **Domain anchor = `graph_rank: 0`** — The domain/area anchor element is identified by having `graph_rank: 0` in the YAML, not by checking for a specific type key like `domain`.
 6. **The `archimate:` field in registry-mapping.yaml is optional metadata** — It exists for documentation/reference for ArchiMate users. The UI and loader NEVER read it.
 
 **Test:** If a user renames every element type, layer, and relationship in `registry-mapping.yaml` to completely custom names, the catalog UI must still build and render correctly.

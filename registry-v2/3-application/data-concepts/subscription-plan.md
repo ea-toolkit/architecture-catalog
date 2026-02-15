@@ -8,7 +8,7 @@ domain: Billing and Payments
 registered: false
 classification: business-confidential
 
-owned_by_architecture_area_domain: Billing and Payments
+owned_by_domain: Billing and Payments
 detailed_by_data_aggregates:
   - Billing Aggregate
 

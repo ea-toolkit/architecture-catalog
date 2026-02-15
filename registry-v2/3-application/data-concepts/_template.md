@@ -18,7 +18,7 @@ classification: internal  # pii | business-confidential | internal
 
 # ── Relationships (from draw.io arrows) ──────────────────────
 # Owns (← in): architecture area domain that owns this (singular)
-owned_by_architecture_area_domain: 
+owned_by_domain: 
 
 # Composition (◆ out): data aggregates within this concept (array)
 composes_data_aggregates: []

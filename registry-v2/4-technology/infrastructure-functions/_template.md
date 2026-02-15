@@ -19,10 +19,10 @@ registered: false  # true if imported from source system
 realized_by_application_infrastructure: []
 
 # Realization (⇢ in): tech infrastructure that realizes this (array)
-realized_by_technology_infrastructure: []
+realized_by_cloud_services: []
 
 # Realization (⇢ in): hosting nodes that realize this (array)
-realized_by_hosting_nodes: []
+realized_by_infra_nodes: []
 
 # Realization (⇢ in): networking equipment that realizes this (array)
 realized_by_networking_equipment: []

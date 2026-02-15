@@ -6,7 +6,7 @@
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: logical-component
+type: component
 name: 
 description: 
 owner: 
@@ -16,16 +16,16 @@ sourcing: in-house  # in-house | vendor | hybrid
 
 # ── Relationships (from draw.io arrows) ──────────────────────
 # Composition (◆ in): belongs to architecture area domain (singular)
-parent_architecture_area_domain: 
+parent_domain: 
 
 # Composition (◆ out): child logical components (array) - self-reference
-composes_logical_components: []
+composes_components: []
 
 # Owns: data aggregates owned by this component (array)
 owns_data_aggregates: []
 
 # Realization (⇢ out): logical APIs this component realizes (array)
-realizes_logical_apis: []
+realizes_api_contracts: []
 
 # Realization (⇢ out): business capability realized (singular)
 realizes_business_capability: 

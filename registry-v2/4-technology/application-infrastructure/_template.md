@@ -23,10 +23,10 @@ realizes_infrastructure_functions: []
 serves_software_subsystems: []
 
 # Serving (← in): technology infrastructure this runs on (singular)
-served_by_technology_infrastructure: 
+served_by_cloud_services:
 
 # Serving (← in): hosting nodes this runs on (array)
-served_by_hosting_nodes: []
+served_by_infra_nodes: []
 
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: system-software

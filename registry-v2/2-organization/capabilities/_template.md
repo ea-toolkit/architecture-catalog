@@ -21,7 +21,7 @@ composes_process_modules: []
 owns_information_objects: []
 
 # Realization (incoming): Logical Components that realize this capability
-realized_by_logical_components: []
+realized_by_components: []
 
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: business-function

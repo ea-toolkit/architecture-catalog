@@ -10,7 +10,7 @@ sourcing: in-house
 
 composes_software_subsystems:
   - crm-api-gateway
-realizes_logical_component: Tenant Management
+realizes_component: Tenant Management
 
 archimate_type: application-component
 c4_type: System

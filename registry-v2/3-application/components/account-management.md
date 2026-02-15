@@ -1,5 +1,5 @@
 ---
-type: logical-component
+type: component
 name: Account Management
 description: Manages customer account data, contact records, organization hierarchy, and account-level configuration.
 owner: Platform Team
@@ -7,7 +7,7 @@ status: active
 domain: Customer Management
 sourcing: in-house
 
-parent_architecture_area_domain: Customer Management
+parent_domain: Customer Management
 realized_by_software_systems:
   - Platform Core
 owns_data_aggregates:

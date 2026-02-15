@@ -13,7 +13,7 @@ lifecycle_states:
   - archived
 
 parent_data_concept: Customer Profile
-owned_by_logical_component: Account Management
+owned_by_component: Account Management
 composes_data_entities:
   - Contact
   - Organization

@@ -12,7 +12,7 @@ Create a `.astro` file in `catalog-ui/src/pages/`:
 import Layout from '../layouts/Layout.astro';
 import { elements, LAYER_META } from '../data/registry';
 
-const apiElements = elements.filter(e => e.type === 'physical_business_api');
+const apiElements = elements.filter(e => e.type === 'api_endpoint');
 ---
 
 <Layout title="API Inventory">

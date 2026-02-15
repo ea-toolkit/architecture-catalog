@@ -13,7 +13,7 @@ lifecycle_states:
   - archived
 
 parent_data_concept: Usage Metrics
-owned_by_logical_component: Contact Analytics
+owned_by_component: Contact Analytics
 composes_data_entities:
   - Report
   - Metric Definition

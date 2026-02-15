@@ -2,7 +2,7 @@
 """
 Refresh draw.io diagrams with metadata from the registry.
 
-Syncs enriched registry data (logical_component, sourcing, etc.)
+Syncs enriched registry data (component, sourcing, etc.)
 into diagram shapes as custom properties, so the data appears when
 you inspect shapes in draw.io and in extracted YAMLs.
 
@@ -31,11 +31,11 @@ VIEWS_DIR = REPO_ROOT / "views"
 # Registry fields to sync to diagrams (registry field -> diagram property name)
 SYNC_FIELDS = {
     # Data objects
-    "logical_component": "logical_component",
+    "component": "component",
     "aggregate": "aggregate",
     "source_system": "source_system",
     "classification": "classification",
-    # Logical components
+    # Components
     "parent_domain": "parent_domain",
     "sourcing": "sourcing",
     # Software systems

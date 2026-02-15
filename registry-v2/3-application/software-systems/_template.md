@@ -20,7 +20,7 @@ catalog_id:   # External catalog registration ID
 composes_software_subsystems: []
 
 # Realization (⇢ out): logical component this realizes (singular)
-realizes_logical_component: 
+realizes_component: 
 
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: application-component

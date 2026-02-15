@@ -1,5 +1,5 @@
 ---
-type: logical-component
+type: component
 name: Contact Analytics
 description: Provides analytics and reporting on customer contacts, usage patterns, and engagement metrics.
 owner: Analytics Team
@@ -8,10 +8,10 @@ domain: Analytics and Insights
 registered: false
 sourcing: vendor
 
-parent_architecture_area_domain: Analytics and Insights
-composes_logical_components: []
+parent_domain: Analytics and Insights
+composes_components: []
 owns_data_aggregates: []
-realizes_logical_apis: []
+realizes_api_contracts: []
 realizes_business_capability: Customer Management
 realized_by_software_systems:
   - Analytics Warehouse

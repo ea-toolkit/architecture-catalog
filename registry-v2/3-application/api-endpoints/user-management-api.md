@@ -1,5 +1,5 @@
 ---
-type: physical-business-api
+type: api_endpoint
 name: User Management API
 description: REST API for user lifecycle management including invitations, role assignments, and access revocation.
 owner: Platform Team
@@ -9,7 +9,7 @@ registered: false
 protocol: REST/JSON
 
 parent_software_subsystem: user-auth-service
-implements_logical_api: ~
+implements_api_contract: ~
 
 archimate_type: application-interface
 togaf_type: Information System Service

@@ -1,32 +1,28 @@
 ---
 # ─────────────────────────────────────────────────────────────
-# Architecture Area Domain
-# Enterprise-level software domain and capability model.
-# Brings together related Business Capabilities at highest level.
+# Customer / Market Segment
+# The target audience for Products and Services.
+# Typically the party that generates revenue for the company.
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: architecture-area-domain
+type: market_segment
 name: 
 description: 
 owner: 
 status: draft  # draft | active | deprecated
 registered: false  # true if imported from source system
 
-# ── Relationships (from draw.io arrows) ──────────────────────
-# Composition (◆): logical components within this domain (array)
-composes_logical_components: []
+# ── Relationships (from EMM arrows) ──────────────────────────
+# Serving: products that serve this segment (array)
+served_by_products: []
 
-# Owns: data concepts owned by this domain (array)
-owns_data_concepts: []
+# Serving: business services that serve this segment (array)
+served_by_business_services: []
 
 # ── Alignment ────────────────────────────────────────────────
-archimate_type: application-function
-ddd_type: Domain
-togaf_type: ~
-emm_type: Architecture Area
-software_boundaries_type: Software Domain
-capsifi_type: ~
+archimate_type: business-actor
+togaf_type: Actor
 ---
 
-<!-- Extended description, scope, boundaries, responsibilities -->
+<!-- Extended description, personas, characteristics, revenue model, etc. -->

@@ -58,7 +58,7 @@ roles:
 
 - **Confluence:** Platform Architecture Space
 - **Runbook:** Tenant Onboarding Runbook
-- **API Docs:** Tenant API Reference at `/catalog/physical_business_api--tenant-api`
+- **API Docs:** Tenant API Reference at `/catalog/api_endpoint--tenant-api`
 - **Monitoring Dashboard:** Datadog - Customer Management Overview
 
 ## SLOs

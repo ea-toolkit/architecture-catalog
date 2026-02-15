@@ -1,32 +1,39 @@
 ---
 # ─────────────────────────────────────────────────────────────
-# Logical Business API
-# Capabilities of a Logical Component exposed as an API.
-# Grouping of related operations as a single API resource.
+# Technology Infrastructure
+# Base-level infrastructure on which Application Infrastructure
+# and Software Systems can be deployed.
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: logical-business-api
+type: cloud_service
 name: 
 description: 
 owner: 
 status: draft  # draft | active | deprecated
 registered: false  # true if imported from source system
+cloud_provider: GCP  # GCP | Azure | AWS | on-prem | hybrid
 
 # ── Relationships (from draw.io arrows) ──────────────────────
-# Realization (⇢ in): logical component that realizes this (singular)
-realized_by_logical_component: 
+# Realization (⇢ out): infrastructure functions realized (array)
+realizes_infrastructure_functions: []
 
-# Assignment (● in): physical APIs that implement this (array)
-implemented_by_physical_apis: []
+# Serving (→ out): application infrastructure hosted (array)
+serves_application_infrastructure: []
+
+# Serving (→ out): software subsystems hosted (array)
+serves_software_subsystems: []
+
+# Serving (← in): hosting nodes this runs on (array)
+served_by_infra_nodes: []
 
 # ── Alignment ────────────────────────────────────────────────
-archimate_type: application-service
-ddd_type: Domain Service
-togaf_type: Information System Service
-emm_type: Conceptual IS Service
-software_boundaries_type: Software Component
-capsifi_type: ~
+archimate_type: system-software
+uml_type: Artifact
+togaf_type: Physical Technology Component
+emm_type: Physical TI Component
+software_boundaries_type: Technology System
+capsifi_type: Technology Component
 ---
 
-<!-- Extended description, operations, versioning -->
+<!-- Extended description, cloud config, contracts, etc. -->

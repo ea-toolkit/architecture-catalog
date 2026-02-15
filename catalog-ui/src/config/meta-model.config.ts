@@ -29,29 +29,28 @@ export const ELEMENT_HIERARCHY: Record<string, number> = {
   
   // ── Products & Services Layer (LEFT of domain) ──
   'product': -1,
-  'customer_segment': -2,
+  'market_segment': -2,
 
   // ── Business Layer (LEFT of domain) ──
   'business_actor': -1,
   'business_role': -1,
   'business_service': -1,
-  
+
   // ── Domain / Architecture Area (ANCHOR) ──
   'domain': 0,
   'architecture_area': 0,
-  'architecture_area_domain': 0,
-  
+
   // ── Application Layer - Logical (RIGHT of domain) ──
-  'logical_component': 1,
+  'component': 1,
   'business_capability': 1,
-  
+
   // ── Application Layer - Physical (further RIGHT) ──
   'software_system': 2,
-  'logical_business_api': 2,
-  
+  'api_contract': 2,
+
   // ── Application Layer - Implementation ──
   'software_subsystem': 3,
-  'physical_business_api': 3,
+  'api_endpoint': 3,
   'software_component': 4,
   'software_code': 5,
   
@@ -65,8 +64,8 @@ export const ELEMENT_HIERARCHY: Record<string, number> = {
   'infrastructure_function': 4,
   'infrastructure_api': 4,
   'application_infrastructure': 5,
-  'technology_infrastructure': 5,
-  'hosting_node': 6,
+  'cloud_service': 5,
+  'infra_node': 6,
   'network_zone': 6,
   'networking_equipment': 6,
   

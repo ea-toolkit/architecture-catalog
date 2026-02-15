@@ -1,12 +1,12 @@
 ---
-type: architecture-area-domain
+type: domain
 name: Billing and Payments
 description: Manages subscription plans, recurring billing, invoicing, and payment reconciliation for B2B SaaS customers.
 owner: Billing Team
 status: active
 domain: Billing and Payments
 
-composes_logical_components:
+composes_components:
   - subscription-billing
 
 owns_data_concepts:

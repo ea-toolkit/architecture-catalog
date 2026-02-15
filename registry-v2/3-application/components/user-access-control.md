@@ -1,5 +1,5 @@
 ---
-type: logical-component
+type: component
 name: User Access Control
 description: Handles user authentication, role-based authorization, permission management, and session control for tenant workspaces.
 owner: Platform Team
@@ -7,7 +7,7 @@ status: active
 domain: Customer Management
 sourcing: in-house
 
-parent_architecture_area_domain: Customer Management
+parent_domain: Customer Management
 realized_by_software_systems:
   - Platform Core
 realizes_business_capability:

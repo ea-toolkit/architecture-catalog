@@ -22,16 +22,16 @@ parent_software_system:
 composes_software_components: []
 
 # Composition (◆ out): physical APIs exposed (array)
-composes_physical_apis: []
+composes_api_endpoints: []
 
 # Owns: data aggregates owned (array)
 owns_data_aggregates: []
 
 # Serving (← in): infrastructure that serves this (arrays)
 served_by_application_infrastructure: []
-served_by_technology_infrastructure: []
+served_by_cloud_services: []
 served_by_infrastructure_apis: []
-served_by_hosting_nodes: []
+served_by_infra_nodes: []
 
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: application-component

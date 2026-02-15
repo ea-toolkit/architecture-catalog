@@ -8,7 +8,7 @@ status: active
 product_type: digital
 
 # Relationships
-serves_customer_segments:
+serves_market_segments:
   - Enterprise B2B SaaS
 aggregates_business_services:
   - CRM Cloud Service

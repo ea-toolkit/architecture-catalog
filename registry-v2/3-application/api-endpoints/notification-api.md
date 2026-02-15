@@ -1,5 +1,5 @@
 ---
-type: physical-business-api
+type: api_endpoint
 name: Notification API
 description: REST API for managing notification preferences, delivery channels, and sending transactional notifications to tenant users.
 owner: Platform Team
@@ -9,7 +9,7 @@ registered: false
 protocol: REST/JSON
 
 parent_software_subsystem: tenant-admin-portal
-implements_logical_api: ~
+implements_api_contract: ~
 
 archimate_type: application-interface
 togaf_type: Information System Service

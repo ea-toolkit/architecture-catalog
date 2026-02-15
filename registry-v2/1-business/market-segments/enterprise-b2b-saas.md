@@ -1,5 +1,5 @@
 ---
-type: customer_segment
+type: market_segment
 name: Enterprise B2B SaaS
 description: Mid-to-large enterprises requiring multi-tenant CRM with analytics and billing
 owner: Sales Team

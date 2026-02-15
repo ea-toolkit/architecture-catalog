@@ -15,10 +15,6 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     bg: '#eff6ff', border: '#3b82f6', text: '#1e40af',
     borderStyle: 'solid', borderRadius: '12px', icon: 'D',
   },
-  architecture_area_domain: {
-    bg: '#eff6ff', border: '#2563eb', text: '#1e40af',
-    borderStyle: 'solid', borderRadius: '12px', icon: 'D',
-  },
   business_capability: {
     bg: '#fff7ed', border: '#f97316', text: '#9a3412',
     borderStyle: 'solid', borderRadius: '4px', icon: 'BC',
@@ -27,9 +23,9 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     bg: '#fff7ed', border: '#fb923c', text: '#9a3412',
     borderStyle: 'solid', borderRadius: '4px', icon: 'BP',
   },
-  logical_component: {
+  component: {
     bg: '#f5f3ff', border: '#8b5cf6', text: '#5b21b6',
-    borderStyle: 'solid', borderRadius: '8px', icon: 'LC',
+    borderStyle: 'solid', borderRadius: '8px', icon: 'C',
   },
   software_system: {
     bg: '#ecfdf5', border: '#10b981', text: '#065f46',
@@ -39,13 +35,13 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     bg: '#ecfdf5', border: '#6ee7b7', text: '#065f46',
     borderStyle: 'dashed', borderRadius: '8px', icon: 'Sub',
   },
-  logical_business_api: {
+  api_contract: {
     bg: '#eef2ff', border: '#6366f1', text: '#3730a3',
     borderStyle: 'solid', borderRadius: '16px', icon: 'API',
   },
-  physical_business_api: {
+  api_endpoint: {
     bg: '#eef2ff', border: '#a5b4fc', text: '#3730a3',
-    borderStyle: 'dashed', borderRadius: '16px', icon: 'pAPI',
+    borderStyle: 'dashed', borderRadius: '16px', icon: 'EP',
   },
   data_concept: {
     bg: '#fffbeb', border: '#f59e0b', text: '#92400e',
@@ -83,21 +79,21 @@ export const NODE_STYLES: Record<string, NodeStyle> = {
     bg: '#faf5ff', border: '#a855f7', text: '#6b21a8',
     borderStyle: 'solid', borderRadius: '8px', icon: 'P',
   },
-  customer_segment: {
+  market_segment: {
     bg: '#faf5ff', border: '#c084fc', text: '#6b21a8',
-    borderStyle: 'solid', borderRadius: '50%', icon: 'CS',
+    borderStyle: 'solid', borderRadius: '50%', icon: 'MS',
   },
   business_service: {
     bg: '#faf5ff', border: '#9333ea', text: '#6b21a8',
     borderStyle: 'solid', borderRadius: '12px', icon: 'BS',
   },
-  hosting_node: {
+  infra_node: {
     bg: '#ecfdf5', border: '#10b981', text: '#065f46',
-    borderStyle: 'solid', borderRadius: '4px', icon: 'HN',
+    borderStyle: 'solid', borderRadius: '4px', icon: 'IN',
   },
-  technology_infrastructure: {
+  cloud_service: {
     bg: '#ecfdf5', border: '#34d399', text: '#065f46',
-    borderStyle: 'dashed', borderRadius: '4px', icon: 'TI',
+    borderStyle: 'dashed', borderRadius: '4px', icon: 'CS',
   },
 };
 

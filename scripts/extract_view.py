@@ -258,7 +258,7 @@ def enrich_element(label, ref):
         names = [lc["name"]] + lc.get("aliases", [])
         if label in names:
             desc = lc.get("description") or ""
-            result = {"type": "logical_component", "description": desc.strip()}
+            result = {"type": "component", "description": desc.strip()}
             if lc.get("sourcing"):
                 result["sourcing"] = lc["sourcing"]
             if lc.get("sub_components"):
@@ -399,8 +399,8 @@ def extract_domain_context(diagram, ref):
         if enrichment and enrichment.get("description"):
             result["domain"]["description"] = enrichment["description"]
 
-    # Collect logical components, integration boundaries, external elements
-    logical_components = []
+    # Collect components, integration boundaries, external elements
+    components = []
     integration_areas = []
     external_systems = []
     external_actors = []
@@ -424,9 +424,9 @@ def extract_domain_context(diagram, ref):
             and label != (domain_container or {}).get("label", "")
             and _is_inside_domain(cell, domain_container, cells, children_of)
         ):
-            lc = _extract_logical_component(cid, cell, cells, edges, children_of, ref)
+            lc = _extract_component(cid, cell, cells, edges, children_of, ref)
             if lc:
-                logical_components.append(lc)
+                components.append(lc)
 
         # Integration areas (functions with "integration" in name)
         elif shape == "archimate.function" and "integrat" in label.lower():
@@ -465,8 +465,8 @@ def extract_domain_context(diagram, ref):
                     adj["sends"] = adj_flows["outgoing"]
                 adjacent_domains.append(adj)
 
-    if logical_components:
-        result["logical_components"] = logical_components
+    if components:
+        result["components"] = components
     if integration_areas:
         result["integration_boundaries"] = integration_areas
     if external_systems:
@@ -530,8 +530,8 @@ def _absolute_position(cell, cells):
     return x, y
 
 
-def _extract_logical_component(cid, cell, cells, edges, children_of, ref):
-    """Extract a logical component with its data concepts and flows."""
+def _extract_component(cid, cell, cells, edges, children_of, ref):
+    """Extract a component with its data concepts and flows."""
     lc = {"name": cell["label"]}
 
     # Enrichment from reference
@@ -702,7 +702,7 @@ def extract_data_aggregate(diagram, ref):
     result = {
         "view_type": "data-aggregate",
         "tab": diagram["tab_name"],
-        "logical_components": [],
+        "components": [],
     }
 
     # Find logical component containers (top-level archimate.function)
@@ -784,7 +784,7 @@ def extract_data_aggregate(diagram, ref):
             if relationships:
                 lc["relationships"] = relationships
 
-            result["logical_components"].append(lc)
+            result["components"].append(lc)
 
     return result
 

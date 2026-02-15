@@ -1,37 +1,42 @@
 ---
 # ─────────────────────────────────────────────────────────────
-# Domain Event
-# An event relevant for domain experts and contextual for the domain.
-# Expressed as a verb in past tense.
+# Physical Business API
+# Actual API schema/contract implementing a Logical Business API.
+# Multiple physical endpoints possible (EventAPI, WebAPI, GraphQL).
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: domain-event
+type: api_endpoint
 name: 
 description: 
 owner: 
 status: draft  # draft | active | deprecated
 registered: false  # true if imported from source system
-event_format: CloudEvents  # CloudEvents | Avro | JSON | other
-schema_registry:   # link to schema
+api_catalog_id:   # Kong / API catalog identifier
+protocol: REST  # REST | gRPC | GraphQL | async | event
+auth_method: OAuth2  # mTLS | OAuth2 | API-Key
 
 # ── Relationships (from draw.io arrows) ──────────────────────
-# Triggering (← in): physical APIs that publish this (array)
-published_by_api_endpoints: []
+# Composition (◆ in): software subsystem that owns this (singular)
+parent_software_subsystem: 
 
-# Triggering (← in): physical APIs that consume this (array)
-consumed_by_api_endpoints: []
+# Assignment (● out): logical API this implements (singular)
+implements_api_contract: 
 
-# Realization (⇢ out): business event this realizes (singular)
-realizes_business_event: 
+# Triggering (→ out): domain events published (array)
+publishes_domain_events: []
+
+# Triggering (→ out): domain events consumed (array)
+consumes_domain_events: []
 
 # ── Alignment ────────────────────────────────────────────────
-archimate_type: application-event
-c4_type: Relation
-ddd_type: Domain Event
-togaf_type: ~
+archimate_type: application-interface
+uml_type: Interface
+ddd_type: Application Service
+togaf_type: Information System Service
 emm_type: ~
+software_boundaries_type: Software Component
 capsifi_type: ~
 ---
 
-<!-- Extended description, payload schema, versioning, etc. -->
+<!-- Extended description, endpoints, authentication, versioning -->

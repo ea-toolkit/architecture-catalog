@@ -1,5 +1,5 @@
 ---
-type: technology_infrastructure
+type: cloud_service
 name: Google Kubernetes Engine
 description: Managed Kubernetes service providing container orchestration for NovaCRM
 owner: Platform Engineering
@@ -12,7 +12,7 @@ serves_software_subsystems:
   - crm-api-gateway
   - billing-worker
   - analytics-pipeline
-served_by_hosting_nodes:
+served_by_infra_nodes:
   - GCP Production Cluster
 ---
 

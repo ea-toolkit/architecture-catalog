@@ -1,12 +1,12 @@
 ---
 # ─────────────────────────────────────────────────────────────
-# Hosting Node
+# Infrastructure Node
 # Hardware device or software execution environment.
 # Offers Infrastructure Functions of Compute and/or Storage.
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: hosting-node
+type: infra_node
 name: 
 description: 
 owner: 
@@ -23,7 +23,7 @@ realizes_infrastructure_functions: []
 serves_application_infrastructure: []
 
 # Serving (→ out): technology infrastructure hosted (array)
-serves_technology_infrastructure: []
+serves_cloud_services: []
 
 # Serving (→ out): software subsystems deployed (array)
 serves_software_subsystems: []

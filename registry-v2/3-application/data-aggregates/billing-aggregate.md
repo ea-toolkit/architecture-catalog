@@ -13,7 +13,7 @@ lifecycle_states:
   - cancelled
 
 parent_data_concept: Subscription Plan
-owned_by_logical_component: Subscription Billing
+owned_by_component: Subscription Billing
 composes_data_entities:
   - Invoice
   - Usage Record

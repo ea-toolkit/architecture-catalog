@@ -8,7 +8,7 @@ domain: Customer Management
 registered: false
 
 parent_software_system: Platform Core
-composes_physical_apis:
+composes_api_endpoints:
   - tenant-api
 consumes_apis: []
 

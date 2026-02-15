@@ -1,5 +1,5 @@
 ---
-type: architecture-area-domain
+type: domain
 name: Customer Management
 description: B2B SaaS platform for customer relationship management, covering tenant management, account administration, and user access control.
 owner: Platform Team
@@ -7,7 +7,7 @@ status: active
 domain: Customer Management
 registered: false
 
-composes_logical_components:
+composes_components:
   - tenant-management
   - account-management
   - user-access-control

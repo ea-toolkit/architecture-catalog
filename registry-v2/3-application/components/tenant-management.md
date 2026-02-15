@@ -1,5 +1,5 @@
 ---
-type: logical-component
+type: component
 name: Tenant Management
 description: Manages tenant lifecycle including onboarding, configuration, and offboarding of B2B customers.
 owner: Platform Team
@@ -8,11 +8,11 @@ domain: Customer Management
 registered: false
 sourcing: in-house
 
-parent_architecture_area_domain: Customer Management
-composes_logical_components: []
+parent_domain: Customer Management
+composes_components: []
 owns_data_aggregates:
   - Tenant Aggregate
-realizes_logical_apis: []
+realizes_api_contracts: []
 realizes_business_capability: Customer Management
 realized_by_software_systems:
   - Platform Core

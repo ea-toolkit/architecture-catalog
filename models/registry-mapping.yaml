@@ -175,8 +175,8 @@ elements:
         required: false
         label: Product Type
     relationships:
-      serves_customer_segments:
-        target: customer_segment
+      serves_market_segments:
+        target: market_segment
         type: serving
         cardinality: many
         resolve_by: name
@@ -191,12 +191,12 @@ elements:
         required: false
 
   # ══════════════════════════════════════════════
-  # Customer Segment (Layer 1)
+  # Market Segment (Layer 1)
   # ══════════════════════════════════════════════
-  customer_segment:
-    label: Customer Segment
+  market_segment:
+    label: Market Segment
     layer: business
-    folder: 1-business/customer-segments
+    folder: 1-business/market-segments
     id_field: name
     archimate: business-actor
     graph_rank: -2
@@ -233,7 +233,7 @@ elements:
         type: serving
         cardinality: many
         resolve_by: name
-        inverse: serves_customer_segments
+        inverse: serves_market_segments
         required: false
 
   # ══════════════════════════════════════════════
@@ -327,8 +327,8 @@ elements:
         required: false
         label: Status
     relationships:
-      realized_by_logical_components:
-        target: logical_component
+      realized_by_components:
+        target: component
         type: realization
         cardinality: many
         resolve_by: name
@@ -390,12 +390,12 @@ elements:
         required: false
 
   # ══════════════════════════════════════════════
-  # Architecture Area Domain
+  # Domain
   # ══════════════════════════════════════════════
-  architecture_area_domain:
-    label: Architecture Area Domain
+  domain:
+    label: Domain
     layer: application
-    folder: 3-application/architecture-area-domains
+    folder: 3-application/domains
     id_field: name
     archimate: application-function
     graph_rank: 0
@@ -427,12 +427,12 @@ elements:
         required: false
         label: Aliases
     relationships:
-      composes_logical_components:
-        target: logical_component
+      composes_components:
+        target: component
         type: composition
         cardinality: many
         resolve_by: slug
-        inverse: parent_architecture_area_domain
+        inverse: parent_domain
         required: false
       owns_data_concepts:
         target: data_concept
@@ -443,12 +443,12 @@ elements:
         required: false
 
   # ══════════════════════════════════════════════
-  # Logical Component
+  # Component
   # ══════════════════════════════════════════════
-  logical_component:
-    label: Logical Component
+  component:
+    label: Component
     layer: application
-    folder: 3-application/logical-components
+    folder: 3-application/components
     id_field: name
     archimate: application-function
     graph_rank: 1
@@ -484,15 +484,15 @@ elements:
         required: false
         label: Sourcing
     relationships:
-      parent_architecture_area_domain:
-        target: architecture_area_domain
+      parent_domain:
+        target: domain
         type: composition
         cardinality: one
         resolve_by: name
-        inverse: composes_logical_components
+        inverse: composes_components
         required: false
-      composes_logical_components:
-        target: logical_component
+      composes_components:
+        target: component
         type: composition
         cardinality: many
         resolve_by: name
@@ -503,21 +503,21 @@ elements:
         type: realization
         cardinality: many
         resolve_by: name
-        inverse: realizes_logical_components
+        inverse: realizes_components
         required: false
-      realizes_logical_apis:
-        target: logical_business_api
+      realizes_api_contracts:
+        target: api_contract
         type: serving
         cardinality: many
         resolve_by: name
-        inverse: realized_by_logical_component
+        inverse: realized_by_component
         required: false
       owns_data_aggregates:
         target: data_aggregate
         type: aggregation
         cardinality: many
         resolve_by: name
-        inverse: owned_by_logical_component
+        inverse: owned_by_component
         required: false
       realizes_business_capability:
         target: business_capability
@@ -596,16 +596,16 @@ elements:
         resolve_by: slug
         inverse: parent_software_system
         required: false
-      realizes_logical_components:
-        target: logical_component
+      realizes_components:
+        target: component
         type: realization
         cardinality: many
         resolve_by: name
         inverse: realized_by_software_systems
         required: false
       # Legacy singular field — loader normalizes to array
-      realizes_logical_component:
-        target: logical_component
+      realizes_component:
+        target: component
         type: realization
         cardinality: one
         resolve_by: name
@@ -661,15 +661,15 @@ elements:
         resolve_by: name
         inverse: composes_software_subsystems
         required: false
-      composes_physical_apis:
-        target: physical_business_api
+      composes_api_endpoints:
+        target: api_endpoint
         type: composition
         cardinality: many
         resolve_by: slug
         inverse: parent_software_subsystem
         required: false
       consumes_apis:
-        target: physical_business_api
+        target: api_endpoint
         type: serving
         cardinality: many
         resolve_by: slug
@@ -677,12 +677,12 @@ elements:
         required: false
 
   # ══════════════════════════════════════════════
-  # Logical Business API
+  # API Contract
   # ══════════════════════════════════════════════
-  logical_business_api:
-    label: Logical Business API
+  api_contract:
+    label: API Contract
     layer: application
-    folder: 3-application/logical-apis
+    folder: 3-application/api-contracts
     id_field: name
     archimate: application-service
     graph_rank: 2
@@ -714,28 +714,28 @@ elements:
         required: false
         label: Status
     relationships:
-      realized_by_logical_component:
-        target: logical_component
+      realized_by_component:
+        target: component
         type: realization
         cardinality: one
         resolve_by: name
-        inverse: realizes_logical_apis
+        inverse: realizes_api_contracts
         required: false
-      implemented_by_physical_apis:
-        target: physical_business_api
+      implemented_by_api_endpoints:
+        target: api_endpoint
         type: realization
         cardinality: many
         resolve_by: slug
-        inverse: implements_logical_api
+        inverse: implements_api_contract
         required: false
 
   # ══════════════════════════════════════════════
-  # Physical Business API
+  # API Endpoint
   # ══════════════════════════════════════════════
-  physical_business_api:
-    label: Physical Business API
+  api_endpoint:
+    label: API Endpoint
     layer: application
-    folder: 3-application/physical-apis
+    folder: 3-application/api-endpoints
     id_field: name
     archimate: application-interface
     graph_rank: 3
@@ -780,14 +780,14 @@ elements:
         type: composition
         cardinality: one
         resolve_by: slug
-        inverse: composes_physical_apis
+        inverse: composes_api_endpoints
         required: false
-      implements_logical_api:
-        target: logical_business_api
+      implements_api_contract:
+        target: api_contract
         type: realization
         cardinality: one
         resolve_by: name
-        inverse: implemented_by_physical_apis
+        inverse: implemented_by_api_endpoints
         required: false
 
   # ══════════════════════════════════════════════
@@ -835,10 +835,10 @@ elements:
         type: string
         required: false
         label: Source System
-      logical_component:
+      component:
         type: string
         required: false
-        label: Logical Component
+        label: Component
     relationships:
       detailed_by_data_aggregates:
         target: data_aggregate
@@ -897,8 +897,8 @@ elements:
         resolve_by: name
         inverse: detailed_by_data_aggregates
         required: false
-      owned_by_logical_component:
-        target: logical_component
+      owned_by_component:
+        target: component
         type: aggregation
         cardinality: one
         resolve_by: name
@@ -1019,15 +1019,15 @@ elements:
         required: false
         label: Schema Registry
     relationships:
-      published_by_physical_apis:
-        target: physical_business_api
+      published_by_api_endpoints:
+        target: api_endpoint
         type: serving
         cardinality: many
         resolve_by: slug
         inverse: ~
         required: false
-      consumed_by_physical_apis:
-        target: physical_business_api
+      consumed_by_api_endpoints:
+        target: api_endpoint
         type: serving
         cardinality: many
         resolve_by: slug
@@ -1042,12 +1042,12 @@ elements:
         required: false  # Cross-layer link — target type not yet mapped
 
   # ══════════════════════════════════════════════
-  # Hosting Node (Layer 4)
+  # Infrastructure Node (Layer 4)
   # ══════════════════════════════════════════════
-  hosting_node:
-    label: Hosting Node
+  infra_node:
+    label: Infrastructure Node
     layer: technology
-    folder: 4-technology/hosting-nodes
+    folder: 4-technology/infra-nodes
     id_field: name
     archimate: node
     graph_rank: 4
@@ -1096,12 +1096,12 @@ elements:
         required: false
 
   # ══════════════════════════════════════════════
-  # Technology Infrastructure (Layer 4)
+  # Cloud Service (Layer 4)
   # ══════════════════════════════════════════════
-  technology_infrastructure:
-    label: Technology Infrastructure
+  cloud_service:
+    label: Cloud Service
     layer: technology
-    folder: 4-technology/technology-infrastructure
+    folder: 4-technology/cloud-services
     id_field: name
     archimate: system-software
     graph_rank: 4
@@ -1144,8 +1144,8 @@ elements:
         resolve_by: slug
         inverse: ~
         required: false
-      served_by_hosting_nodes:
-        target: hosting_node
+      served_by_infra_nodes:
+        target: infra_node
         type: serving
         cardinality: many
         resolve_by: name
@@ -1181,7 +1181,7 @@ elements:
 #
 # resolve_by: name
 #   Match the target's `name:` frontmatter field (case-insensitive).
-#   e.g., "Tenant Management" → logical-components/tenant-management.md
+#   e.g., "Tenant Management" → components/tenant-management.md
 #
 # resolve_by: abbreviation
 #   Match the target's `abbreviation:` frontmatter field.

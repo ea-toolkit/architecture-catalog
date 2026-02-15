@@ -8,9 +8,9 @@ domain: Customer Management
 registered: false
 event_format: CloudEvents/JSON
 
-published_by_physical_apis:
+published_by_api_endpoints:
   - user-management-api
-consumed_by_physical_apis:
+consumed_by_api_endpoints:
   - notification-api
 
 archimate_type: application-event

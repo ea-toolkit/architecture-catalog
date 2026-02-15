@@ -20,7 +20,7 @@ trust_level: medium  # high | medium | low | untrusted
 aggregates_networking_equipment: []
 
 # Association: hosting nodes within this zone (array)
-associated_hosting_nodes: []
+associated_infra_nodes: []
 
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: communication-network

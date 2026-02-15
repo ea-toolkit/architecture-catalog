@@ -8,7 +8,7 @@ domain: Customer Management
 
 composes_process_modules: []
 owns_information_objects: []
-realized_by_logical_components:
+realized_by_components:
   - Account Management
 
 archimate_type: business-function

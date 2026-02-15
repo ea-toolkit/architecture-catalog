@@ -8,9 +8,9 @@ domain: Analytics and Insights
 registered: false
 event_format: CloudEvents/JSON
 
-published_by_physical_apis:
+published_by_api_endpoints:
   - analytics-query-api
-consumed_by_physical_apis: []
+consumed_by_api_endpoints: []
 
 archimate_type: application-event
 ddd_type: Domain Event

@@ -1,5 +1,5 @@
 ---
-type: customer_segment
+type: market_segment
 name: SMB SaaS
 description: Small and medium businesses using the platform for lightweight CRM needs with self-service onboarding and standard support tiers.
 owner: Sales Team

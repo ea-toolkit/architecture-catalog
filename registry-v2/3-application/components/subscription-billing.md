@@ -1,5 +1,5 @@
 ---
-type: logical-component
+type: component
 name: Subscription Billing
 description: Handles subscription plan management, recurring billing cycles, invoicing, and payment reconciliation.
 owner: Billing Team
@@ -8,11 +8,11 @@ domain: Billing and Payments
 registered: false
 sourcing: in-house
 
-parent_architecture_area_domain: Billing and Payments
-composes_logical_components: []
+parent_domain: Billing and Payments
+composes_components: []
 owns_data_aggregates:
   - Billing Aggregate
-realizes_logical_apis: []
+realizes_api_contracts: []
 realizes_business_capability: Customer Management
 realized_by_software_systems:
   - Billing Engine

@@ -1,42 +1,32 @@
 ---
 # ─────────────────────────────────────────────────────────────
-# Physical Business API
-# Actual API schema/contract implementing a Logical Business API.
-# Multiple physical endpoints possible (EventAPI, WebAPI, GraphQL).
+# Logical Business API
+# Capabilities of a Logical Component exposed as an API.
+# Grouping of related operations as a single API resource.
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: physical-business-api
+type: api_contract
 name: 
 description: 
 owner: 
 status: draft  # draft | active | deprecated
 registered: false  # true if imported from source system
-api_catalog_id:   # Kong / API catalog identifier
-protocol: REST  # REST | gRPC | GraphQL | async | event
-auth_method: OAuth2  # mTLS | OAuth2 | API-Key
 
 # ── Relationships (from draw.io arrows) ──────────────────────
-# Composition (◆ in): software subsystem that owns this (singular)
-parent_software_subsystem: 
+# Realization (⇢ in): logical component that realizes this (singular)
+realized_by_component: 
 
-# Assignment (● out): logical API this implements (singular)
-implements_logical_api: 
-
-# Triggering (→ out): domain events published (array)
-publishes_domain_events: []
-
-# Triggering (→ out): domain events consumed (array)
-consumes_domain_events: []
+# Assignment (● in): physical APIs that implement this (array)
+implemented_by_api_endpoints: []
 
 # ── Alignment ────────────────────────────────────────────────
-archimate_type: application-interface
-uml_type: Interface
-ddd_type: Application Service
+archimate_type: application-service
+ddd_type: Domain Service
 togaf_type: Information System Service
-emm_type: ~
+emm_type: Conceptual IS Service
 software_boundaries_type: Software Component
 capsifi_type: ~
 ---
 
-<!-- Extended description, endpoints, authentication, versioning -->
+<!-- Extended description, operations, versioning -->

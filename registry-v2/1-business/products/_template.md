@@ -16,7 +16,7 @@ product_type: physical  # physical | digital | hybrid
 
 # ── Relationships (from EMM arrows) ──────────────────────────
 # Serving: segments this product serves (array)
-serves_customer_segments: []
+serves_market_segments: []
 
 # Aggregation: business services this product aggregates (array)
 aggregates_business_services: []

@@ -8,7 +8,7 @@ domain: Analytics and Insights
 registered: false
 classification: internal
 
-owned_by_architecture_area_domain: Analytics and Insights
+owned_by_domain: Analytics and Insights
 detailed_by_data_aggregates:
   - Analytics Aggregate
 

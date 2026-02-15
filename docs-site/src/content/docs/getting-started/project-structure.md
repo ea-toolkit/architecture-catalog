@@ -13,12 +13,12 @@ architecture-catalog/
 │   ├── 1-business/
 │   ├── 2-organization/
 │   ├── 3-application/
-│   │   ├── architecture-area-domains/
-│   │   ├── logical-components/
+│   │   ├── domains/
+│   │   ├── components/
 │   │   ├── software-systems/
 │   │   ├── software-subsystems/
-│   │   ├── physical-apis/
-│   │   ├── logical-apis/
+│   │   ├── api-endpoints/
+│   │   ├── api-contracts/
 │   │   ├── data-concepts/
 │   │   ├── data-aggregates/
 │   │   ├── data-entities/

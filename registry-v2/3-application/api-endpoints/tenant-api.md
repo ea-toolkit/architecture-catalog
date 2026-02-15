@@ -1,5 +1,5 @@
 ---
-type: physical-business-api
+type: api_endpoint
 name: Tenant API
 description: REST API for tenant CRUD operations, onboarding workflows, and configuration management.
 owner: Platform Team
@@ -9,7 +9,7 @@ registered: false
 protocol: REST/JSON
 
 parent_software_subsystem: crm-api-gateway
-implements_logical_api: ~
+implements_api_contract: ~
 
 archimate_type: application-interface
 c4_type: ~

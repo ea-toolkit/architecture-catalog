@@ -1,12 +1,12 @@
 ---
-type: architecture-area-domain
+type: domain
 name: Analytics and Insights
 description: Provides analytics, reporting, and business intelligence on customer contacts, usage patterns, and engagement metrics.
 owner: Analytics Team
 status: active
 domain: Analytics and Insights
 
-composes_logical_components:
+composes_components:
   - contact-analytics
 
 owns_data_concepts:

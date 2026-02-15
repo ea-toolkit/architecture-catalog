@@ -8,7 +8,7 @@ domain: Analytics and Insights
 registered: false
 
 parent_software_system: Analytics Warehouse
-composes_physical_apis:
+composes_api_endpoints:
   - analytics-query-api
 consumes_apis: []
 

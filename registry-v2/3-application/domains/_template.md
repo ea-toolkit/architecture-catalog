@@ -1,39 +1,32 @@
 ---
 # ─────────────────────────────────────────────────────────────
-# Technology Infrastructure
-# Base-level infrastructure on which Application Infrastructure
-# and Software Systems can be deployed.
+# Architecture Area Domain
+# Enterprise-level software domain and capability model.
+# Brings together related Business Capabilities at highest level.
 # ─────────────────────────────────────────────────────────────
 
 # ── Core Fields ──────────────────────────────────────────────
-type: technology-infrastructure
+type: domain
 name: 
 description: 
 owner: 
 status: draft  # draft | active | deprecated
 registered: false  # true if imported from source system
-cloud_provider: GCP  # GCP | Azure | AWS | on-prem | hybrid
 
 # ── Relationships (from draw.io arrows) ──────────────────────
-# Realization (⇢ out): infrastructure functions realized (array)
-realizes_infrastructure_functions: []
+# Composition (◆): logical components within this domain (array)
+composes_components: []
 
-# Serving (→ out): application infrastructure hosted (array)
-serves_application_infrastructure: []
-
-# Serving (→ out): software subsystems hosted (array)
-serves_software_subsystems: []
-
-# Serving (← in): hosting nodes this runs on (array)
-served_by_hosting_nodes: []
+# Owns: data concepts owned by this domain (array)
+owns_data_concepts: []
 
 # ── Alignment ────────────────────────────────────────────────
-archimate_type: system-software
-uml_type: Artifact
-togaf_type: Physical Technology Component
-emm_type: Physical TI Component
-software_boundaries_type: Technology System
-capsifi_type: Technology Component
+archimate_type: application-function
+ddd_type: Domain
+togaf_type: ~
+emm_type: Architecture Area
+software_boundaries_type: Software Domain
+capsifi_type: ~
 ---
 
-<!-- Extended description, cloud config, contracts, etc. -->
+<!-- Extended description, scope, boundaries, responsibilities -->

@@ -8,7 +8,7 @@ domain: Billing and Payments
 registered: false
 
 parent_software_system: Billing Engine
-composes_physical_apis:
+composes_api_endpoints:
   - subscription-api
 consumes_apis: []
 

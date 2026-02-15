@@ -12,31 +12,35 @@ Guide the user through creating a properly structured registry entry.
 
 ## Arguments
 
-- `$1` - Element type: logical-component, software-system, data-concept, data-aggregate, data-entity, domain-event, physical-api, etc.
+- `$1` - Element type: component, software-system, data-concept, data-aggregate, data-entity, domain-event, api-endpoint, etc.
 - `$2+` - Element name (can have spaces)
 
 If arguments not provided, ask the user:
 1. What type of element?
 2. What is the element name?
-3. Which architecture area domain does it belong to?
+3. Which domain does it belong to?
 
 ## Element Type to Folder Mapping
 
 | Type | Folder |
 |------|--------|
-| architecture-area-domain | registry-v2/3-application/architecture-area-domains/ |
-| logical-component | registry-v2/3-application/logical-components/ |
+| domain | registry-v2/3-application/domains/ |
+| component | registry-v2/3-application/components/ |
 | software-system | registry-v2/3-application/software-systems/ |
 | software-subsystem | registry-v2/3-application/software-subsystems/ |
-| physical-api | registry-v2/3-application/physical-apis/ |
-| logical-api | registry-v2/3-application/logical-apis/ |
+| api-endpoint | registry-v2/3-application/api-endpoints/ |
+| api-contract | registry-v2/3-application/api-contracts/ |
 | domain-event | registry-v2/3-application/domain-events/ |
 | data-concept | registry-v2/3-application/data-concepts/ |
 | data-aggregate | registry-v2/3-application/data-aggregates/ |
 | data-entity | registry-v2/3-application/data-entities/ |
 | capability | registry-v2/2-organization/capabilities/ |
 | process | registry-v2/2-organization/processes/ |
-| actor | registry-v2/2-organization/actors/ |
+| market-segment | registry-v2/1-business/market-segments/ |
+| product | registry-v2/1-business/products/ |
+| business-service | registry-v2/1-business/business-services/ |
+| infra-node | registry-v2/4-technology/infra-nodes/ |
+| cloud-service | registry-v2/4-technology/cloud-services/ |
 
 ## Workflow
 
@@ -83,7 +87,7 @@ For **data** elements (concepts, aggregates, entities), also include:
 For **software** elements (systems, subsystems), also include:
 - sourcing: in-house/vendor/hybrid
 - vendor: (if vendor)
-- realizes_logical_component: Which LC this system supports
+- realizes_component: Which component this system supports
 
 ## Notes
 

@@ -23,7 +23,7 @@ owner: Platform Team
 domain: Customer Management
 status: active
 parent_software_system: platform-core
-composes_physical_apis:
+composes_api_endpoints:
   - tenant-api
 ---
 
@@ -84,7 +84,7 @@ Internally, each element gets a composite ID: `<type_key>--<slug>`
 
 ```
 software_subsystem--billing-worker
-physical_business_api--tenant-api
+api_endpoint--tenant-api
 data_concept--tenant-account
 ```
 

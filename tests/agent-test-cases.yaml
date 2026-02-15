@@ -29,7 +29,7 @@ categories:
         name: Data ownership lookup
         prompt: "What data aggregates does Tenant Management own?"
         expected_sources:
-          - registry-v2/3-application/logical-components/tenant-management.md
+          - registry-v2/3-application/components/tenant-management.md
         expects: >
           Agent should list owned data (Tenant Aggregate) with
           file citations. Should not invent data concepts not in the repo.
@@ -38,7 +38,7 @@ categories:
         name: Sourcing classification
         prompt: "Which logical components in the Enterprise Platform are in-house vs vendor?"
         expected_sources:
-          - registry-v2/3-application/logical-components/
+          - registry-v2/3-application/components/
         expects: >
           Agent should list all LCs grouped by sourcing (Tenant Management: in-house,
           Subscription Billing: in-house, Contact Analytics: vendor). Should cite source files.
@@ -48,7 +48,7 @@ categories:
         prompt: "What software systems realize the Subscription Billing logical component?"
         expected_sources:
           - registry-v2/3-application/software-systems/billing-engine.md
-          - registry-v2/3-application/logical-components/subscription-billing.md
+          - registry-v2/3-application/components/subscription-billing.md
         expects: >
           Agent should find Billing Engine realizes Subscription Billing.
           Should cite the relationship field in the source file.
@@ -93,7 +93,7 @@ categories:
           that tracks payment transactions for subscriptions.
           Which logical component should own it and why?
         expected_sources:
-          - registry-v2/3-application/logical-components/subscription-billing.md
+          - registry-v2/3-application/components/subscription-billing.md
           - registry-v2/3-application/data-aggregates/billing-aggregate.md
           - models/registry-mapping.yaml
         expects: >
@@ -109,7 +109,7 @@ categories:
         expected_sources:
           - registry-v2/3-application/software-systems/analytics-warehouse.md
           - registry-v2/3-application/software-subsystems/analytics-pipeline.md
-          - registry-v2/3-application/physical-apis/analytics-query-api.md
+          - registry-v2/3-application/api-endpoints/analytics-query-api.md
         expects: >
           Agent should trace relationships from Analytics Warehouse through its
           subsystems and APIs. Should identify Contact Analytics as the logical
@@ -135,8 +135,8 @@ categories:
           'Notification Management' in the Customer Management domain. It is an in-house
           component owned by platform-team.
         expected_sources:
-          - registry-v2/3-application/logical-components/_template.md
-          - registry-v2/3-application/logical-components/ (existing entries for pattern reference)
+          - registry-v2/3-application/components/_template.md
+          - registry-v2/3-application/components/ (existing entries for pattern reference)
         expects: >
           Agent should use the template, place file in correct folder with
           kebab-case filename, fill frontmatter correctly. Body should note

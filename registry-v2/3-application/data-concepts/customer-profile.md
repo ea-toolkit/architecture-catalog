@@ -8,7 +8,7 @@ domain: Customer Management
 registered: false
 classification: business-confidential
 
-owned_by_architecture_area_domain: Customer Management
+owned_by_domain: Customer Management
 detailed_by_data_aggregates:
   - Account Aggregate
 

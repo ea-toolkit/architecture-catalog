@@ -11,7 +11,7 @@ vendor: Snowflake
 
 composes_software_subsystems:
   - analytics-pipeline
-realizes_logical_component: Contact Analytics
+realizes_component: Contact Analytics
 
 archimate_type: application-component
 c4_type: System

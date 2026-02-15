@@ -8,8 +8,8 @@
 
 service_type: software_subsystem
 event_type: domain_event
-publishes_field: published_by_physical_apis
-consumes_field: consumed_by_physical_apis
+publishes_field: published_by_api_endpoints
+consumes_field: consumed_by_api_endpoints
 
 # Optional display label overrides (defaults to type label from registry-mapping.yaml):
 # service_label: Service
