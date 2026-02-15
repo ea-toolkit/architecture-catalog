@@ -77,6 +77,16 @@ cd catalog-ui && npm run build   # Validate
 
 See the [contributing guide](docs-site/src/content/docs/contributing/how-to-contribute.md) for full details.
 
+## Acknowledgements
+
+The catalog UI design is inspired by [EventCatalog](https://www.eventcatalog.dev/)
+by David Boyne. EventCatalog is an excellent tool for documenting event-driven
+architectures — if that's your focus, check it out.
+
+Architecture Catalog takes a different approach: vocabulary-agnostic,
+schema-driven, and built for enterprise architecture modelling across
+all layers (not just events).
+
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
