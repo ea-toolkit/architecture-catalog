@@ -28,8 +28,6 @@ c4_type: System
 uml_type: System
 togaf_type: Application Component
 emm_type: Physical IS Component
-software_boundaries_type: Business System
-capsifi_type: System
 ddd_type: ~
 ---
 

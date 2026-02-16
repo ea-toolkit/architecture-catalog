@@ -18,7 +18,6 @@ actor_type: internal | external | system
 archimate_type: business-actor
 togaf_type: Actor
 uml_type: Actor
-capsifi_type: ~
 ---
 
 # <Actor Name>

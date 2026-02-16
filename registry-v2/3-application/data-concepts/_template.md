@@ -30,7 +30,6 @@ realizes_business_information_object:
 archimate_type: data-object
 togaf_type: Data Entities
 emm_type: Data Concept
-capsifi_type: Concept
 ddd_type: ~
 c4_type: ~
 ---

@@ -34,7 +34,6 @@ realizes_infrastructure_apis: []
 archimate_type: technology-function
 togaf_type: Logical Technology Component
 emm_type: Logical TI Component
-capsifi_type: ~
 ---
 
 <!-- Extended description, capabilities offered, etc. -->

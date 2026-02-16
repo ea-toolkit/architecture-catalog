@@ -31,7 +31,6 @@ c4_type: Relation
 ddd_type: Domain Event
 togaf_type: ~
 emm_type: ~
-capsifi_type: ~
 ---
 
 <!-- Extended description, payload schema, versioning, etc. -->

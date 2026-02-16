@@ -28,8 +28,6 @@ archimate_type: device
 uml_type: Device
 togaf_type: Physical Technology Component
 emm_type: Physical TI Component
-software_boundaries_type: Hardware
-capsifi_type: Technology Component
 ---
 
 <!-- Extended description, vendor, specs, config, etc. -->

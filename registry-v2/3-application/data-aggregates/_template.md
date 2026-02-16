@@ -33,7 +33,6 @@ archimate_type: data-object
 ddd_type: Aggregate
 togaf_type: Logical Data Component
 emm_type: ~
-capsifi_type: System
 c4_type: ~
 ---
 

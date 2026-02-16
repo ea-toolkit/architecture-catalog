@@ -36,8 +36,6 @@ archimate_type: node
 uml_type: Node
 togaf_type: Physical Technology Component
 emm_type: Physical TI Component
-software_boundaries_type: Hardware
-capsifi_type: Technology Component
 ---
 
 <!-- Extended description, specs, location, config -->

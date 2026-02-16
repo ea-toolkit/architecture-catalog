@@ -29,8 +29,6 @@ uml_type: Component
 ddd_type: Module
 togaf_type: ~
 emm_type: ~
-software_boundaries_type: Software Component
-capsifi_type: ~
 ---
 
 <!-- Extended description, purpose, technology, etc. -->

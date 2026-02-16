@@ -24,7 +24,6 @@ aggregates_business_services: []
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: product
 togaf_type: Product
-capsifi_type: Product
 software_boundaries: Digital Product Solution
 ---
 

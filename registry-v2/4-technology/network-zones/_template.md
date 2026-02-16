@@ -27,8 +27,6 @@ archimate_type: communication-network
 uml_type: Communication Path
 togaf_type: Physical Technology Component
 emm_type: Physical TI Component
-software_boundaries_type: Hardware
-capsifi_type: Technology Component
 ---
 
 <!-- Extended description, security controls, firewall rules, etc. -->

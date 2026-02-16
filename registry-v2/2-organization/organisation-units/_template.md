@@ -33,7 +33,6 @@ owns_e2e_processes: []
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: business-actor
 togaf_type: Organization Unit
-capsifi_type: Organisation
 ---
 
 <!-- Extended description, org chart, responsibilities, etc. -->

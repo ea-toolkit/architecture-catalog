@@ -26,7 +26,6 @@ realized_by_components: []
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: business-function
 togaf_type: Business Capability
-capsifi_type: Business Capability
 ---
 
 # <Business Capability Name>
