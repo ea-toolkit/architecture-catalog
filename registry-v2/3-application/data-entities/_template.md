@@ -33,7 +33,6 @@ archimate_type: data-object
 ddd_type: Entity
 togaf_type: Physical Data Component
 emm_type: Data Entity
-capsifi_type: ~
 c4_type: ~
 ---
 

@@ -39,8 +39,6 @@ c4_type: Container
 uml_type: SubSystem
 togaf_type: Application Component
 emm_type: Physical IS Component
-software_boundaries_type: Software Subsystem
-capsifi_type: ~
 ---
 
 <!-- Extended description, deployment, runtime config -->

@@ -22,7 +22,6 @@ owned_by_organisation_units: []
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: business-process
 togaf_type: Value Stream
-capsifi_type: Value Stream
 ---
 
 <!-- Extended description, outcomes, metrics, stages, etc. -->

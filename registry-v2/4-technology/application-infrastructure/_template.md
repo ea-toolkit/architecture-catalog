@@ -33,8 +33,6 @@ archimate_type: system-software
 uml_type: Artifact
 togaf_type: Physical Technology Component
 emm_type: Physical TI Component
-software_boundaries_type: Technology System
-capsifi_type: Technology Component
 ---
 
 <!-- Extended description, vendor info, support, etc. -->

@@ -26,7 +26,6 @@ serves_software_subsystems: []
 archimate_type: technology-service
 togaf_type: Technology Service
 emm_type: Conceptual TI Service
-capsifi_type: ~
 ---
 
 <!-- Extended description, specification, versions, etc. -->

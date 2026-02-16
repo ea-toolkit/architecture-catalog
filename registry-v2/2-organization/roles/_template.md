@@ -22,7 +22,6 @@ performs_process_tasks: []
 # ── Alignment ────────────────────────────────────────────────
 archimate_type: business-role
 togaf_type: Role
-capsifi_type: Role
 ---
 
 <!-- Extended description, responsibilities, permissions, etc. -->

@@ -38,8 +38,6 @@ archimate_type: application-function
 ddd_type: Bounded Context
 togaf_type: Information System Service
 emm_type: Logical IS Component
-software_boundaries_type: ~
-capsifi_type: Logical Applications
 ---
 
 <!-- Extended description, boundaries, responsibilities -->

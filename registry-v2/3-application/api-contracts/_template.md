@@ -25,8 +25,6 @@ archimate_type: application-service
 ddd_type: Domain Service
 togaf_type: Information System Service
 emm_type: Conceptual IS Service
-software_boundaries_type: Software Component
-capsifi_type: ~
 ---
 
 <!-- Extended description, operations, versioning -->

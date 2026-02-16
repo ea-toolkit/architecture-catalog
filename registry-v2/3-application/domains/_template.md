@@ -25,8 +25,6 @@ archimate_type: application-function
 ddd_type: Domain
 togaf_type: ~
 emm_type: Architecture Area
-software_boundaries_type: Software Domain
-capsifi_type: ~
 ---
 
 <!-- Extended description, scope, boundaries, responsibilities -->

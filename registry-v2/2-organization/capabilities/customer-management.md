@@ -16,7 +16,6 @@ realized_by_components:
 
 archimate_type: business-function
 togaf_type: Business Capability
-capsifi_type: Business Capability
 ---
 
 # Customer Management

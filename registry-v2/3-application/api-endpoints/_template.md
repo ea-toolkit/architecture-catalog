@@ -35,8 +35,6 @@ uml_type: Interface
 ddd_type: Application Service
 togaf_type: Information System Service
 emm_type: ~
-software_boundaries_type: Software Component
-capsifi_type: ~
 ---
 
 <!-- Extended description, endpoints, authentication, versioning -->
