@@ -113,6 +113,7 @@ export function buildDomainGraph(
           source: normalized.source,
           target: normalized.target,
           type: 'relationshipEdge',
+          animated: true,
           data: {
             relationship: rel.type,
             label: semantics.label,
@@ -144,6 +145,7 @@ export function buildDomainGraph(
         source: domain.id,
         target: el.id,
         type: 'relationshipEdge',
+        animated: true,
         data: {
           relationship: 'composition',
           label: 'contains',
@@ -268,6 +270,7 @@ export function buildElementGraph(
       source: normalized.source,
       target: normalized.target,
       type: 'relationshipEdge',
+      animated: true,
       data: {
         relationship: rel.type,
         label: semantics.label,
@@ -320,6 +323,7 @@ export function buildElementGraph(
           source: normalized.source,
           target: normalized.target,
           type: 'relationshipEdge',
+          animated: true,
           data: {
             relationship: rel.type,
             label: semantics.label,

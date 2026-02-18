@@ -7,7 +7,6 @@ import {
   ReactFlow,
   Background,
   Controls,
-  MiniMap,
   useNodesState,
   useEdgesState,
   useReactFlow,
@@ -162,8 +161,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
       backgroundColor: '#fafafa',
       pixelRatio: 2,
       filter: (node) => {
-        // Exclude minimap and controls from the export
-        if (node?.classList?.contains('react-flow__minimap')) return false;
+        // Exclude controls from the export
         if (node?.classList?.contains('react-flow__controls')) return false;
         return true;
       },
@@ -241,14 +239,6 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
         >
           <Background color="#e2e8f0" gap={20} />
           <Controls position="top-left" showInteractive={false} />
-          <MiniMap
-            nodeColor={(node) => {
-              const style = (node.data as Record<string, unknown>)?.style as Record<string, string> | undefined;
-              return style?.border || '#94a3b8';
-            }}
-            maskColor="rgba(0,0,0,0.1)"
-            position="bottom-left"
-          />
 
           {/* Toolbar Panel — search, status filter, export */}
           <Panel position="top-right">
