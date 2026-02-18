@@ -154,6 +154,39 @@ See `docs-site/src/content/docs/contributing/how-to-contribute.md` for detailed 
 
 ---
 
+## Git Workflow
+
+- **Never commit directly to `main`** — branch protection rules are enabled
+- Always create a feature branch from `main`: `git checkout -b <type>/<short-description>`
+- Branch naming: `feat/`, `fix/`, `chore/`, `docs/` prefixes
+- Implement, test, commit on the branch, then push and create a PR
+- Merge via GitHub PR (squash or merge commit)
+
+---
+
+## Maps Architecture
+
+Maps are analytical views that consume registry data. They are a **separate layer** from the core registry schema.
+
+**Two-tier design:**
+
+1. **Core schema (`registry-mapping.yaml`)** — vocabulary-agnostic, drives the registry loader and catalog UI. No type-name conditionals, no layer-name conditionals. A user can rename every type and layer and it still works.
+
+2. **Map definitions (separate YAML files)** — view-specific, can reference specific element types. Each map type gets its own YAML:
+   - `registry-mapping.yaml` → Domain Context Map (uses registry relationships)
+   - `event-mapping.yaml` → Event Flow Map (knows about events, publish/consume)
+   - Future: `heatmap-mapping.yaml`, `impact-mapping.yaml`, etc.
+
+**Why maps are NOT vocabulary-agnostic:** An event map needs to know what events are. A capability heatmap needs to know what capabilities are. These are opinionated analytical views — that's the whole point. The core registry stays generic; map views are intentionally domain-aware.
+
+**Adding a new map type:**
+1. Create a YAML definition file in `models/` (e.g., `heatmap-mapping.yaml`)
+2. Create the React visualization component in `catalog-ui/src/components/graphs/`
+3. Create the Astro page to render it
+4. Pre-configured maps ship with the project; custom maps can be contributed
+
+---
+
 ## Development Principles
 
 - Build incrementally — 1% at a time, prove each piece works

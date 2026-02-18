@@ -8,7 +8,6 @@ import {
   ReactFlow,
   Background,
   Controls,
-  MiniMap,
   useNodesState,
   useEdgesState,
   useReactFlow,
@@ -177,7 +176,6 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
       backgroundColor: '#fafafa',
       pixelRatio: 2,
       filter: (node) => {
-        if (node?.classList?.contains('react-flow__minimap')) return false;
         if (node?.classList?.contains('react-flow__controls')) return false;
         return true;
       },
@@ -221,14 +219,6 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
       >
         <Background color="#e2e8f0" gap={20} />
         <Controls position="top-left" showInteractive={false} />
-        <MiniMap
-          nodeColor={(node) => {
-            const style = (node.data as Record<string, unknown>)?.style as Record<string, string> | undefined;
-            return style?.border || '#94a3b8';
-          }}
-          maskColor="rgba(0,0,0,0.1)"
-          position="bottom-left"
-        />
 
         {/* Export button */}
         <Panel position="top-right">
