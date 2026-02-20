@@ -11,6 +11,10 @@ description: <Brief description>
 owner: <owning-team>
 domain:
 status: draft | active | deprecated
+maturity: Initial | Developing | Good | Excellent
+lifecycle: new | active | retired
+sourcing: in-house | vendor | hybrid
+size: s | m | l | xl | xxl
 registered: false
 
 # ── Relationships (from draw.io arrows) ──────────────────────

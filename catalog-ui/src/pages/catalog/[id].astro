@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { elements, getElementById, getDomainById, getElementsByDomain, LAYER_META, TYPE_BADGES, REL_TYPE_LABELS, getExtraFields, eventMappingEnabled, type LayerKey } from '../../data/registry';
+import { elements, getElementById, getDomainById, getElementsByDomain, LAYER_META, TYPE_BADGES, REL_TYPE_LABELS, getExtraFields, eventMappingEnabled, heatmapMappingEnabled, type LayerKey } from '../../data/registry';
+import { getDiagramsByDomain } from '../../data/diagrams-mock';
 import ElementContextGraph from '../../components/graphs/ElementContextGraph';
 import { marked } from 'marked';
 
@@ -13,6 +14,7 @@ const element = getElementById(id!)!;
 const domain = getDomainById(element.domain);
 const layer = LAYER_META[element.layer];
 const domainElements = domain ? getElementsByDomain(domain.id) : [];
+const domainDiagrams = domain ? getDiagramsByDomain(domain.id) : [];
 const extraFields = getExtraFields(element);
 
 // Badge categories derived from mapping YAML — no hardcoded type list
@@ -77,13 +79,48 @@ for (const el of domainElements) {
       </div>
       <div class="sidebar-group-items">
         <a href={domain ? `/domains/${domain.id}` : '/'} class="sidebar-item">Architecture Overview</a>
-        <a href={domain ? `/domains/${domain.id}/context-map` : '/'} class="sidebar-item">Domain Context Map</a>
         <a href={domain ? `/domains/${domain.id}/docs` : '/'} class="sidebar-item">Documentation</a>
+      </div>
+    </div>
+
+    {/* Maps section in sidebar */}
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon" style="background: #6366f115; color: #6366f1;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </span>
+        <span class="sidebar-group-title">Maps</span>
+      </div>
+      <div class="sidebar-group-items">
+        <a href={domain ? `/domains/${domain.id}/context-map` : '/'} class="sidebar-item">Domain Context Map</a>
         {eventMappingEnabled && domain && (
           <a href={`/domains/${domain.id}/events`} class="sidebar-item">Event Map</a>
         )}
+        {heatmapMappingEnabled && (
+          <a href={domain ? `/domains/${domain.id}/heatmap` : '/'} class="sidebar-item"><span>Capability Heatmap</span></a>
+        )}
       </div>
     </div>
+
+    {/* Diagrams section in sidebar */}
+    {domainDiagrams.length > 0 && (
+      <div class="sidebar-group">
+        <div class="sidebar-group-header">
+          <span class="sidebar-group-icon" style="background: #f59e0b15; color: #f59e0b;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <span class="sidebar-group-title">Diagrams</span>
+        </div>
+        <div class="sidebar-group-items">
+          {domainDiagrams.map(d => (
+            <a href={`/diagrams/${d.id}`} class="sidebar-item">
+              <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{d.name}</span>
+              <span class="sidebar-type-label">{d.format}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
 
     {Object.entries(elementsByLayer).map(([layerKey, groups]) => {
       const l = LAYER_META[layerKey as LayerKey];

@@ -4,6 +4,10 @@ name: Customer Management
 description: The ability to manage the full lifecycle of B2B customer relationships including acquisition, onboarding, retention, and offboarding.
 owner: Platform Team
 status: active
+maturity: Excellent
+lifecycle: active
+sourcing: in-house
+size: xl
 domain: Customer Management
 registered: false
 

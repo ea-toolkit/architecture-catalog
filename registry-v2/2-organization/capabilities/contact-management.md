@@ -4,6 +4,10 @@ name: Contact Management
 description: The ability to capture, organize, and maintain customer contact information and interaction history across all touchpoints.
 owner: Platform Team
 status: active
+maturity: Developing
+lifecycle: active
+sourcing: hybrid
+size: m
 domain: Customer Management
 
 composes_process_modules: []

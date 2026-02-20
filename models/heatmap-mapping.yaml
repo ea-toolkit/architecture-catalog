@@ -1,0 +1,37 @@
+# Capability Heatmap View Mapping
+# Maps registry element types to semantic heatmap roles.
+# This file is OPTIONAL — if absent, no Capability Heatmap tab appears.
+#
+# Values are element type KEYS and field KEYS from registry-mapping.yaml.
+
+capability_type: business_capability
+
+# Heatmap dimensions — field keys from the capability's frontmatter
+maturity_field: maturity
+lifecycle_field: lifecycle
+sourcing_field: sourcing
+size_field: size
+
+# Maturity color scale (the "heat" — ordered best → worst)
+maturity_scale:
+  Excellent: '#10b981'
+  Good: '#3b82f6'
+  Developing: '#f59e0b'
+  Initial: '#94a3b8'
+
+# Treemap tile sizes — maps size field values to CSS grid spans
+size_scale:
+  s:   { cols: 1, rows: 1 }
+  m:   { cols: 2, rows: 1 }
+  l:   { cols: 2, rows: 2 }
+  xl:  { cols: 3, rows: 2 }
+  xxl: { cols: 3, rows: 3 }
+
+# Optional: which relationship field to display on tiles (omit to hide)
+realization_field: realized_by_components
+
+# Optional display label overrides (defaults to field labels from registry-mapping.yaml):
+# capability_label: Business Capability
+# maturity_label: Maturity
+# lifecycle_label: Lifecycle
+# sourcing_label: Sourcing
