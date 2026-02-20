@@ -488,6 +488,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Type badges */
 .badge-domain { background: rgb(var(--ec-badge-domain-bg)); color: rgb(var(--ec-badge-domain-text)); border-color: transparent; }
+.badge-capability { background: rgb(236 253 245); color: rgb(6 95 70); border-color: transparent; }
 .badge-component { background: rgb(243 232 255); color: rgb(126 34 206); border-color: transparent; }
 .badge-system { background: rgb(219 234 254); color: rgb(30 64 175); border-color: transparent; }
 .badge-data { background: rgb(254 243 199); color: rgb(180 83 9); border-color: transparent; }
@@ -497,6 +498,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Status badges */
 .badge-active { background: rgb(220 252 231); color: rgb(22 101 52); border-color: transparent; }
+.badge-new { background: rgb(224 242 254); color: rgb(7 89 133); border-color: transparent; }
 .badge-planned { background: rgb(224 242 254); color: rgb(7 89 133); border-color: transparent; }
 .badge-deprecated { background: rgb(254 226 226); color: rgb(153 27 27); border-color: transparent; }
 .badge-draft { background: rgb(var(--ec-badge-default-bg)); color: rgb(var(--ec-badge-default-text)); border-color: transparent; }

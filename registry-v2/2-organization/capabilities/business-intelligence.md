@@ -4,6 +4,10 @@ name: Business Intelligence
 description: The ability to collect, process, and present analytics on customer engagement, usage patterns, and platform performance.
 owner: Analytics Team
 status: active
+maturity: Developing
+lifecycle: new
+sourcing: hybrid
+size: s
 domain: Analytics and Insights
 registered: false
 

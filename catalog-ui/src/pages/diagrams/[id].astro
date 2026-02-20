@@ -5,7 +5,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { DiagramViewer } from '../../components/diagrams';
 import { diagrams, getDiagramById, getDiagramsByDomain } from '../../data/diagrams-mock';
-import { domains, getElementsByDomain, LAYER_META, eventMappingEnabled, type LayerKey } from '../../data/registry';
+import { domains, getElementsByDomain, LAYER_META, eventMappingEnabled, heatmapMappingEnabled, type LayerKey } from '../../data/registry';
 
 export function getStaticPaths() {
   return diagrams.map(d => ({
@@ -59,16 +59,31 @@ const fc = formatColors[diagram.format];
         <a href={`/domains/${diagram.domain}`} class="sidebar-item">
           <span>Architecture Overview</span>
         </a>
-        <a href={`/domains/${diagram.domain}/context-map`} class="sidebar-item">
-          <span>Domain Context Map</span>
-        </a>
         <a href={`/domains/${diagram.domain}/docs`} class="sidebar-item">
           <span>Documentation</span>
+        </a>
+      </div>
+    </div>
+
+    {/* Maps section */}
+    <div class="sidebar-group">
+      <div class="sidebar-group-header">
+        <span class="sidebar-group-icon" style="background: #6366f115; color: #6366f1;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </span>
+        <span class="sidebar-group-title">Maps</span>
+      </div>
+      <div class="sidebar-group-items">
+        <a href={`/domains/${diagram.domain}/context-map`} class="sidebar-item">
+          <span>Domain Context Map</span>
         </a>
         {eventMappingEnabled && (
           <a href={`/domains/${diagram.domain}/events`} class="sidebar-item">
             <span>Event Map</span>
           </a>
+        )}
+        {heatmapMappingEnabled && (
+          <a href={`/domains/${diagram.domain}/heatmap`} class="sidebar-item"><span>Capability Heatmap</span></a>
         )}
       </div>
     </div>

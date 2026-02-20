@@ -30,6 +30,7 @@ import {
 } from '../lib/registry-loader';
 import type { RegistryGraph, SiteConfig, LayerDef, RelationshipTypeDef } from '../lib/types';
 import { loadEventMapping, resolveEventFlows, type EventFlow, type EventMappingConfig } from '../lib/event-mapping-loader';
+import { loadHeatmapMapping, type HeatmapMappingConfig } from '../lib/heatmap-mapping-loader';
 
 // ─────────────────────────────────────────────────────────────
 // Types — self-contained, no dependency on mock.ts
@@ -86,6 +87,7 @@ let _domains: Domain[] = [];
 let _elements: Element[] = [];
 let _loadError: string | null = null;
 let _eventMapping: EventMappingConfig | null = null;
+let _heatmapMapping: HeatmapMappingConfig | null = null;
 const _eventFlowCache = new Map<string, EventFlow | null>();
 
 try {
@@ -130,6 +132,12 @@ try {
   _eventMapping = loadEventMapping();
   if (_eventMapping) {
     console.log(`🔔 Event mapping loaded: ${_eventMapping.event_type} → ${_eventMapping.service_type}`);
+  }
+
+  // Load optional heatmap mapping
+  _heatmapMapping = loadHeatmapMapping();
+  if (_heatmapMapping) {
+    console.log(`🔥 Heatmap mapping loaded: ${_heatmapMapping.capability_type} (${Object.keys(_heatmapMapping.maturity_scale).join(', ')})`);
   }
 } catch (err) {
   _loadError = err instanceof Error ? err.message : String(err);
@@ -279,3 +287,18 @@ export function getEventFlows(domainId: string): EventFlow | null {
 
 // Re-export types for consumers
 export type { EventFlow, EventNode, ServiceNode, EventEdge } from '../lib/event-mapping-loader';
+
+// ─────────────────────────────────────────────────────────────
+// Heatmap API — optional, driven by heatmap-mapping.yaml
+// ─────────────────────────────────────────────────────────────
+
+/** Whether heatmap mapping is configured (heatmap-mapping.yaml exists and is valid) */
+export const heatmapMappingEnabled: boolean = _heatmapMapping !== null;
+
+/** Get the heatmap mapping config (null if not configured) */
+export function getHeatmapConfig(): HeatmapMappingConfig | null {
+  return _heatmapMapping;
+}
+
+// Re-export types for consumers
+export type { HeatmapMappingConfig } from '../lib/heatmap-mapping-loader';

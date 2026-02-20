@@ -326,6 +326,22 @@ elements:
         type: string
         required: false
         label: Status
+      maturity:
+        type: string
+        required: false
+        label: Maturity
+      lifecycle:
+        type: string
+        required: false
+        label: Lifecycle
+      sourcing:
+        type: string
+        required: false
+        label: Sourcing
+      size:
+        type: string
+        required: false
+        label: Size
     relationships:
       realized_by_components:
         target: component

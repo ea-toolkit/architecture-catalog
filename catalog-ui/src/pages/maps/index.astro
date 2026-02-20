@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { domains, eventMappingEnabled, heatmapMappingEnabled } from '../../data/registry';
+---
+
+<Layout title="Maps">
+  <div class="page-header">
+    <div class="page-header-title">
+      <h1>Maps</h1>
+    </div>
+    <p class="page-header-summary">Analytical views across architecture domains</p>
+  </div>
+
+  <div class="page-body">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+      {domains.map(d => (
+        <div class="card" style={`padding: 20px; border-top: 3px solid ${d.color};`}>
+          <h3 style="font-size: 15px; font-weight: 600; margin: 0 0 12px; color: rgb(var(--ec-page-text));">{d.name}</h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <a href={`/domains/${d.id}/context-map`} style="font-size: 13px; color: rgb(59, 130, 246); text-decoration: none;">Domain Context Map</a>
+            {eventMappingEnabled && (
+              <a href={`/domains/${d.id}/events`} style="font-size: 13px; color: rgb(59, 130, 246); text-decoration: none;">Event Map</a>
+            )}
+            {heatmapMappingEnabled && (
+              <a href={`/domains/${d.id}/heatmap`} style="font-size: 13px; color: rgb(59, 130, 246); text-decoration: none;">Capability Heatmap</a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

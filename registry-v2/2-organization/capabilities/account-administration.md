@@ -4,6 +4,10 @@ name: Account Administration
 description: The ability to manage tenant accounts, user provisioning, role assignments, and access control policies across the platform.
 owner: Platform Team
 status: active
+maturity: Good
+lifecycle: active
+sourcing: in-house
+size: m
 domain: Customer Management
 
 composes_process_modules: []
