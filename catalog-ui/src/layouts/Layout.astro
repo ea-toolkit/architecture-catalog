@@ -25,6 +25,14 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
     ? <link rel="icon" href={SITE_CONFIG.logo_image} />
     : <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-size='16' font-weight='bold' fill='white' font-family='Inter'>${SITE_CONFIG.logo_text}</text></svg>`} />
   }
+  <!-- FOUC prevention: apply saved theme before paint -->
+  <script is:inline>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      if (!saved) saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
 </head>
 <body>
   <div class="app-shell">
@@ -162,7 +170,11 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
 
     function toggleTheme() {
       const current = document.documentElement.getAttribute('data-theme');
+      // Enable smooth transition only on user-initiated toggle
+      document.documentElement.classList.add('theme-transition');
       setTheme(current === 'dark' ? 'light' : 'dark');
+      // Remove transition class after animation completes
+      setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
     }
 
     function updateToggleIcon(theme: string) {
