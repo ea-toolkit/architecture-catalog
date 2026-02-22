@@ -131,6 +131,19 @@
 
   --ec-card-bg: 30 41 59;
 
+  --ec-badge-domain-bg: 66 52 14;
+  --ec-badge-domain-text: 253 224 71;
+  --ec-badge-service-bg: 76 20 52;
+  --ec-badge-service-text: 249 168 212;
+  --ec-badge-event-bg: 69 46 8;
+  --ec-badge-event-text: 251 191 36;
+  --ec-badge-command-bg: 76 20 52;
+  --ec-badge-command-text: 249 168 212;
+  --ec-badge-query-bg: 46 26 80;
+  --ec-badge-query-text: 196 181 253;
+  --ec-badge-default-bg: 51 65 85;
+  --ec-badge-default-text: 203 213 225;
+
   --ec-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --ec-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
   --ec-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
