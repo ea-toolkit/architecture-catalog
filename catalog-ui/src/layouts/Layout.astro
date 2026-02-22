@@ -174,9 +174,17 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
       }
     }
 
-    // Restore saved theme on load
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    // Restore saved theme on load, fall back to system preference
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme') || (systemPrefersDark ? 'dark' : 'light');
     setTheme(savedTheme);
+
+    // Listen for system preference changes (when no explicit choice saved)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    });
 
     // Expose globally for the toggle button
     (window as any).__toggleTheme = toggleTheme;
