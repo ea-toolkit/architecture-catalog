@@ -633,6 +633,11 @@ button { font-family: inherit; cursor: pointer; }
   line-height: 1.6;
 }
 
+[data-theme="dark"] .detail-body pre {
+  background: #0f172a;
+  border: 1px solid rgb(51 65 85);
+}
+
 .detail-body pre code {
   background: none;
   padding: 0;
@@ -684,6 +689,10 @@ button { font-family: inherit; cursor: pointer; }
 .card:hover {
   box-shadow: var(--ec-shadow-md);
   border-color: rgb(203 213 225);
+}
+
+[data-theme="dark"] .card:hover {
+  border-color: rgb(71 85 105);
 }
 
 .card-grid {
