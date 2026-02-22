@@ -149,6 +149,28 @@
   --ec-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
 }
 
+/* ── Dark overrides for hardcoded badge classes ── */
+[data-theme="dark"] .badge-capability { background: rgb(6 78 59); color: rgb(167 243 208); }
+[data-theme="dark"] .badge-component { background: rgb(46 26 80); color: rgb(196 181 253); }
+[data-theme="dark"] .badge-system { background: rgb(23 37 84); color: rgb(147 197 253); }
+[data-theme="dark"] .badge-data { background: rgb(69 46 8); color: rgb(251 191 36); }
+[data-theme="dark"] .badge-api { background: rgb(30 27 75); color: rgb(165 180 252); }
+[data-theme="dark"] .badge-process { background: rgb(66 52 14); color: rgb(253 224 71); }
+
+[data-theme="dark"] .badge-active { background: rgb(6 78 59); color: rgb(167 243 208); }
+[data-theme="dark"] .badge-new { background: rgb(12 74 110); color: rgb(125 211 252); }
+[data-theme="dark"] .badge-planned { background: rgb(12 74 110); color: rgb(125 211 252); }
+[data-theme="dark"] .badge-deprecated { background: rgb(127 29 29); color: rgb(254 202 202); }
+[data-theme="dark"] .badge-retired { background: rgb(51 65 85); color: rgb(148 163 184); }
+
+[data-theme="dark"] .badge-in-house { background: rgb(23 37 84); color: rgb(147 197 253); }
+[data-theme="dark"] .badge-vendor { background: rgb(69 46 8); color: rgb(251 191 36); }
+[data-theme="dark"] .badge-hybrid { background: rgb(46 26 80); color: rgb(196 181 253); }
+
+[data-theme="dark"] .badge-excellent { background: rgb(6 78 59); color: rgb(167 243 208); }
+[data-theme="dark"] .badge-good { background: rgb(23 37 84); color: rgb(147 197 253); }
+[data-theme="dark"] .badge-developing { background: rgb(69 46 8); color: rgb(251 191 36); }
+
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
