@@ -83,6 +83,59 @@
   --ec-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
+/* ── Dark Mode ── */
+[data-theme="dark"] {
+  --ec-page-bg: 15 23 42;
+  --ec-page-text: 226 232 240;
+  --ec-page-text-muted: 148 163 184;
+  --ec-page-border: 51 65 85;
+
+  --ec-header-bg: 15 23 42;
+  --ec-header-text: 226 232 240;
+  --ec-header-border: 51 65 85;
+
+  --ec-accent: 192 132 252;
+  --ec-accent-hover: 168 85 247;
+  --ec-accent-subtle: 30 20 50;
+  --ec-accent-text: 192 132 252;
+
+  --ec-button-bg: 226 232 240;
+  --ec-button-bg-hover: 203 213 225;
+  --ec-button-text: 15 23 42;
+
+  --ec-icon-color: 148 163 184;
+  --ec-icon-hover: 226 232 240;
+
+  --ec-sidebar-bg: 15 23 42;
+  --ec-sidebar-border: 51 65 85;
+  --ec-sidebar-text: 148 163 184;
+  --ec-sidebar-active-bg: 226 232 240;
+  --ec-sidebar-active-text: 15 23 42;
+  --ec-sidebar-hover-bg: 30 41 59;
+
+  --ec-content-bg: 15 23 42;
+  --ec-content-text: 226 232 240;
+  --ec-content-text-muted: 148 163 184;
+  --ec-content-text-secondary: 148 163 184;
+  --ec-content-border: 51 65 85;
+  --ec-content-hover: 30 41 59;
+  --ec-content-active: 30 20 50;
+
+  --ec-input-bg: 30 41 59;
+  --ec-input-border: 51 65 85;
+  --ec-input-text: 226 232 240;
+  --ec-input-placeholder: 100 116 139;
+
+  --ec-group-icon-bg: 30 41 59;
+  --ec-group-icon-text: 148 163 184;
+
+  --ec-card-bg: 30 41 59;
+
+  --ec-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --ec-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --ec-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+}
+
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
