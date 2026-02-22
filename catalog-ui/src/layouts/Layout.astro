@@ -147,6 +147,17 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
 
   <!-- Sidebar auto-collapse for groups with > 6 items -->
   <script>
+    // ── Theme toggle ──
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+    }
+
+    // Expose globally for the toggle button
+    (window as any).__toggleTheme = toggleTheme;
+
     const MAX_VISIBLE = 6;
 
     function initSidebarCollapse() {
