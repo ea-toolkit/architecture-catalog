@@ -154,12 +154,29 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
   <!-- Sidebar auto-collapse for groups with > 6 items -->
   <script>
     // ── Theme toggle ──
-    function toggleTheme() {
-      const html = document.documentElement;
-      const current = html.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
+    function setTheme(theme: string) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      updateToggleIcon(theme);
     }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    function updateToggleIcon(theme: string) {
+      const moon = document.querySelector('.theme-icon-moon') as HTMLElement;
+      const sun = document.querySelector('.theme-icon-sun') as HTMLElement;
+      if (moon && sun) {
+        moon.style.display = theme === 'dark' ? 'none' : 'block';
+        sun.style.display = theme === 'dark' ? 'block' : 'none';
+      }
+    }
+
+    // Restore saved theme on load
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
 
     // Expose globally for the toggle button
     (window as any).__toggleTheme = toggleTheme;
