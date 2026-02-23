@@ -13,6 +13,10 @@ published_by_api_endpoints:
 consumed_by_api_endpoints:
   - subscription-api
   - analytics-query-api
+  - access-control-api
+  - integration-api
+  - customer-health-api
+  - audit-api
 
 archimate_type: application-event
 ddd_type: Domain Event

@@ -12,6 +12,11 @@ published_by_api_endpoints:
   - tenant-api
 consumed_by_api_endpoints:
   - analytics-query-api
+  - onboarding-api
+  - customer-data-api
+  - customer-health-api
+  - audit-api
+  - integration-api
 
 archimate_type: application-event
 ddd_type: Domain Event

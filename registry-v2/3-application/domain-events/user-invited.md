@@ -12,6 +12,9 @@ published_by_api_endpoints:
   - user-management-api
 consumed_by_api_endpoints:
   - notification-api
+  - access-control-api
+  - audit-api
+  - customer-data-api
 
 archimate_type: application-event
 ddd_type: Domain Event

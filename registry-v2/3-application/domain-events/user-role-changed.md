@@ -10,7 +10,10 @@ event_format: CloudEvents/JSON
 
 published_by_api_endpoints:
   - user-management-api
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - access-control-api
+  - audit-api
+  - notification-api
 
 archimate_type: application-event
 ddd_type: Domain Event
