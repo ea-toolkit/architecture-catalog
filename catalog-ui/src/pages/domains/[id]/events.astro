@@ -189,7 +189,7 @@ if (eventFlow) {
         {/* Event Flow Diagram */}
         <div class="detail-section">
           <div class="detail-section-title">Event Flow Diagram</div>
-          <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 12px; overflow: hidden; height: 500px;">
+          <div style="border: 1px solid rgb(var(--ec-page-border)); border-radius: 12px; overflow: hidden; height: calc(100vh - 200px); min-height: 500px;">
             <EventFlowGraph
               client:only="react"
               eventFlow={eventFlow}

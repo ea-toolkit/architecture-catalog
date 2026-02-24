@@ -30,7 +30,7 @@ import { applyDagreLayout } from './utils/layout';
 import { buildEventFlowGraph } from './utils/event-graph-data';
 import type { EventFlow } from '../../data/registry';
 
-// ── Custom edge for event flows (colored by publish/consume) ──
+// ── Custom edge for event flows (animated flowing dots) ──
 function EventFlowEdge({
   id,
   sourceX,
@@ -50,17 +50,57 @@ function EventFlowEdge({
     targetX, targetY, targetPosition,
   });
 
+  // Stagger animation duration based on edge id hash for natural feel
+  const hash = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const duration = 1.8 + (hash % 5) * 0.3; // 1.8s – 3.0s
+
   return (
     <>
+      {/* Faint trail line */}
       <BaseEdge
         id={id}
         path={edgePath}
         style={{
           stroke: color,
           strokeWidth: 2,
+          strokeOpacity: 0.25,
         }}
         markerEnd={`url(#arrow-${color.replace('#', '')})`}
       />
+      {/* Animated dashed overlay */}
+      <path
+        d={edgePath}
+        fill="none"
+        stroke={color}
+        strokeWidth={2}
+        strokeDasharray="6 4"
+        strokeOpacity={0.5}
+      >
+        <animate
+          attributeName="stroke-dashoffset"
+          from="20"
+          to="0"
+          dur={`${duration * 0.5}s`}
+          repeatCount="indefinite"
+        />
+      </path>
+      {/* Flowing dot */}
+      <circle r="4" fill={color} opacity="0.9">
+        <animateMotion
+          dur={`${duration}s`}
+          repeatCount="indefinite"
+          path={edgePath}
+        />
+      </circle>
+      {/* Second dot offset for density */}
+      <circle r="3" fill={color} opacity="0.5">
+        <animateMotion
+          dur={`${duration}s`}
+          repeatCount="indefinite"
+          path={edgePath}
+          begin={`${duration * 0.5}s`}
+        />
+      </circle>
       {label && (
         <EdgeLabelRenderer>
           <div
