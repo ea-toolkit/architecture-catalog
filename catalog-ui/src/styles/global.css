@@ -83,8 +83,104 @@
   --ec-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
+/* ── Dark Mode ── */
+[data-theme="dark"] {
+  --ec-page-bg: 15 23 42;
+  --ec-page-text: 226 232 240;
+  --ec-page-text-muted: 148 163 184;
+  --ec-page-border: 51 65 85;
+
+  --ec-header-bg: 15 23 42;
+  --ec-header-text: 226 232 240;
+  --ec-header-border: 51 65 85;
+
+  --ec-accent: 192 132 252;
+  --ec-accent-hover: 168 85 247;
+  --ec-accent-subtle: 30 20 50;
+  --ec-accent-text: 192 132 252;
+
+  --ec-button-bg: 226 232 240;
+  --ec-button-bg-hover: 203 213 225;
+  --ec-button-text: 15 23 42;
+
+  --ec-icon-color: 148 163 184;
+  --ec-icon-hover: 226 232 240;
+
+  --ec-sidebar-bg: 15 23 42;
+  --ec-sidebar-border: 51 65 85;
+  --ec-sidebar-text: 148 163 184;
+  --ec-sidebar-active-bg: 226 232 240;
+  --ec-sidebar-active-text: 15 23 42;
+  --ec-sidebar-hover-bg: 30 41 59;
+
+  --ec-content-bg: 15 23 42;
+  --ec-content-text: 226 232 240;
+  --ec-content-text-muted: 148 163 184;
+  --ec-content-text-secondary: 148 163 184;
+  --ec-content-border: 51 65 85;
+  --ec-content-hover: 30 41 59;
+  --ec-content-active: 30 20 50;
+
+  --ec-input-bg: 30 41 59;
+  --ec-input-border: 51 65 85;
+  --ec-input-text: 226 232 240;
+  --ec-input-placeholder: 100 116 139;
+
+  --ec-group-icon-bg: 30 41 59;
+  --ec-group-icon-text: 148 163 184;
+
+  --ec-card-bg: 30 41 59;
+
+  --ec-badge-domain-bg: 66 52 14;
+  --ec-badge-domain-text: 253 224 71;
+  --ec-badge-service-bg: 76 20 52;
+  --ec-badge-service-text: 249 168 212;
+  --ec-badge-event-bg: 69 46 8;
+  --ec-badge-event-text: 251 191 36;
+  --ec-badge-command-bg: 76 20 52;
+  --ec-badge-command-text: 249 168 212;
+  --ec-badge-query-bg: 46 26 80;
+  --ec-badge-query-text: 196 181 253;
+  --ec-badge-default-bg: 51 65 85;
+  --ec-badge-default-text: 203 213 225;
+
+  --ec-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --ec-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --ec-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+}
+
+/* ── Dark overrides for hardcoded badge classes ── */
+[data-theme="dark"] .badge-capability { background: rgb(6 78 59); color: rgb(167 243 208); }
+[data-theme="dark"] .badge-component { background: rgb(46 26 80); color: rgb(196 181 253); }
+[data-theme="dark"] .badge-system { background: rgb(23 37 84); color: rgb(147 197 253); }
+[data-theme="dark"] .badge-data { background: rgb(69 46 8); color: rgb(251 191 36); }
+[data-theme="dark"] .badge-api { background: rgb(30 27 75); color: rgb(165 180 252); }
+[data-theme="dark"] .badge-process { background: rgb(66 52 14); color: rgb(253 224 71); }
+
+[data-theme="dark"] .badge-active { background: rgb(6 78 59); color: rgb(167 243 208); }
+[data-theme="dark"] .badge-new { background: rgb(12 74 110); color: rgb(125 211 252); }
+[data-theme="dark"] .badge-planned { background: rgb(12 74 110); color: rgb(125 211 252); }
+[data-theme="dark"] .badge-deprecated { background: rgb(127 29 29); color: rgb(254 202 202); }
+[data-theme="dark"] .badge-retired { background: rgb(51 65 85); color: rgb(148 163 184); }
+
+[data-theme="dark"] .badge-in-house { background: rgb(23 37 84); color: rgb(147 197 253); }
+[data-theme="dark"] .badge-vendor { background: rgb(69 46 8); color: rgb(251 191 36); }
+[data-theme="dark"] .badge-hybrid { background: rgb(46 26 80); color: rgb(196 181 253); }
+
+[data-theme="dark"] .badge-excellent { background: rgb(6 78 59); color: rgb(167 243 208); }
+[data-theme="dark"] .badge-good { background: rgb(23 37 84); color: rgb(147 197 253); }
+[data-theme="dark"] .badge-developing { background: rgb(69 46 8); color: rgb(251 191 36); }
+
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Theme transition (applied after initial paint to prevent FOUC) ── */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -545,6 +641,11 @@ button { font-family: inherit; cursor: pointer; }
   line-height: 1.6;
 }
 
+[data-theme="dark"] .detail-body pre {
+  background: #0f172a;
+  border: 1px solid rgb(51 65 85);
+}
+
 .detail-body pre code {
   background: none;
   padding: 0;
@@ -596,6 +697,10 @@ button { font-family: inherit; cursor: pointer; }
 .card:hover {
   box-shadow: var(--ec-shadow-md);
   border-color: rgb(203 213 225);
+}
+
+[data-theme="dark"] .card:hover {
+  border-color: rgb(71 85 105);
 }
 
 .card-grid {
@@ -727,6 +832,16 @@ button { font-family: inherit; cursor: pointer; }
 .rel-group-incoming {
   background: rgba(139, 92, 246, 0.1);
   color: #8b5cf6;
+}
+
+[data-theme="dark"] .rel-group-outgoing {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .rel-group-incoming {
+  background: rgba(167, 139, 250, 0.15);
+  color: #a78bfa;
 }
 
 .rel-group-label {
@@ -902,6 +1017,9 @@ button { font-family: inherit; cursor: pointer; }
 }
 .rel-col-out { background: #3b82f6; }
 .rel-col-in  { background: #8b5cf6; }
+
+[data-theme="dark"] .rel-col-out { background: #60a5fa; }
+[data-theme="dark"] .rel-col-in  { background: #a78bfa; }
 
 .rel-cell-pills {
   display: inline;

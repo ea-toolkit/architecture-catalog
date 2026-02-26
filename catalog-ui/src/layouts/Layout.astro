@@ -25,6 +25,14 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
     ? <link rel="icon" href={SITE_CONFIG.logo_image} />
     : <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-size='16' font-weight='bold' fill='white' font-family='Inter'>${SITE_CONFIG.logo_text}</text></svg>`} />
   }
+  <!-- FOUC prevention: apply saved theme before paint -->
+  <script is:inline>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      if (!saved) saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
 </head>
 <body>
   <div class="app-shell">
@@ -60,10 +68,16 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
         </a>
       </div>
 
-      <!-- Bottom: Meta Model -->
-      <a href="#" class="icon-bar-item" title="Meta Model" style="margin-top: auto; margin-bottom: 8px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      </a>
+      <!-- Bottom: Theme toggle + Meta Model -->
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+        <button class="icon-bar-item" title="Toggle dark mode" onclick="window.__toggleTheme()" id="theme-toggle-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-sun" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="#" class="icon-bar-item" title="Meta Model">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </a>
+      </div>
     </nav>
 
     <!-- ═══ Nested Sidebar ═══ -->
@@ -147,6 +161,46 @@ const activeDomainData = activeDomain ? domains.find(d => d.id === activeDomain)
 
   <!-- Sidebar auto-collapse for groups with > 6 items -->
   <script>
+    // ── Theme toggle ──
+    function setTheme(theme: string) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      updateToggleIcon(theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      // Enable smooth transition only on user-initiated toggle
+      document.documentElement.classList.add('theme-transition');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+      // Remove transition class after animation completes
+      setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
+    }
+
+    function updateToggleIcon(theme: string) {
+      const moon = document.querySelector('.theme-icon-moon') as HTMLElement;
+      const sun = document.querySelector('.theme-icon-sun') as HTMLElement;
+      if (moon && sun) {
+        moon.style.display = theme === 'dark' ? 'none' : 'block';
+        sun.style.display = theme === 'dark' ? 'block' : 'none';
+      }
+    }
+
+    // Restore saved theme on load, fall back to system preference
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme') || (systemPrefersDark ? 'dark' : 'light');
+    setTheme(savedTheme);
+
+    // Listen for system preference changes (when no explicit choice saved)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
+    // Expose globally for the toggle button
+    (window as any).__toggleTheme = toggleTheme;
+
     const MAX_VISIBLE = 6;
 
     function initSidebarCollapse() {
