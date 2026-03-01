@@ -168,3 +168,63 @@ class TestReadmeCreated:
         # Run again — should NOT overwrite
         _run_init(tmp_path, mapping_file)
         assert readme.read_text() == "custom readme"
+
+
+# ── Pure function tests ─────────────────────────────────────
+
+
+class TestDefaultValue:
+    """default_value() returns correct YAML defaults for each field type."""
+
+    def test_string(self):
+        assert ir.default_value("string") == '""'
+
+    def test_string_array(self):
+        assert ir.default_value("string[]") == "[]"
+
+    def test_number(self):
+        assert ir.default_value("number") == "0"
+
+    def test_boolean(self):
+        assert ir.default_value("boolean") == "false"
+
+    def test_object_array(self):
+        assert ir.default_value("object[]") == "[]"
+
+    def test_unknown_falls_back_to_string(self):
+        assert ir.default_value("foobar") == '""'
+
+
+class TestBuildTemplate:
+    """build_template() produces well-formed template markdown."""
+
+    def test_contains_frontmatter_delimiters(self, minimal_mapping):
+        content = ir.build_template("service", minimal_mapping["elements"]["service"], minimal_mapping)
+        assert content.startswith("---")
+        assert content.count("---") >= 2
+
+    def test_contains_type_field(self, minimal_mapping):
+        content = ir.build_template("service", minimal_mapping["elements"]["service"], minimal_mapping)
+        assert 'type: "service"' in content
+
+    def test_contains_archimate_type(self, minimal_mapping):
+        content = ir.build_template("service", minimal_mapping["elements"]["service"], minimal_mapping)
+        assert "archimate_type: business-service" in content
+
+    def test_no_archimate_falls_back_to_tilde(self, minimal_mapping):
+        elem = {"label": "Bare", "fields": {"name": {"type": "string", "required": True, "label": "Name"}}}
+        content = ir.build_template("bare", elem, minimal_mapping)
+        assert "archimate_type: ~" in content
+
+    def test_relationships_section_present(self, minimal_mapping):
+        content = ir.build_template("component", minimal_mapping["elements"]["component"], minimal_mapping)
+        assert "Relationships" in content
+        assert "composes_services:" in content
+
+    def test_no_relationships_section_when_empty(self, minimal_mapping):
+        content = ir.build_template("service", minimal_mapping["elements"]["service"], minimal_mapping)
+        assert "Relationships" not in content
+
+    def test_status_field_has_draft_default(self, minimal_mapping):
+        content = ir.build_template("service", minimal_mapping["elements"]["service"], minimal_mapping)
+        assert 'status: "draft"' in content
