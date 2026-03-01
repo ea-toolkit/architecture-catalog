@@ -9,3 +9,4 @@ node_modules/
 _reference/
 dist/
 dashboard.html
+tests/tmp/
