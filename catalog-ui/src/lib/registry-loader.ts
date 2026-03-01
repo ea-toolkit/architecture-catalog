@@ -47,8 +47,9 @@ import type {
 /**
  * Parse markdown frontmatter (between --- delimiters).
  * Returns null if no valid frontmatter found.
+ * @internal Exported for testing — not part of the public API.
  */
-function parseFrontmatter(content: string): { frontmatter: Record<string, unknown>; body: string } | null {
+export function parseFrontmatter(content: string): { frontmatter: Record<string, unknown>; body: string } | null {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
   if (!match) return null;
   try {
@@ -94,7 +95,8 @@ export function loadMapping(customPath?: string): RegistryMapping {
 // 3. File Scanner
 // ─────────────────────────────────────────────────────────────
 
-interface RawFile {
+/** @internal Exported for testing. */
+export interface RawFile {
   slug: string;          // filename without .md
   path: string;          // full absolute path
   relativePath: string;  // relative to registry root
@@ -140,8 +142,9 @@ function scanFolder(folderPath: string, registryRoot: string): RawFile[] {
 /**
  * Build lookup indexes from all loaded raw files.
  * These indexes enable O(1) reference resolution by slug, name, or abbreviation.
+ * @internal Exported for testing.
  */
-function buildRawIndexes(
+export function buildRawIndexes(
   allFiles: Map<string, { typeDef: ElementTypeDef; files: RawFile[] }>
 ): {
   bySlug: Map<string, { typeKey: string; file: RawFile }[]>;
@@ -183,8 +186,9 @@ function buildRawIndexes(
 /**
  * Resolve a single reference value to a target element.
  * When multiple elements share a slug/name, prefer the one matching targetType.
+ * @internal Exported for testing.
  */
-function resolveRef(
+export function resolveRef(
   rawValue: string,
   resolveBy: 'slug' | 'name' | 'abbreviation',
   targetType: string,
@@ -265,7 +269,8 @@ function resolveRelationships(
 // 5. Health Assessment
 // ─────────────────────────────────────────────────────────────
 
-function assessHealth(
+/** @internal Exported for testing. */
+export function assessHealth(
   file: RawFile,
   typeDef: ElementTypeDef,
   relationships: ResolvedRelationship[]
@@ -400,8 +405,9 @@ function relationshipLabel(archimateType: string, fieldKey: string): string {
 
 /**
  * Build all indexes for O(1) lookups.
+ * @internal Exported for testing.
  */
-function buildGraphIndexes(
+export function buildGraphIndexes(
   elements: Map<string, RegistryElement>,
   edges: RegistryEdge[]
 ): GraphIndexes {
@@ -421,7 +427,7 @@ function buildGraphIndexes(
     byType.set(el.elementType, typeList);
 
     // By domain — normalize to slug format so "NovaCRM Platform" and "novacrm-platform" resolve to the same key
-    const rawDomain = (el.fields.domain as string) ?? 'unknown';
+    const rawDomain = (el.fields.domain as string)?.trim() || 'unknown';
     const domain = rawDomain === 'unknown' ? 'unknown' : rawDomain.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-');
     const domainList = byDomain.get(domain) ?? [];
     domainList.push(el);
