@@ -22,25 +22,14 @@ If arguments not provided, ask the user:
 
 ## Element Type to Folder Mapping
 
-| Type | Folder |
-|------|--------|
-| domain | registry-v2/3-application/domains/ |
-| component | registry-v2/3-application/components/ |
-| software-system | registry-v2/3-application/software-systems/ |
-| software-subsystem | registry-v2/3-application/software-subsystems/ |
-| api-endpoint | registry-v2/3-application/api-endpoints/ |
-| api-contract | registry-v2/3-application/api-contracts/ |
-| domain-event | registry-v2/3-application/domain-events/ |
-| data-concept | registry-v2/3-application/data-concepts/ |
-| data-aggregate | registry-v2/3-application/data-aggregates/ |
-| data-entity | registry-v2/3-application/data-entities/ |
-| capability | registry-v2/2-organization/capabilities/ |
-| process | registry-v2/2-organization/processes/ |
-| market-segment | registry-v2/1-business/market-segments/ |
-| product | registry-v2/1-business/products/ |
-| business-service | registry-v2/1-business/business-services/ |
-| infra-node | registry-v2/4-technology/infra-nodes/ |
-| cloud-service | registry-v2/4-technology/cloud-services/ |
+**Do NOT hardcode paths.** Always discover dynamically:
+
+1. Read `models/registry-mapping.yaml`
+2. Find the element type under `elements:`
+3. Use the `folder:` field for that type to determine the target directory
+4. Prepend `registry-v2/` to the folder path
+
+This ensures the skill works even if users rename layers, types, or restructure folders.
 
 ## Workflow
 
@@ -59,19 +48,19 @@ If arguments not provided, ask the user:
 ## Response Format
 
 ```
-**Created:** registry-v2/3-application/data-entities/payment-record.md
+**Created:** registry-v2/<layer>/<type-folder>/element-name.md
 
 **Frontmatter:**
 ---
-type: data-entity
-name: Payment Record
+type: <element-type>
+name: <Element Name>
 owner: TBD
 status: draft
-parent_data_aggregate: TBD
+<type-specific fields from template>
 ---
 
 **Next Steps:**
-1. Fill in TBD fields (owner, parent_data_aggregate)
+1. Fill in TBD fields
 2. Add description in the body
 3. Run /validate to verify
 
