@@ -47,22 +47,24 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 
 | Skill | Usage | Purpose |
 |-------|-------|---------|
-| `/example-archi` | `/example-archi [question]` | Example domain Q&A, create entries, proposals |
+| `/enterprise-platform-archi` | `/enterprise-platform-archi [question]` | Enterprise Platform domain Q&A, create entries, proposals |
 | `/validate` | `/validate` | Run model validation, show errors and orphans |
 | `/dashboard` | `/dashboard` | Generate HTML health dashboard |
 | `/new-entry` | `/new-entry [type] [name]` | Create registry entry (guided wizard) |
+| `/scaffold-component` | `/scaffold-component [Name]` | Scaffold React component + test file |
 
 ### Examples
 ```
-/example-archi What data does Tenant Management own?
-/example-archi Create a registry entry for Payment Gateway
+/enterprise-platform-archi What data does Tenant Management own?
+/enterprise-platform-archi Create a registry entry for Payment Gateway
 /validate
 /dashboard
 /new-entry data-object "Payment Record"
+/scaffold-component CapabilityHeatmap
 ```
 
 ### Why Skills?
-- **Explicit invocation** — Type `/example-archi` to guarantee the right context
+- **Explicit invocation** — Type `/enterprise-platform-archi` to guarantee the right context
 - **Scoped search** — Each domain skill searches its own files first, minimizing token usage
 - **Pattern for teams** — `/<domain>-archi` is learnable: `/payments-archi`, `/logistics-archi`, etc.
 
@@ -73,14 +75,23 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 ```
 .claude/
   skills/
-    example-archi/SKILL.md          # /example-archi skill
+    enterprise-platform-archi/SKILL.md  # /enterprise-platform-archi skill
     validate/SKILL.md               # /validate skill
     dashboard/SKILL.md              # /dashboard skill
     new-entry/SKILL.md              # /new-entry skill
+    scaffold-component/SKILL.md     # /scaffold-component skill
   agents/
-    example-domain.md               # Auto-delegation fallback
+    domain-expert.md                # Read-only domain Q&A (auto-delegation)
+    fe-developer.md                 # Frontend developer (catalog-ui/)
+    registry-agent.md               # Registry data specialist (registry-v2/, views/)
+    test-writer.md                  # Test specialist (pytest + vitest)
   hooks/
     welcome.sh                      # Shows skills on session start
+    pre-commit-validate.sh          # Runs validate.py before git commits
+    check-test-exists.sh            # Warns if .tsx has no co-located test
+  rules/
+    vocab-agnostic.md               # 2-tier vocab-agnostic reminder (catalog-ui/src/**)
+    registry-format.md              # Registry entry format rules (registry-v2/**)
   settings.json                     # Hook configuration
 
 registry-v2/                # Element registry — one .md file per architecture element
@@ -147,10 +158,10 @@ The UI is fully schema-driven via `models/registry-mapping.yaml`. Adding a new e
 1. Create skill: `.claude/skills/<domain>-archi/SKILL.md`
 2. Create sub-agent: `.claude/agents/<domain>.md`
 3. Create views folder: `views/<domain>/`
-4. Create registry entries in `registry-v2/3-application/`
+4. Create registry entries in `registry-v2/` (discover folders from registry-mapping.yaml)
 5. Update welcome hook to show new skill
 
-See `docs-site/src/content/docs/contributing/how-to-contribute.md` for detailed instructions.
+See `templates/agents/domain-onboarding.md` for a guided template, or `docs-site/src/content/docs/contributing/how-to-contribute.md` for detailed instructions.
 
 ---
 
