@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "architecture-catalog",
+    "public": "catalog-ui/dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+}

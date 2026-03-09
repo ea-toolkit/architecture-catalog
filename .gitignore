@@ -10,3 +10,6 @@ _reference/
 dist/
 dashboard.html
 tests/tmp/
+firebase-sa-key.json
+firebase-debug.log
+.firebase/
