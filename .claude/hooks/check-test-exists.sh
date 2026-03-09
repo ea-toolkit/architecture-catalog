@@ -2,7 +2,8 @@
 # PostToolUse hook — warns if a catalog-ui component lacks a test file
 # Non-blocking (exit 0) — just a reminder, not a gate
 
-FILE_PATH=$(echo "$TOOL_INPUT" | jq -r '.file_path // empty' 2>/dev/null)
+INPUT=$(cat /dev/stdin 2>/dev/null)
+FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
 
 # Only check catalog-ui source files (not test files themselves)
 if [[ "$FILE_PATH" == *"catalog-ui/src/"* ]] && \

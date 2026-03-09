@@ -2,7 +2,8 @@
 # PreToolUse hook — runs model validation before git commits only
 # Matches on all Bash calls, but only acts on git commit commands
 
-COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command // empty' 2>/dev/null)
+INPUT=$(cat /dev/stdin 2>/dev/null)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 
 # Only run for git commit commands
 if [[ "$COMMAND" == *"git commit"* ]]; then
