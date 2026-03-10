@@ -3,11 +3,14 @@
   <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black" alt="React 18" />
   <img src="https://img.shields.io/badge/License-MIT-green?logo=opensourceinitiative&logoColor=white" alt="MIT" />
   <img src="https://img.shields.io/badge/Schema_Driven-YAML-blue" alt="Schema Driven" />
+  <a href="https://architecture-catalog.web.app"><img src="https://img.shields.io/badge/Live_Demo-architecture--catalog.web.app-black?logo=firebase&logoColor=white" alt="Live Demo" /></a>
 </p>
 
 # Architecture Catalog
 
 **A schema-driven, white-label architecture catalog that turns Markdown files into a beautiful, interactive static site.**
+
+> **[Live Demo](https://architecture-catalog.web.app)** — explore a sample catalog with 3 domains and 100+ elements.
 
 Model your enterprise architecture using plain Markdown files with YAML frontmatter, define your schema in a single YAML mapping, and get a fully navigable catalog — dashboards, domain maps, element details, context graphs, and health scores — with zero custom code.
 
