@@ -31,6 +31,7 @@ import {
 import type { RegistryGraph, SiteConfig, LayerDef, RelationshipTypeDef } from '../lib/types';
 import { loadEventMapping, resolveEventFlows, type EventFlow, type EventMappingConfig } from '../lib/event-mapping-loader';
 import { loadHeatmapMapping, type HeatmapMappingConfig } from '../lib/heatmap-mapping-loader';
+import { diagrams as mockDiagrams } from './diagrams-mock';
 
 // ─────────────────────────────────────────────────────────────
 // Types — self-contained, no dependency on mock.ts
@@ -101,6 +102,11 @@ try {
     if (domainId === 'unknown') continue;
     const domainEls = toLegacyElements(_graph, domainId) as Element[];
     _elements.push(...domainEls);
+  }
+
+  // Populate diagram counts from mock diagrams
+  for (const domain of _domains) {
+    domain.diagramCount = mockDiagrams.filter(d => d.domain === domain.id).length;
   }
 
   // Populate incoming relationships from the graph's edge index

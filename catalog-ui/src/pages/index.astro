@@ -16,11 +16,14 @@ const maturityColor: Record<string, string> = {
   <!-- Header -->
   <div class="page-header">
     <div class="page-header-title">
-      <h1>Architecture Catalog</h1>
+      <span class="page-header-logo">{SITE_CONFIG.logo_text}</span>
+      <div>
+        <h1>{SITE_CONFIG.name}</h1>
+        <p class="page-header-summary">
+          {SITE_CONFIG.description} — {domains.length} domains, {elements.length} registered entities
+        </p>
+      </div>
     </div>
-    <p class="page-header-summary">
-      {SITE_CONFIG.description} — {domains.length} domains, {elements.length} registered elements
-    </p>
   </div>
 
   <div class="page-body">
@@ -28,7 +31,7 @@ const maturityColor: Record<string, string> = {
     <div class="stat-row">
       <div class="stat-card">
         <div class="stat-value">{stats.totalElements}</div>
-        <div class="stat-label">Registered Elements</div>
+        <div class="stat-label">Registered Entities</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">{stats.totalDomains}</div>
@@ -40,7 +43,7 @@ const maturityColor: Record<string, string> = {
       </div>
       <div class="stat-card">
         <div class="stat-value">{stats.enrichedElements}</div>
-        <div class="stat-label">Enriched Elements</div>
+        <div class="stat-label">Enriched Entities</div>
       </div>
     </div>
 
@@ -103,7 +106,7 @@ const maturityColor: Record<string, string> = {
             </span>
             <span class="domain-card-metric domain-card-metric-link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-              {d.totalElements} elements
+              {d.totalElements} entities
             </span>
           </div>
         </a>

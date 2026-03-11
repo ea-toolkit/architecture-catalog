@@ -17,12 +17,12 @@ import { domains, eventMappingEnabled, heatmapMappingEnabled } from '../../data/
         <div class="card" style={`padding: 20px; border-top: 3px solid ${d.color};`}>
           <h3 style="font-size: 15px; font-weight: 600; margin: 0 0 12px; color: rgb(var(--ec-page-text));">{d.name}</h3>
           <div style="display: flex; flex-direction: column; gap: 8px;">
-            <a href={`/domains/${d.id}/context-map`} style="font-size: 13px; color: rgb(59, 130, 246); text-decoration: none;">Domain Context Map</a>
+            <a href={`/domains/${d.id}/context-map`} style="font-size: 13px; color: rgb(var(--ec-accent)); text-decoration: none;">Domain Context Map</a>
             {eventMappingEnabled && (
-              <a href={`/domains/${d.id}/events`} style="font-size: 13px; color: rgb(59, 130, 246); text-decoration: none;">Event Map</a>
+              <a href={`/domains/${d.id}/events`} style="font-size: 13px; color: rgb(var(--ec-accent)); text-decoration: none;">Event Map</a>
             )}
             {heatmapMappingEnabled && (
-              <a href={`/domains/${d.id}/heatmap`} style="font-size: 13px; color: rgb(59, 130, 246); text-decoration: none;">Capability Heatmap</a>
+              <a href={`/domains/${d.id}/heatmap`} style="font-size: 13px; color: rgb(var(--ec-accent)); text-decoration: none;">Capability Heatmap</a>
             )}
           </div>
         </div>

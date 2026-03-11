@@ -191,6 +191,30 @@
   background: #0f172a;
 }
 
+/* Graph node colors for dark mode */
+[data-theme="dark"] .react-flow {
+  --node-bg: #1e293b;
+  --node-text: #e2e8f0;
+  --node-badge-bg: #334155;
+  --node-badge-text: #94a3b8;
+  --node-badge-accent-bg: #2e1065;
+  --node-badge-accent-text: #c4b5fd;
+}
+
+[data-theme="dark"] .react-flow__background {
+  background: rgb(var(--ec-page-bg));
+}
+
+[data-theme="dark"] .react-flow__controls button {
+  background: rgb(30 41 59);
+  color: rgb(226 232 240);
+  border-color: rgb(51 65 85);
+}
+
+[data-theme="dark"] .react-flow__controls button:hover {
+  background: rgb(51 65 85);
+}
+
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -551,11 +575,25 @@ button { font-family: inherit; cursor: pointer; }
   }
 }
 
+.page-header-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgb(var(--ec-button-bg));
+  color: rgb(var(--ec-button-text));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
 .page-header-summary {
-  font-size: 16px;
+  font-size: 14px;
   color: rgb(var(--ec-page-text-muted));
-  font-weight: 300;
-  margin-top: 8px;
+  font-weight: 400;
+  margin-top: 4px;
   line-height: 1.5;
 }
 
@@ -1050,7 +1088,8 @@ button { font-family: inherit; cursor: pointer; }
 
 .domain-card {
   cursor: pointer;
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .domain-card-header {
@@ -1126,16 +1165,16 @@ button { font-family: inherit; cursor: pointer; }
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-top: 12px;
-  padding-top: 10px;
+  margin-top: auto;
+  padding-top: 14px;
   border-top: 1px solid rgb(var(--ec-page-border));
 }
 
 .domain-card-metric {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
+  gap: 5px;
+  font-size: 12px;
   color: rgb(var(--ec-page-text-muted));
   letter-spacing: 0.01em;
 }
@@ -1158,6 +1197,85 @@ button { font-family: inherit; cursor: pointer; }
 
 .domain-card-metric-link svg {
   opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════════════
+   DIAGRAM VIEWER
+   ═══════════════════════════════════════════════════ */
+
+.diagram-viewer-container {
+  width: 100%;
+  background: rgb(var(--ec-card-bg));
+  border: 1px solid rgb(var(--ec-page-border));
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.diagram-viewer-toolbar {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgb(var(--ec-page-border));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-family: Inter, system-ui, sans-serif;
+  color: rgb(var(--ec-page-text-muted));
+}
+
+.diagram-viewer-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid rgb(var(--ec-page-border));
+  background: rgb(var(--ec-card-bg));
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(var(--ec-page-text-muted));
+}
+
+.diagram-viewer-btn:hover {
+  background: rgb(var(--ec-content-hover));
+}
+
+.diagram-viewer-format-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgb(var(--ec-badge-event-bg));
+  color: rgb(var(--ec-badge-event-text));
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.diagram-viewer-canvas {
+  padding: 24px;
+  height: calc(100vh - 280px);
+  min-height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--ec-content-hover));
+}
+
+.diagram-viewer-source {
+  border-top: 1px solid rgb(var(--ec-page-border));
+  background: #1e293b;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.diagram-viewer-source pre {
+  margin: 0;
+  padding: 16px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  white-space: pre-wrap;
 }
 
 /* ═══════════════════════════════════════════════════
