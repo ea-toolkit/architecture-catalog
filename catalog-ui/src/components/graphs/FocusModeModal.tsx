@@ -203,7 +203,7 @@ function FocusModeContent({
         nodesConnectable={false}
         elementsSelectable={false}
       >
-        <Background color="#e2e8f0" gap={20} />
+        <Background color="var(--graph-grid, #e2e8f0)" gap={20} />
         <Controls position="bottom-left" showInteractive={false} />
       </ReactFlow>
 
@@ -300,7 +300,7 @@ export default function FocusModeModal({
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          background: 'white',
+          background: 'rgb(var(--ec-card-bg))',
           borderRadius: 16,
           overflow: 'hidden',
           boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
@@ -313,8 +313,8 @@ export default function FocusModeModal({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '16px 24px',
-            borderBottom: '1px solid #e2e8f0',
-            background: '#f8fafc',
+            borderBottom: '1px solid rgb(var(--ec-page-border))',
+            background: 'rgb(var(--ec-content-hover))',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -339,10 +339,10 @@ export default function FocusModeModal({
             </div>
 
             <div>
-              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#1e293b' }}>
+              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'rgb(var(--ec-page-text))' }}>
                 Focus Mode
               </h2>
-              <p style={{ margin: 0, fontSize: 13, color: '#64748b' }}>
+              <p style={{ margin: 0, fontSize: 13, color: 'rgb(var(--ec-page-text-muted))' }}>
                 Exploring: <strong>{centerLabel}</strong> ({centerType})
               </p>
             </div>
@@ -355,22 +355,22 @@ export default function FocusModeModal({
               width: 40,
               height: 40,
               border: 'none',
-              background: '#f1f5f9',
+              background: 'rgb(var(--ec-content-hover))',
               borderRadius: 10,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#64748b',
+              color: 'rgb(var(--ec-page-text-muted))',
               transition: 'all 0.15s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#e2e8f0';
-              e.currentTarget.style.color = '#1e293b';
+              e.currentTarget.style.background = 'rgb(var(--ec-page-border))';
+              e.currentTarget.style.color = 'rgb(var(--ec-page-text))';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#f1f5f9';
-              e.currentTarget.style.color = '#64748b';
+              e.currentTarget.style.background = 'rgb(var(--ec-content-hover))';
+              e.currentTarget.style.color = 'rgb(var(--ec-page-text-muted))';
             }}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

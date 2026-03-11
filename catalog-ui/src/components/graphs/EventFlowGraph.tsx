@@ -257,7 +257,7 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
         maxZoom={2}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#e2e8f0" gap={20} />
+        <Background color="var(--graph-grid, #e2e8f0)" gap={20} />
         <Controls position="top-left" showInteractive={false} />
 
         {/* Export button */}
@@ -265,18 +265,8 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
           <button
             onClick={handleExportPng}
             title="Export as PNG"
-            style={{
-              padding: '5px 10px',
-              borderRadius: 6,
-              border: '1px solid #e2e8f0',
-              background: 'white',
-              color: '#64748b',
-              fontSize: 11,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 4,
-            }}
+            className="graph-panel-btn"
+            style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', fontSize: 11 }}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
@@ -289,14 +279,11 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
 
         {/* Legend */}
         <Panel position="bottom-right">
-          <div style={{
-            background: 'white',
-            border: '1px solid #e2e8f0',
-            borderRadius: 8,
+          <div className="graph-panel-box" style={{
             padding: '10px 14px',
             fontSize: 11,
           }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Event Flow</div>
+            <div className="graph-panel-heading">Event Flow</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <svg width="24" height="10" style={{ flexShrink: 0 }}>
@@ -312,14 +299,14 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
                 </svg>
                 <span style={{ color: '#10b981', fontWeight: 500 }}>Consumes</span>
               </div>
-              <div style={{ borderTop: '1px solid #e2e8f0', margin: '4px 0' }} />
+              <div className="graph-panel-divider" />
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 12, height: 12, borderRadius: 3, background: '#fef2f2', border: '2px solid #ef4444', flexShrink: 0 }} />
-                <span style={{ color: '#64748b' }}>{eventFlow.eventLabel}</span>
+                <span className="graph-panel-label">{eventFlow.eventLabel}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 12, height: 12, borderRadius: 3, background: '#ecfdf5', border: '2px solid #6ee7b7', flexShrink: 0 }} />
-                <span style={{ color: '#64748b' }}>{eventFlow.serviceLabel}</span>
+                <span className="graph-panel-label">{eventFlow.serviceLabel}</span>
               </div>
             </div>
           </div>

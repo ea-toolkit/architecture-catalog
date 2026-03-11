@@ -215,6 +215,90 @@
   border-color: rgb(51 65 85);
 }
 
+/* Graph panel controls (search, filters, legend boxes) */
+.graph-panel-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+.graph-panel-heading {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #475569;
+}
+.graph-panel-label {
+  color: #64748b;
+}
+.graph-panel-divider {
+  border-top: 1px solid #e2e8f0;
+  margin: 8px 0;
+}
+.graph-panel-input {
+  border: none;
+  outline: none;
+  font-size: 11px;
+  width: 130px;
+  background: transparent;
+  color: #334155;
+}
+.graph-panel-clear {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+}
+.graph-panel-btn {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  font-size: 10px;
+  cursor: pointer;
+}
+.graph-panel-btn--active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .graph-panel-box {
+  background: rgb(15 23 42);
+  border-color: rgb(51 65 85);
+}
+[data-theme="dark"] .graph-panel-heading {
+  color: #94a3b8;
+}
+[data-theme="dark"] .graph-panel-label {
+  color: #94a3b8;
+}
+[data-theme="dark"] .graph-panel-divider {
+  border-color: rgb(51 65 85);
+}
+[data-theme="dark"] .graph-panel-input {
+  color: #e2e8f0;
+}
+[data-theme="dark"] .graph-panel-clear {
+  color: #64748b;
+}
+[data-theme="dark"] .graph-panel-btn {
+  border-color: rgb(51 65 85);
+  background: rgb(30 41 59);
+  color: #94a3b8;
+}
+[data-theme="dark"] .graph-panel-btn--active {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+[data-theme="dark"] .react-flow {
+  --graph-grid: #334155;
+}
+
 [data-theme="dark"] .react-flow__controls button:hover {
   background: rgb(51 65 85);
 }
