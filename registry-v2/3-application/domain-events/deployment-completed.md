@@ -11,7 +11,9 @@ schema_registry: https://schema-registry.internal/operations/deployment-complete
 
 published_by_api_endpoints:
   - argocd-app-sync
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - metrics-query-endpoint
+  - audit-event-ingest
 realizes_business_event:
 
 archimate_type: application-event

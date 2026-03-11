@@ -197,7 +197,7 @@ export default function BaseNode({ data, id }: NodeProps) {
       {/* Header section with colored background */}
       <div
         style={{
-          background: style?.bg || '#f8fafc',
+          background: `var(--node-header-bg, ${style?.bg || '#f8fafc'})`,
           padding: '10px 14px',
           borderBottom: `1px solid ${style?.border}30`,
           display: 'flex',

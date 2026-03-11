@@ -11,7 +11,8 @@ schema_registry: https://schema-registry.internal/integration/webhook-delivery-f
 
 published_by_api_endpoints:
   - webhook-subscriptions-list
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - notification-api
 realizes_business_event:
 
 archimate_type: application-event

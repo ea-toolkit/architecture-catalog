@@ -11,7 +11,9 @@ schema_registry: https://schema-registry.internal/security/user-access-revoked
 
 published_by_api_endpoints:
   - auth-token-issue
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - access-control-api
+  - audit-event-ingest
 realizes_business_event:
 
 archimate_type: application-event

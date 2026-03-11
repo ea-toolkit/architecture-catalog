@@ -11,7 +11,8 @@ schema_registry: https://schema-registry.internal/integration/connector-sync-com
 
 published_by_api_endpoints:
   - connector-status-get
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - analytics-query-api
 realizes_business_event:
 
 archimate_type: application-event

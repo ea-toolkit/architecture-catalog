@@ -125,7 +125,7 @@ export default function BPMNViewer({ xmlContent, name }: BPMNViewerProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgb(var(--ec-content-hover))',
+            background: '#f8fafc',
             zIndex: 10,
           }}>
             <div style={{ textAlign: 'center', color: '#94a3b8' }}>
@@ -162,7 +162,7 @@ export default function BPMNViewer({ xmlContent, name }: BPMNViewerProps) {
             style={{
               width: '100%',
               height: '100%',
-              background: 'rgb(var(--ec-content-hover))',
+              background: '#f8fafc',
             }}
           />
         )}

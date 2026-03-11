@@ -11,7 +11,9 @@ schema_registry: https://schema-registry.internal/operations/slo-breach-detected
 
 published_by_api_endpoints:
   - metrics-query-endpoint
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - notification-api
+  - analytics-query-api
 realizes_business_event:
 
 archimate_type: application-event

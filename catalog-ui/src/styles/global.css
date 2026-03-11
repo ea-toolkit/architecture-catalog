@@ -195,10 +195,14 @@
 [data-theme="dark"] .react-flow {
   --node-bg: #1e293b;
   --node-text: #e2e8f0;
+  --node-header-bg: #0f172a;
   --node-badge-bg: #334155;
   --node-badge-text: #94a3b8;
   --node-badge-accent-bg: #2e1065;
   --node-badge-accent-text: #c4b5fd;
+  --edge-label-bg: rgba(15, 23, 42, 0.95);
+  --edge-label-text: #94a3b8;
+  --edge-label-border: #334155;
 }
 
 [data-theme="dark"] .react-flow__background {
@@ -1258,7 +1262,7 @@ button { font-family: inherit; cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(var(--ec-content-hover));
+  background: #f8fafc;
 }
 
 .diagram-viewer-source {

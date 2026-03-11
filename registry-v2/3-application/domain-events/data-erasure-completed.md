@@ -11,7 +11,9 @@ schema_registry: https://schema-registry.internal/security/data-erasure-complete
 
 published_by_api_endpoints:
   - privacy-request-submit
-consumed_by_api_endpoints: []
+consumed_by_api_endpoints:
+  - audit-api
+  - notification-api
 realizes_business_event:
 
 archimate_type: application-event

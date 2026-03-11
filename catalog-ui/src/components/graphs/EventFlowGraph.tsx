@@ -107,7 +107,7 @@ function EventFlowEdge({
             style={{
               position: 'absolute',
               transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-              background: 'rgba(255,255,255,0.95)',
+              background: 'var(--edge-label-bg, rgba(255,255,255,0.95))',
               padding: '2px 8px',
               borderRadius: 4,
               fontSize: 10,
