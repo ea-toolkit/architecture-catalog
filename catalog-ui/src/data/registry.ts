@@ -161,7 +161,7 @@ export const LAYER_META: Record<string, { name: string; color: string; bg: strin
 
 /** Site config — branding from mapping YAML */
 export const SITE_CONFIG: SiteConfig =
-  _graph ? getSiteConfig(_graph.mapping) : { name: 'Architecture Catalog', description: '', logo_text: 'A' };
+  _graph ? getSiteConfig(_graph.mapping) : { name: 'Architecture Catalog', company: '', description: '', logo_text: 'A' };
 
 /** Type key → badge category map — from mapping YAML badge_category field */
 export const TYPE_BADGES: Record<string, string> =

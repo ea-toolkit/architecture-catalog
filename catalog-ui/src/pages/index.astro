@@ -18,9 +18,9 @@ const maturityColor: Record<string, string> = {
     <div class="page-header-title">
       <span class="page-header-logo">{SITE_CONFIG.logo_text}</span>
       <div>
-        <h1>{SITE_CONFIG.name}</h1>
+        <h1>{SITE_CONFIG.company || SITE_CONFIG.name}</h1>
         <p class="page-header-summary">
-          {SITE_CONFIG.description} — {domains.length} domains, {elements.length} registered entities
+          {SITE_CONFIG.company ? SITE_CONFIG.name : SITE_CONFIG.description} — {domains.length} domains, {elements.length} registered entities
         </p>
       </div>
     </div>

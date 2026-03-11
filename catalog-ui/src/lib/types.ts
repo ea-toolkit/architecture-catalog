@@ -9,6 +9,7 @@
 /** Site branding — change in registry-mapping.yaml for white-label deployment */
 export interface SiteConfig {
   name: string;
+  company?: string;
   description: string;
   logo_text: string;
   logo_image?: string;
