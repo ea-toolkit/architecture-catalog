@@ -155,7 +155,7 @@ export default function BaseNode({ data, id }: NodeProps) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: 'white',
+        background: 'var(--node-bg, white)',
         border: `2px solid ${style?.border || '#e2e8f0'}`,
         borderRadius: '8px',
         minWidth: 200,
@@ -178,7 +178,7 @@ export default function BaseNode({ data, id }: NodeProps) {
           background: style?.border || '#94a3b8',
           width: 10,
           height: 10,
-          border: '2px solid white',
+          border: '2px solid var(--node-bg, white)',
           boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
         }}
       />
@@ -189,7 +189,7 @@ export default function BaseNode({ data, id }: NodeProps) {
           background: style?.border || '#94a3b8',
           width: 10,
           height: 10,
-          border: '2px solid white',
+          border: '2px solid var(--node-bg, white)',
           boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
         }}
       />
@@ -197,7 +197,7 @@ export default function BaseNode({ data, id }: NodeProps) {
       {/* Header section with colored background */}
       <div
         style={{
-          background: style?.bg || '#f8fafc',
+          background: `var(--node-header-bg, ${style?.bg || '#f8fafc'})`,
           padding: '10px 14px',
           borderBottom: `1px solid ${style?.border}30`,
           display: 'flex',
@@ -240,7 +240,7 @@ export default function BaseNode({ data, id }: NodeProps) {
             style={{
               fontSize: 13,
               fontWeight: 600,
-              color: '#1e293b',
+              color: 'var(--node-text, #1e293b)',
               lineHeight: 1.25,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -263,8 +263,8 @@ export default function BaseNode({ data, id }: NodeProps) {
                 fontWeight: 500,
                 padding: '2px 8px',
                 borderRadius: 4,
-                background: '#f1f5f9',
-                color: '#475569',
+                background: 'var(--node-badge-bg, #f1f5f9)',
+                color: 'var(--node-badge-text, #475569)',
               }}
             >
               {d.status}
@@ -277,8 +277,8 @@ export default function BaseNode({ data, id }: NodeProps) {
                 fontWeight: 500,
                 padding: '2px 8px',
                 borderRadius: 4,
-                background: '#f5f3ff',
-                color: '#6d28d9',
+                background: 'var(--node-badge-accent-bg, #f5f3ff)',
+                color: 'var(--node-badge-accent-text, #6d28d9)',
               }}
             >
               {d.sourcing}
@@ -300,8 +300,8 @@ export default function BaseNode({ data, id }: NodeProps) {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 6,
-            background: '#f1f5f9',
-            color: '#64748b',
+            background: 'var(--node-badge-bg, #f1f5f9)',
+            color: 'var(--node-badge-text, #64748b)',
             textDecoration: 'none',
             transition: 'all 0.15s',
             flexShrink: 0,
@@ -312,8 +312,8 @@ export default function BaseNode({ data, id }: NodeProps) {
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#f1f5f9';
-            e.currentTarget.style.color = '#64748b';
+            e.currentTarget.style.background = 'var(--node-badge-bg, #f1f5f9)';
+            e.currentTarget.style.color = 'var(--node-badge-text, #64748b)';
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

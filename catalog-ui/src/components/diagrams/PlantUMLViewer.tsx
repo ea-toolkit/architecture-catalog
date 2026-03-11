@@ -26,6 +26,7 @@ export default function PlantUMLViewer({
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const sourceRef = useRef<HTMLDivElement>(null);
 
   const imageUrl = useMemo(() => {
     try {
@@ -39,6 +40,16 @@ export default function PlantUMLViewer({
   const handleZoomIn = () => setZoom(z => Math.min(z + ZOOM_STEP, MAX_ZOOM));
   const handleZoomOut = () => setZoom(z => Math.max(z - ZOOM_STEP, MIN_ZOOM));
   const handleReset = () => { setZoom(1); setPan({ x: 0, y: 0 }); };
+
+  const handleToggleSource = () => {
+    const next = !showSource;
+    setShowSource(next);
+    if (next) {
+      setTimeout(() => {
+        sourceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  };
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (zoom > 1) {
@@ -63,83 +74,30 @@ export default function PlantUMLViewer({
     }
   }, []);
 
-  const btnStyle: React.CSSProperties = {
-    width: 32,
-    height: 32,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 6,
-    border: '1px solid #e2e8f0',
-    background: 'white',
-    cursor: 'pointer',
-    fontSize: 16,
-    fontWeight: 600,
-    color: '#64748b',
-  };
-
   return (
-    <div style={{
-      width: '100%',
-      background: 'white',
-      border: '1px solid #e2e8f0',
-      borderRadius: 10,
-      overflow: 'hidden',
-    }}>
+    <div className="diagram-viewer-container">
       {/* Toolbar */}
-      <div style={{
-        padding: '10px 16px',
-        borderBottom: '1px solid #e2e8f0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        fontSize: 12,
-        fontFamily: 'Inter, system-ui, sans-serif',
-        color: '#64748b',
-      }}>
+      <div className="diagram-viewer-toolbar">
         <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
-          <span style={{ fontWeight: 600, color: '#334155' }}>{name}</span>
+          <span style={{ fontWeight: 600 }}>{name}</span>
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {/* Zoom controls */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginRight: 8 }}>
-            <button onClick={handleZoomOut} style={btnStyle} title="Zoom out">−</button>
+            <button onClick={handleZoomOut} className="diagram-viewer-btn" title="Zoom out">−</button>
             <span style={{ minWidth: 48, textAlign: 'center', fontSize: 11, fontWeight: 600 }}>{Math.round(zoom * 100)}%</span>
-            <button onClick={handleZoomIn} style={btnStyle} title="Zoom in">+</button>
-            <button onClick={handleReset} style={{ ...btnStyle, width: 'auto', padding: '0 10px', fontSize: 11 }} title="Reset view">
+            <button onClick={handleZoomIn} className="diagram-viewer-btn" title="Zoom in">+</button>
+            <button onClick={handleReset} className="diagram-viewer-btn" style={{ width: 'auto', padding: '0 10px', fontSize: 11 }} title="Reset view">
               Reset
             </button>
           </div>
-          <button
-            onClick={() => setShowSource(!showSource)}
-            style={{
-              padding: '4px 10px',
-              borderRadius: 6,
-              border: '1px solid #e2e8f0',
-              background: showSource ? '#f1f5f9' : 'white',
-              fontSize: 11,
-              fontWeight: 500,
-              color: '#64748b',
-              cursor: 'pointer',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
+          <button onClick={handleToggleSource} className="diagram-viewer-btn" style={{ width: 'auto', padding: '0 10px', fontSize: 11, fontWeight: 500 }}>
             {showSource ? 'Hide Source' : 'View Source'}
           </button>
-          <span style={{
-            padding: '4px 10px',
-            borderRadius: 6,
-            background: '#fef3c7',
-            color: '#92400e',
-            fontWeight: 600,
-            fontSize: 11,
-          }}>
-            PlantUML
-          </span>
+          <span className="diagram-viewer-format-badge">PlantUML</span>
         </div>
       </div>
 
@@ -151,17 +109,8 @@ export default function PlantUMLViewer({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         onWheel={handleWheel}
-        style={{
-          padding: 24,
-          height: 'calc(100vh - 280px)',
-          minHeight: 400,
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#fafafa',
-          cursor: zoom > 1 ? (isPanning ? 'grabbing' : 'grab') : 'default',
-        }}
+        className="diagram-viewer-canvas"
+        style={{ cursor: zoom > 1 ? (isPanning ? 'grabbing' : 'grab') : 'default' }}
       >
         {imageError || !imageUrl ? (
           <div style={{ textAlign: 'center', color: '#94a3b8' }}>
@@ -191,23 +140,8 @@ export default function PlantUMLViewer({
 
       {/* Source code (collapsible) */}
       {showSource && (
-        <div style={{
-          borderTop: '1px solid #e2e8f0',
-          background: '#1e293b',
-          maxHeight: 300,
-          overflow: 'auto',
-        }}>
-          <pre style={{
-            margin: 0,
-            padding: 16,
-            fontSize: 11,
-            lineHeight: 1.6,
-            color: '#e2e8f0',
-            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, monospace',
-            whiteSpace: 'pre-wrap',
-          }}>
-            {source}
-          </pre>
+        <div ref={sourceRef} className="diagram-viewer-source">
+          <pre>{source}</pre>
         </div>
       )}
     </div>

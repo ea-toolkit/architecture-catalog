@@ -51,8 +51,9 @@ registry_root: registry-v2
 # ─────────────────────────────────────────────────────────────
 site:
   name: Architecture Catalog
+  company: Nova CRM
   description: Enterprise architecture registry
-  logo_text: A
+  logo_text: N
   # logo_image: /logo.svg   # Optional: path to logo image in catalog-ui/public/
 
 # ─────────────────────────────────────────────────────────────

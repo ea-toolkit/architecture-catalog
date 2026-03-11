@@ -13,11 +13,11 @@ const diagramsByDomain = diagrams.reduce((acc, d) => {
   return acc;
 }, {} as Record<string, typeof diagrams>);
 
-// Format badge colors
-const formatColors = {
-  plantuml: { bg: '#fef3c7', color: '#92400e' },
-  bpmn: { bg: '#ecfdf5', color: '#065f46' },
-  drawio: { bg: '#eff6ff', color: '#3b82f6' },
+// Format badge CSS classes (dark-mode safe)
+const formatClasses: Record<string, string> = {
+  plantuml: 'format-badge-plantuml',
+  bpmn: 'format-badge-bpmn',
+  drawio: 'format-badge-drawio',
 };
 ---
 
@@ -67,7 +67,6 @@ const formatColors = {
           
           <div class="diagram-grid">
             {domainDiagrams.map(d => {
-              const fc = formatColors[d.format];
               return (
                 <a href={`/diagrams/${d.id}`} class="diagram-card" data-format={d.format}>
                   <div class="diagram-card-header">
@@ -95,7 +94,7 @@ const formatColors = {
                         </svg>
                       )}
                     </div>
-                    <span class="diagram-format-badge" style={`background: ${fc.bg}; color: ${fc.color};`}>
+                    <span class={`diagram-format-badge ${formatClasses[d.format]}`}>
                       {d.format}
                     </span>
                   </div>
@@ -124,8 +123,8 @@ const formatColors = {
   .filter-pill {
     padding: 6px 14px;
     border-radius: 20px;
-    border: 1px solid rgb(var(--ec-border));
-    background: white;
+    border: 1px solid rgb(var(--ec-page-border));
+    background: rgb(var(--ec-card-bg));
     font-size: 12px;
     font-weight: 500;
     color: rgb(var(--ec-page-text-muted));
@@ -133,12 +132,12 @@ const formatColors = {
     transition: all 0.15s ease;
   }
   .filter-pill:hover {
-    border-color: rgb(var(--ec-primary));
-    color: rgb(var(--ec-primary));
+    border-color: rgb(var(--ec-accent));
+    color: rgb(var(--ec-accent));
   }
   .filter-pill.active {
-    background: rgb(var(--ec-primary));
-    border-color: rgb(var(--ec-primary));
+    background: rgb(var(--ec-accent));
+    border-color: rgb(var(--ec-accent));
     color: white;
   }
   
@@ -152,16 +151,16 @@ const formatColors = {
   .diagram-card {
     display: flex;
     flex-direction: column;
-    background: white;
-    border: 1px solid rgb(var(--ec-border));
+    background: rgb(var(--ec-card-bg));
+    border: 1px solid rgb(var(--ec-page-border));
     border-radius: 10px;
     padding: 16px;
     text-decoration: none;
     transition: all 0.15s ease;
   }
   .diagram-card:hover {
-    border-color: rgb(var(--ec-primary));
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: rgb(var(--ec-accent));
+    box-shadow: var(--ec-shadow-md);
     transform: translateY(-2px);
   }
   
@@ -176,7 +175,7 @@ const formatColors = {
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: rgb(var(--ec-bg-muted));
+    background: rgb(var(--ec-page-bg-muted, 241 245 249));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,6 +190,9 @@ const formatColors = {
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
+  .format-badge-plantuml { background: rgb(var(--ec-badge-event-bg)); color: rgb(var(--ec-badge-event-text)); }
+  .format-badge-bpmn { background: rgb(var(--ec-badge-domain-bg)); color: rgb(var(--ec-badge-domain-text)); }
+  .format-badge-drawio { background: rgb(var(--ec-badge-query-bg)); color: rgb(var(--ec-badge-query-text)); }
   
   .diagram-card-body {
     flex: 1;
@@ -223,7 +225,7 @@ const formatColors = {
   .diagram-tag {
     padding: 3px 8px;
     border-radius: 4px;
-    background: rgb(var(--ec-bg-muted));
+    background: rgb(var(--ec-page-bg-muted, 241 245 249));
     font-size: 10px;
     color: rgb(var(--ec-page-text-muted));
   }

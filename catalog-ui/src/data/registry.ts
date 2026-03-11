@@ -31,6 +31,7 @@ import {
 import type { RegistryGraph, SiteConfig, LayerDef, RelationshipTypeDef } from '../lib/types';
 import { loadEventMapping, resolveEventFlows, type EventFlow, type EventMappingConfig } from '../lib/event-mapping-loader';
 import { loadHeatmapMapping, type HeatmapMappingConfig } from '../lib/heatmap-mapping-loader';
+import { diagrams as mockDiagrams } from './diagrams-mock';
 
 // ─────────────────────────────────────────────────────────────
 // Types — self-contained, no dependency on mock.ts
@@ -103,6 +104,11 @@ try {
     _elements.push(...domainEls);
   }
 
+  // Populate diagram counts from mock diagrams
+  for (const domain of _domains) {
+    domain.diagramCount = mockDiagrams.filter(d => d.domain === domain.id).length;
+  }
+
   // Populate incoming relationships from the graph's edge index
   // (must happen AFTER all elements are loaded since edges cross domains)
   for (const el of _elements) {
@@ -155,7 +161,7 @@ export const LAYER_META: Record<string, { name: string; color: string; bg: strin
 
 /** Site config — branding from mapping YAML */
 export const SITE_CONFIG: SiteConfig =
-  _graph ? getSiteConfig(_graph.mapping) : { name: 'Architecture Catalog', description: '', logo_text: 'A' };
+  _graph ? getSiteConfig(_graph.mapping) : { name: 'Architecture Catalog', company: '', description: '', logo_text: 'A' };
 
 /** Type key → badge category map — from mapping YAML badge_category field */
 export const TYPE_BADGES: Record<string, string> =

@@ -88,65 +88,29 @@ export default function BPMNViewer({ xmlContent, name }: BPMNViewerProps) {
     }
   };
 
-  const btnStyle: React.CSSProperties = {
-    width: 32,
-    height: 32,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 6,
-    border: '1px solid #e2e8f0',
-    background: 'white',
-    cursor: 'pointer',
-    fontSize: 16,
-    fontWeight: 600,
-    color: '#64748b',
-  };
+  // Uses .diagram-viewer-btn CSS class instead of inline styles
 
   return (
-    <div style={{
-      width: '100%',
-      background: 'white',
-      border: '1px solid #e2e8f0',
-      borderRadius: 10,
-      overflow: 'hidden',
-    }}>
+    <div className="diagram-viewer-container">
       {/* Toolbar */}
-      <div style={{
-        padding: '10px 16px',
-        borderBottom: '1px solid #e2e8f0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        fontSize: 12,
-        fontFamily: 'Inter, system-ui, sans-serif',
-        color: '#64748b',
-      }}>
+      <div className="diagram-viewer-toolbar">
         <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <path d="M3 9h18M9 21V9"/>
           </svg>
-          <span style={{ fontWeight: 600, color: '#334155' }}>{name}</span>
+          <span style={{ fontWeight: 600 }}>{name}</span>
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {/* Zoom controls */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginRight: 8 }}>
-            <button onClick={handleZoomOut} style={btnStyle} title="Zoom out">−</button>
+            <button onClick={handleZoomOut} className="diagram-viewer-btn" title="Zoom out">−</button>
             <span style={{ minWidth: 48, textAlign: 'center', fontSize: 11, fontWeight: 600 }}>{zoomLevel}%</span>
-            <button onClick={handleZoomIn} style={btnStyle} title="Zoom in">+</button>
-            <button onClick={handleReset} style={{ ...btnStyle, width: 'auto', padding: '0 10px', fontSize: 11 }} title="Fit to viewport">
+            <button onClick={handleZoomIn} className="diagram-viewer-btn" title="Zoom in">+</button>
+            <button onClick={handleReset} className="diagram-viewer-btn" style={{ width: 'auto', padding: '0 10px', fontSize: 11 }} title="Fit to viewport">
               Fit
             </button>
           </div>
-          <span style={{
-            padding: '4px 10px',
-            borderRadius: 6,
-            background: '#ecfdf5',
-            color: '#065f46',
-            fontWeight: 600,
-            fontSize: 11,
-          }}>
+          <span className="diagram-viewer-format-badge" style={{ background: 'rgb(var(--ec-badge-domain-bg))', color: 'rgb(var(--ec-badge-domain-text))' }}>
             BPMN
           </span>
         </div>
@@ -198,7 +162,7 @@ export default function BPMNViewer({ xmlContent, name }: BPMNViewerProps) {
             style={{
               width: '100%',
               height: '100%',
-              background: '#fafafa',
+              background: '#f8fafc',
             }}
           />
         )}

@@ -237,23 +237,20 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
           maxZoom={2}
           proOptions={{ hideAttribution: true }}
         >
-          <Background color="#e2e8f0" gap={20} />
+          <Background color="var(--graph-grid, #e2e8f0)" gap={20} />
           <Controls position="top-left" showInteractive={false} />
 
           {/* Toolbar Panel — search, status filter, export */}
           <Panel position="top-right">
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {/* Search */}
-              <div style={{
-                background: 'white',
-                border: '1px solid #e2e8f0',
-                borderRadius: 8,
+              <div className="graph-panel-box" style={{
                 padding: '6px 10px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
               }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: 0.5 }}>
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
@@ -262,19 +259,12 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
                   placeholder="Search elements..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    border: 'none',
-                    outline: 'none',
-                    fontSize: 11,
-                    width: 130,
-                    background: 'transparent',
-                    color: '#334155',
-                  }}
+                  className="graph-panel-input"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8', fontSize: 14, lineHeight: 1, padding: 0 }}
+                    className="graph-panel-clear"
                   >
                     x
                   </button>
@@ -287,17 +277,8 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
                   <button
                     key={s}
                     onClick={() => setStatusFilter(s)}
-                    style={{
-                      padding: '3px 8px',
-                      borderRadius: 6,
-                      border: `1px solid ${statusFilter === s ? '#3b82f6' : '#e2e8f0'}`,
-                      background: statusFilter === s ? '#eff6ff' : 'white',
-                      color: statusFilter === s ? '#3b82f6' : '#64748b',
-                      fontSize: 10,
-                      fontWeight: statusFilter === s ? 600 : 400,
-                      cursor: 'pointer',
-                      textTransform: 'capitalize',
-                    }}
+                    className={`graph-panel-btn ${statusFilter === s ? 'graph-panel-btn--active' : ''}`}
+                    style={{ textTransform: 'capitalize' }}
                   >
                     {s}{s !== 'all' && statusCounts[s] > 0 ? ` (${statusCounts[s]})` : ''}
                   </button>
@@ -306,18 +287,8 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
                 <button
                   onClick={handleExportPng}
                   title="Export as PNG"
-                  style={{
-                    padding: '3px 8px',
-                    borderRadius: 6,
-                    border: '1px solid #e2e8f0',
-                    background: 'white',
-                    color: '#64748b',
-                    fontSize: 10,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 3,
-                  }}
+                  className="graph-panel-btn"
+                  style={{ display: 'flex', alignItems: 'center', gap: 3 }}
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
@@ -332,17 +303,14 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
 
           {/* Legend Panel — clickable to filter types */}
           <Panel position="bottom-right">
-            <div style={{
-              background: 'white',
-              border: '1px solid #e2e8f0',
-              borderRadius: 8,
+            <div className="graph-panel-box" style={{
               padding: '10px 14px',
               fontSize: 11,
               maxWidth: 200,
               maxHeight: 300,
               overflowY: 'auto',
             }}>
-              <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Elements</div>
+              <div className="graph-panel-heading">Elements</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {legendItems.map(item => {
                   const isHidden = hiddenTypes.has(item.type);
@@ -372,15 +340,15 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
                         border: `2px solid ${item.style.border}`,
                         flexShrink: 0,
                       }} />
-                      <span style={{ color: '#64748b' }}>{item.label}</span>
+                      <span className="graph-panel-label">{item.label}</span>
                     </div>
                   );
                 })}
               </div>
               {legendEdgeItems.length > 0 && (
                 <>
-                  <div style={{ borderTop: '1px solid #e2e8f0', margin: '8px 0' }} />
-                  <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Relationships</div>
+                  <div className="graph-panel-divider" />
+                  <div className="graph-panel-heading">Relationships</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {legendEdgeItems.map(item => (
                       <div key={item.type} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -392,7 +360,7 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
                             strokeDasharray={item.style.strokeDasharray || 'none'}
                           />
                         </svg>
-                        <span style={{ color: '#64748b' }}>{item.label}</span>
+                        <span className="graph-panel-label">{item.label}</span>
                       </div>
                     ))}
                   </div>
