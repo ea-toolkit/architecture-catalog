@@ -1,0 +1,117 @@
+/* ── Architecture Catalog Docs — Custom Theme ──
+   Matches the catalog-ui design language:
+   - Inter font
+   - Blue accent (#3b82f6)
+   - Slate dark palette
+   - Dark mode default
+*/
+
+/* ── Accent colors ── */
+:root {
+  --sl-color-accent-low: #1e3a5f;
+  --sl-color-accent: #3b82f6;
+  --sl-color-accent-high: #93c5fd;
+  --sl-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sl-font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #dbeafe;
+  --sl-color-accent: #2563eb;
+  --sl-color-accent-high: #1e3a5f;
+}
+
+/* ── Splash hero page ── */
+.hero {
+  padding-block: 4rem !important;
+}
+
+.hero .tagline {
+  font-size: var(--sl-text-lg) !important;
+  max-width: 42ch;
+  line-height: 1.6;
+  color: var(--sl-color-gray-3);
+}
+
+:root[data-theme='light'] .hero .tagline {
+  color: var(--sl-color-gray-4);
+}
+
+/* Hero title — larger and weighted */
+.hero .hero-title {
+  font-size: var(--sl-text-5xl) !important;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Hero action buttons — catalog-style */
+.hero .action {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 0.65rem 1.5rem !important;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.hero .action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero .action.primary {
+  background: var(--sl-color-accent) !important;
+  border-color: var(--sl-color-accent) !important;
+}
+
+/* ── Card grid — polished cards ── */
+.card {
+  border-radius: 10px !important;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card .card-title {
+  font-weight: 700;
+}
+
+/* ── Sidebar polish ── */
+nav.sidebar .top-level > li > details > summary,
+nav.sidebar .top-level > li > a {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ── Header polish ── */
+.header {
+  backdrop-filter: blur(12px);
+}
+
+/* ── Code blocks ── */
+pre {
+  border-radius: 8px !important;
+  border: 1px solid var(--sl-color-gray-5) !important;
+}
+
+/* ── Tip/note callouts — match catalog accent ── */
+.starlight-aside--tip {
+  border-color: var(--sl-color-accent);
+}
+
+/* ── Splash page specific: full-width cards ── */
+[data-page-type='splash'] .sl-container {
+  max-width: 72rem;
+}
+
+/* ── Footer / bottom nav ── */
+.pagination-links a {
+  border-radius: 8px !important;
+  transition: border-color 0.15s;
+}
+
+.pagination-links a:hover {
+  border-color: var(--sl-color-accent) !important;
+}

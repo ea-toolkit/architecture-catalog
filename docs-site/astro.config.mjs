@@ -6,7 +6,17 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Architecture Catalog',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/ea-toolkit/architecture-catalog' }],
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/ea-toolkit/architecture-catalog' },
+			],
+			customCss: ['./src/styles/custom.css'],
+			head: [
+				// Default to dark mode (same as catalog-ui)
+				{
+					tag: 'script',
+					content: `if(!localStorage.getItem('starlight-theme')){document.documentElement.setAttribute('data-theme','dark')}`,
+				},
+			],
 			sidebar: [
 				{
 					label: 'Getting Started',
