@@ -5,16 +5,23 @@ template: splash
 hero:
   tagline: Model your enterprise architecture using plain Markdown files. Define your schema in a single YAML file. Get a fully navigable catalog with zero custom code.
   actions:
-    - text: Get Started
+    - text: Get Started in 5 Minutes
       link: /getting-started/introduction/
       icon: right-arrow
       variant: primary
-    - text: View on GitHub
+    - text: Live Demo
+      link: https://architecture-catalog.web.app
+      icon: external
+    - text: GitHub
       link: https://github.com/ea-toolkit/architecture-catalog
       icon: external
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+
+<Aside type="tip">
+**See it live** — [architecture-catalog.web.app](https://architecture-catalog.web.app) shows a demo catalog with 6 domains and 180+ registered entities, including interactive context maps and event flow diagrams.
+</Aside>
 
 ## Why Architecture Catalog?
 
@@ -29,6 +36,20 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
     Builds to pure static HTML with Astro. Deploy anywhere: GitHub Pages, S3, Netlify, or behind your VPN. No servers, no databases.
   </Card>
   <Card title="Interactive graphs" icon="random">
-    Dependency graphs powered by React Flow with automatic dagre layout. Search, filter, export to PNG.
+    Domain context maps, event flow diagrams, and capability heatmaps powered by React Flow with automatic dagre layout. Search, filter, focus mode, and PNG export.
+  </Card>
+</CardGrid>
+
+## 3 Steps to Your Architecture Catalog
+
+<CardGrid>
+  <Card title="1. Define your schema" icon="document">
+    Edit `registry-mapping.yaml` — declare your element types, layers, relationships, and branding. Use ArchiMate, C4, TOGAF, or your own vocabulary.
+  </Card>
+  <Card title="2. Add your elements" icon="add-document">
+    Create Markdown files in `registry-v2/`. One file per architecture element. Copy a `_template.md`, fill in the YAML frontmatter.
+  </Card>
+  <Card title="3. Build and browse" icon="rocket">
+    Run `npm run build` — the loader reads your schema, scans your files, resolves cross-references, and generates a fully navigable static site.
   </Card>
 </CardGrid>

@@ -5,14 +5,18 @@ description: Customize the catalog's appearance for your organization.
 
 ## Basic branding
 
-Change three lines in `registry-mapping.yaml`:
+Update the `site:` section in `registry-mapping.yaml`:
 
 ```yaml
 site:
-  name: Acme Architecture Catalog     # appears in header + page titles
-  description: Acme Corp engineering   # appears on dashboard
+  name: Architecture Catalog           # catalog name (subtitle on homepage)
+  company: Acme Corp                   # company name (main heading on homepage)
+  description: Acme Corp engineering   # appears on dashboard subtitle
   logo_text: A                         # single character in sidebar logo
+  # logo_image: /logo.svg             # optional: path to image in catalog-ui/public/
 ```
+
+When `company` is set, the homepage shows the company name as the main `h1` heading with the catalog `name` as smaller subtext below it. If `company` is omitted, the `name` is used as the main heading instead.
 
 ## Domain colors
 

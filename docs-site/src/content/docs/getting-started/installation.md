@@ -32,9 +32,10 @@ npm run build
 You should see output like:
 
 ```
-Registry loaded: 34 elements, 69 edges
-  Healthy: 34  |  Connected: 34  |  Orphans: 0
+Registry loaded: 182 elements, 340 edges
+  Healthy: 182  |  Connected: 182  |  Orphans: 0
   Broken refs: 0
+286 page(s) built
 ```
 
 ## Start the dev server
@@ -43,7 +44,9 @@ Registry loaded: 34 elements, 69 edges
 npm run dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321). You should see the dashboard with the Customer Management, Billing & Payments, and Analytics & Insights sample domains.
+Open [http://localhost:4321](http://localhost:4321). You should see the dashboard with 6 sample domains including Customer Management, Billing & Payments, Analytics & Insights, Integration & Connectivity, Security & Compliance, and Platform Operations.
+
+<!-- VIDEO: #1 Homepage overview — open the app, dark mode, hover domain cards, scroll stats (30s) -->
 
 ## Brand it for your organization
 
@@ -51,12 +54,13 @@ Open `models/registry-mapping.yaml` and update the `site:` section:
 
 ```yaml
 site:
-  name: Acme Architecture Catalog
-  description: Acme Corp enterprise architecture registry
-  logo_text: A
+  name: Architecture Catalog       # subtitle / catalog name
+  company: Acme Corp               # main heading on homepage
+  description: Enterprise architecture registry
+  logo_text: A                     # single character in sidebar logo
 ```
 
-Restart the dev server and your branding is applied everywhere.
+When `company` is set, the homepage shows it as the main title with the catalog `name` as subtitle. Restart the dev server and your branding is applied everywhere.
 
 ## Next steps
 

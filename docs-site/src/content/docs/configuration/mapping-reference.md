@@ -28,16 +28,20 @@ elements: { ... }
 
 ```yaml
 site:
-  name: Architecture Catalog       # Page title, header text
+  name: Architecture Catalog       # Catalog name (subtitle when company is set)
+  company: Nova CRM                # Company name (main homepage heading)
   description: Enterprise registry  # Dashboard subtitle
-  logo_text: A                     # Single char in sidebar logo
+  logo_text: N                     # Single char in sidebar logo
+  # logo_image: /logo.svg         # Optional: path to logo image
 ```
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | yes | Shown in page titles, sidebar, breadcrumbs |
+| `name` | string | yes | Catalog name. Shown in page titles and sidebar. Used as homepage heading when `company` is not set. |
+| `company` | string | no | Company/organization name. When set, shown as the main homepage heading with `name` as subtitle. |
 | `description` | string | yes | Shown on the dashboard landing page |
 | `logo_text` | string | yes | Single character in the sidebar icon bar |
+| `logo_image` | string | no | Path to a logo image in `catalog-ui/public/`. Overrides `logo_text` when set. |
 
 ## `layers` -- Architecture Layers
 

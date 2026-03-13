@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "ea-toolkit-demo-ac513"
-  }
+  },
+  "targets": {
+    "ea-toolkit-demo-ac513": {
+      "hosting": {
+        "catalog": [
+          "architecture-catalog"
+        ],
+        "docs": [
+          "docs-architecture-catalog"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

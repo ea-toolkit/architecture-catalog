@@ -15,8 +15,8 @@ npm run build
 The build output shows a health summary:
 
 ```
-Registry loaded: 32 elements, 69 edges
-  Healthy: 32  |  Connected: 32  |  Orphans: 0
+Registry loaded: 182 elements, 340 edges
+  Healthy: 182  |  Connected: 182  |  Orphans: 0
   Broken refs: 0  |  Missing type: 0
 ```
 

@@ -17,6 +17,16 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Features',
+					items: [
+						{ label: 'Dashboard', slug: 'features/dashboard' },
+						{ label: 'Domain Overview', slug: 'features/domain-overview' },
+						{ label: 'Context Map', slug: 'features/context-map' },
+						{ label: 'Event Flow Map', slug: 'features/event-flow' },
+						{ label: 'Diagrams', slug: 'features/diagrams' },
+					],
+				},
+				{
 					label: 'Modeling Your Architecture',
 					items: [
 						{ label: 'Registry Mapping', slug: 'modeling/registry-mapping' },

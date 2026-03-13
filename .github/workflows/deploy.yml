@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'catalog-ui/**'
+      - 'docs-site/**'
       - 'registry-v2/**'
       - 'models/**'
       - 'views/**'
@@ -22,13 +23,17 @@ jobs:
           cache: 'npm'
           cache-dependency-path: catalog-ui/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build catalog
         working-directory: catalog-ui
+        run: |
+          npm ci
+          npm run build
 
-      - name: Build
-        run: npm run build
-        working-directory: catalog-ui
+      - name: Build docs
+        working-directory: docs-site
+        run: |
+          npm ci
+          npm run build
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
