@@ -6,7 +6,17 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Architecture Catalog',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/ea-toolkit/architecture-catalog' }],
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/ea-toolkit/architecture-catalog' },
+			],
+			customCss: ['./src/styles/custom.css'],
+			head: [
+				// Default to dark mode (same as catalog-ui)
+				{
+					tag: 'script',
+					content: `if(!localStorage.getItem('starlight-theme')){document.documentElement.setAttribute('data-theme','dark')}`,
+				},
+			],
 			sidebar: [
 				{
 					label: 'Getting Started',
@@ -14,6 +24,16 @@ export default defineConfig({
 						{ label: 'Introduction', slug: 'getting-started/introduction' },
 						{ label: 'Installation', slug: 'getting-started/installation' },
 						{ label: 'Project Structure', slug: 'getting-started/project-structure' },
+					],
+				},
+				{
+					label: 'Features',
+					items: [
+						{ label: 'Dashboard', slug: 'features/dashboard' },
+						{ label: 'Domain Overview', slug: 'features/domain-overview' },
+						{ label: 'Context Map', slug: 'features/context-map' },
+						{ label: 'Event Flow Map', slug: 'features/event-flow' },
+						{ label: 'Diagrams', slug: 'features/diagrams' },
 					],
 				},
 				{

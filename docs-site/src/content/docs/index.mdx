@@ -2,33 +2,71 @@
 title: Architecture Catalog
 description: A schema-driven, white-label architecture catalog that turns Markdown files into a beautiful, interactive static site.
 template: splash
+banner:
+  content: |
+    <a href="https://architecture-catalog.web.app" target="_blank">See the live demo →</a>
 hero:
-  tagline: Model your enterprise architecture using plain Markdown files. Define your schema in a single YAML file. Get a fully navigable catalog with zero custom code.
+  title: Your architecture,<br/>browsable and beautiful
+  tagline: |
+    Turn plain Markdown files into an interactive architecture catalog.
+    One YAML schema. Zero custom code. Deploy anywhere.
   actions:
-    - text: Get Started
-      link: /getting-started/introduction/
+    - text: Get Started in 5 Minutes
+      link: /getting-started/installation/
       icon: right-arrow
       variant: primary
-    - text: View on GitHub
+    - text: Live Demo
+      link: https://architecture-catalog.web.app
+      icon: external
+      variant: minimal
+    - text: GitHub
       link: https://github.com/ea-toolkit/architecture-catalog
       icon: external
+      variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, Steps, Aside, LinkCard } from '@astrojs/starlight/components';
 
-## Why Architecture Catalog?
+## Get started in 3 steps
 
-<CardGrid stagger>
+<Steps>
+1. **Define your schema** — edit `registry-mapping.yaml` to declare element types, layers, relationships, and branding
+
+2. **Add your elements** — create Markdown files in `registry-v2/`. One file per architecture element, with YAML frontmatter
+
+3. **Build and browse** — run `npm run build`. The catalog reads your schema, scans your files, resolves cross-references, and generates a static site
+</Steps>
+
+<Aside type="tip" title="Works with any vocabulary">
+ArchiMate, TOGAF, C4, or your own custom terminology — the catalog adapts to whatever you define in the YAML schema. No hardcoded type names anywhere.
+</Aside>
+
+---
+
+## What you get
+
+<CardGrid>
   <Card title="Schema-driven" icon="setting">
-    One YAML file defines everything: element types, fields, relationships, layers, and branding. Zero hardcoded type names in the UI.
+    One YAML file defines everything — types, fields, relationships, layers, and branding. Add a new element type? Just add an entry. Zero code changes.
+  </Card>
+  <Card title="Interactive maps" icon="random">
+    Domain context maps, event flow diagrams, and capability heatmaps. Search, filter, focus mode, and PNG export — all powered by React Flow.
   </Card>
   <Card title="Plain Markdown" icon="document">
-    Each architecture element is a `.md` file with YAML frontmatter. No proprietary formats, no vendor lock-in. Git-friendly and AI-readable.
+    Each architecture element is a `.md` file with YAML frontmatter. No proprietary formats. Git-friendly, diff-friendly, AI-readable.
   </Card>
-  <Card title="Static site" icon="rocket">
-    Builds to pure static HTML with Astro. Deploy anywhere: GitHub Pages, S3, Netlify, or behind your VPN. No servers, no databases.
+  <Card title="Deploy anywhere" icon="rocket">
+    Builds to pure static HTML. GitHub Pages, S3, Firebase, Netlify, or behind your VPN. No servers, no databases, no runtime dependencies.
   </Card>
-  <Card title="Interactive graphs" icon="random">
-    Dependency graphs powered by React Flow with automatic dagre layout. Search, filter, export to PNG.
-  </Card>
+</CardGrid>
+
+---
+
+## Explore the docs
+
+<CardGrid>
+  <LinkCard title="Introduction" description="What it is and why it exists" href="/getting-started/introduction/" />
+  <LinkCard title="Features" description="Dashboard, context maps, event flows, diagrams" href="/features/dashboard/" />
+  <LinkCard title="Modeling guide" description="Schema, elements, relationships, domains" href="/modeling/registry-mapping/" />
+  <LinkCard title="Deployment" description="Build, preview, and deploy to any static host" href="/deployment/build-and-deploy/" />
 </CardGrid>

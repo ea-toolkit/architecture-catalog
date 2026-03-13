@@ -41,11 +41,17 @@ The catalog works with any architecture vocabulary: ArchiMate, TOGAF, C4, or you
 
 ## What you get
 
-- **Dashboard** with model-wide statistics and domain health scores
-- **Domain overview** pages with elements grouped by type
+- **[Dashboard](/features/dashboard/)** with domain cards, model-wide statistics, and dark/light theme
+- **[Domain overview](/features/domain-overview/)** pages with elements grouped by type
 - **Element detail** pages with metadata, relationships, and rich Markdown documentation
-- **Interactive context graphs** with search, filter, and PNG export
+- **[Context maps](/features/context-map/)** — interactive dependency graphs with search, filter, focus mode, and PNG export
+- **[Event flow maps](/features/event-flow/)** — animated publish/consume diagrams showing how events flow between services
+- **[Diagrams](/features/diagrams/)** — PlantUML, BPMN, and draw.io rendered inline
 - **Discover page** for searching and filtering across the entire catalog
+
+:::tip[See it live]
+Check out the demo at [architecture-catalog.web.app](https://architecture-catalog.web.app) — 6 domains, 180+ entities, fully interactive.
+:::
 
 ## Next steps
 
