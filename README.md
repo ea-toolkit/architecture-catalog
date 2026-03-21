@@ -4,15 +4,22 @@
   <img src="https://img.shields.io/badge/License-MIT-green?logo=opensourceinitiative&logoColor=white" alt="MIT" />
   <img src="https://img.shields.io/badge/Schema_Driven-YAML-blue" alt="Schema Driven" />
   <a href="https://architecture-catalog.web.app"><img src="https://img.shields.io/badge/Live_Demo-architecture--catalog.web.app-black?logo=firebase&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://docs-architecture-catalog.web.app"><img src="https://img.shields.io/badge/Docs-docs--architecture--catalog.web.app-blue?logo=readthedocs&logoColor=white" alt="Documentation" /></a>
 </p>
 
 # Architecture Catalog
 
 **A schema-driven, white-label architecture catalog that turns Markdown files into a beautiful, interactive static site.**
 
-> **[Live Demo](https://architecture-catalog.web.app)** — explore a sample catalog with 3 domains and 100+ elements.
+<p align="center">
+  <img src="docs-site/public/videos/homepage-demo.gif" alt="Architecture Catalog Demo" width="800" />
+</p>
 
-Model your enterprise architecture using plain Markdown files with YAML frontmatter, define your schema in a single YAML mapping, and get a fully navigable catalog — dashboards, domain maps, element details, context graphs, and health scores — with zero custom code.
+> **[Live Demo](https://architecture-catalog.web.app)** — explore a sample catalog with 6 domains and 180+ entities.
+>
+> **[Documentation](https://docs-architecture-catalog.web.app)** — getting started, features, modeling guide, and deployment.
+
+Model your enterprise architecture using plain Markdown files with YAML frontmatter, define your schema in a single YAML mapping, and get a fully navigable catalog — dashboards, domain maps, element details, context graphs, event flows, and health scores — with zero custom code.
 
 ## Quick Start
 
@@ -41,34 +48,30 @@ No databases, no servers, no vendor lock-in. Just files, Git, and a build step.
 
 ## Features
 
-- **Dashboard** — element counts, domain cards, health scores, enrichment metrics
-- **Domain overview** — elements grouped by type, relationship tables, maturity badges
-- **Element detail** — metadata card, relationship tables, rich Markdown documentation
-- **Context graphs** — interactive dependency graphs with React Flow + dagre auto-layout
+- **Dashboard** — domain cards with hover stats, element counts, dark/light theme
+- **Domain overview** — elements grouped by type, maturity badges, relationship tables
+- **Element detail** — metadata card, outgoing/incoming relationships, rich Markdown docs
+- **Context maps** — interactive dependency graphs with search, filter, focus mode, PNG export
+- **Event flow maps** — animated publish/consume diagrams with cross-domain connections
+- **Diagrams** — PlantUML, BPMN, and draw.io rendered inline with zoom and source view
 - **Discover** — search and filter across the entire catalog
-- **White-label** — change three lines of YAML to brand it as your own
+- **White-label** — change a few lines of YAML to brand it as your own
 - **Vocabulary-agnostic** — works with ArchiMate, TOGAF, C4, or any custom vocabulary
+- **Dark mode** — default dark theme with toggle, consistent across all views
 
 ## Documentation
 
-Full documentation is available in the [docs site](docs-site/):
-
-```bash
-cd docs-site
-npm install
-npm run dev
-# → Open http://localhost:4321
-```
+Full documentation with demo videos: **[docs-architecture-catalog.web.app](https://docs-architecture-catalog.web.app)**
 
 | Section | What you'll find |
 |---------|-----------------|
-| [Getting Started](docs-site/src/content/docs/getting-started/) | Installation, project structure |
-| [Modeling](docs-site/src/content/docs/modeling/) | Registry mapping, elements, relationships, domains |
-| [Configuration](docs-site/src/content/docs/configuration/) | YAML reference, branding, layers & types |
-| [Architecture](docs-site/src/content/docs/architecture/) | How it works, data pipeline, extending the UI |
-| [Tools](docs-site/src/content/docs/tools/) | Validation, dashboard generator, Claude skills |
-| [Deployment](docs-site/src/content/docs/deployment/) | GitHub Pages, Docker, static hosting |
-| [Contributing](docs-site/src/content/docs/contributing/) | Dev setup, conventions, PR workflow |
+| [Getting Started](https://docs-architecture-catalog.web.app/getting-started/introduction/) | Installation, project structure, 5-minute quickstart |
+| [Features](https://docs-architecture-catalog.web.app/features/dashboard/) | Dashboard, context maps, event flows, diagrams — with videos |
+| [Modeling](https://docs-architecture-catalog.web.app/modeling/registry-mapping/) | Registry mapping, elements, relationships, domains |
+| [Configuration](https://docs-architecture-catalog.web.app/configuration/mapping-reference/) | YAML reference, branding, layers & types |
+| [Architecture](https://docs-architecture-catalog.web.app/architecture/how-it-works/) | How it works, data pipeline, extending the UI |
+| [Tools](https://docs-architecture-catalog.web.app/tools/validation/) | Validation, dashboard generator, Claude skills |
+| [Deployment](https://docs-architecture-catalog.web.app/deployment/build-and-deploy/) | Firebase, GitHub Pages, Docker, static hosting |
 
 ## Contributing
 
@@ -78,7 +81,7 @@ git checkout -b feat/my-feature
 cd catalog-ui && npm run build   # Validate
 ```
 
-See the [contributing guide](docs-site/src/content/docs/contributing/how-to-contribute.md) for full details.
+See the [contributing guide](https://docs-architecture-catalog.web.app/contributing/how-to-contribute/) for full details.
 
 ## Acknowledgements
 
