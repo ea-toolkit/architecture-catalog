@@ -5,7 +5,7 @@ description: Visualize event publish/consume flows across your domain.
 
 The event flow map shows how domain events flow between services — who publishes, who consumes, and the events in between.
 
-<!-- VIDEO: #4 Event Flow Map — open event flow, show animated edges, hover nodes, export PNG (30s) -->
+<video src="/videos/Event_Flow.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
 
 ## How it works
 
