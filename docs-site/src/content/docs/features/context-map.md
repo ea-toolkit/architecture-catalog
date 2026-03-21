@@ -5,7 +5,7 @@ description: Interactive domain dependency graphs with search, filter, and focus
 
 The domain context map is an interactive graph showing all elements in a domain and their relationships. It's powered by [React Flow](https://reactflow.dev) with automatic [dagre](https://github.com/dagrejs/dagre) layout.
 
-<!-- VIDEO: #3 Domain Context Map — open context map, zoom/pan, search, toggle legend, focus mode (45s) -->
+<video src="/videos/Context_Map.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
 
 ## Layout
 

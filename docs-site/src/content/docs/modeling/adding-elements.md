@@ -5,6 +5,8 @@ description: Create architecture elements as Markdown files.
 
 Each architecture element is a Markdown file with YAML frontmatter. The frontmatter contains structured metadata; the body is free-form documentation.
 
+<video src="/videos/Registry_File.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
+
 ## Create your first element
 
 1. Find the right folder for the element type (defined in `registry-mapping.yaml`)

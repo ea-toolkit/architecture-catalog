@@ -3,7 +3,11 @@ title: Registry Mapping
 description: The single YAML file that drives everything.
 ---
 
-`models/registry-mapping.yaml` is the single source of truth for the entire catalog. It declares:
+`models/registry-mapping.yaml` is the single source of truth for the entire catalog.
+
+<video src="/videos/registry_mapping_yaml.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
+
+It declares:
 
 - **Site branding** — name, description, logo
 - **Layers** — groupings with colors

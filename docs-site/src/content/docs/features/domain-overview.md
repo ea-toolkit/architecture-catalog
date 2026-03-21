@@ -5,7 +5,7 @@ description: Drill into a domain to see all its elements, grouped by type.
 
 Each domain has a dedicated overview page at `/domains/<domain-slug>/`. It shows all elements belonging to that domain, grouped by their element type.
 
-<!-- VIDEO: #2 Domain deep-dive — click a domain, show element list, click into element detail, show relationships (45s) -->
+<video src="/videos/Domain_Deep_dive.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
 
 ## How to get there
 

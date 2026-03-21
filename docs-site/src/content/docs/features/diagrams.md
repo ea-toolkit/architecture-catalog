@@ -5,7 +5,7 @@ description: View PlantUML, BPMN, and draw.io diagrams inline in the catalog.
 
 The catalog includes a diagram viewer that renders PlantUML, BPMN, and draw.io diagrams directly in the browser. Diagrams are organized by domain and displayed on the `/diagrams` page.
 
-<!-- VIDEO: #5 Diagrams — open diagrams page, view PlantUML, zoom, view source, switch to BPMN (30s) -->
+<video src="/videos/Diagrams.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
 
 ## Supported formats
 

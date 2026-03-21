@@ -5,7 +5,7 @@ description: The homepage dashboard with domain cards, stats, and quick navigati
 
 The dashboard is the landing page of your architecture catalog. It provides a high-level overview of your entire architecture model.
 
-<!-- VIDEO: #1 Homepage overview — open the app, dark mode, hover domain cards, scroll stats (30s) -->
+<video src="/videos/Homepage_Overview.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
 
 ## What you see
 
@@ -51,4 +51,4 @@ See [Site Branding](/configuration/branding/) for the full reference.
 
 The catalog defaults to dark mode with a toggle button in the sidebar icon bar. Theme preference is saved to localStorage and persists across sessions. The toggle also respects the system's `prefers-color-scheme` setting on first visit.
 
-<!-- VIDEO: #6 Dark/Light toggle — toggle theme back and forth on a context map page (15s) -->
+<video src="/videos/Toggle.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>

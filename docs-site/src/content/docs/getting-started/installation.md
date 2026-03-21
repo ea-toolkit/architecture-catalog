@@ -46,7 +46,7 @@ npm run dev
 
 Open [http://localhost:4321](http://localhost:4321). You should see the dashboard with 6 sample domains including Customer Management, Billing & Payments, Analytics & Insights, Integration & Connectivity, Security & Compliance, and Platform Operations.
 
-<!-- VIDEO: #1 Homepage overview — open the app, dark mode, hover domain cards, scroll stats (30s) -->
+<video src="/videos/Homepage_Overview.mp4" controls muted playsinline style="width:100%;border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1rem 0"></video>
 
 ## Brand it for your organization
 
