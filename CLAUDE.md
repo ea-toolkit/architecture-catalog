@@ -198,6 +198,12 @@ Maps are analytical views that consume registry data. They are a **separate laye
 
 ---
 
+## Content & Marketing
+
+**Do NOT create blog posts, social media drafts, or content schedules in this repo.** All content is managed in the `media-manager` repo (`/Users/raj.navakoti/Desktop/github/media-manager/`). Use media-manager's content-writer agent for drafting. The `content/` and `media/` folders here are gitignored local scratch space only.
+
+---
+
 ## Development Principles
 
 - Build incrementally — 1% at a time, prove each piece works
