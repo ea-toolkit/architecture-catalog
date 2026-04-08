@@ -4,9 +4,10 @@ import { domains, graph } from '../../data/registry';
 import { deriveCrossDomainEdges } from '../../lib/cross-domain';
 import CrossDomainMap from '../../components/graphs/CrossDomainMap';
 
-// Derive cross-domain edges at build time
+// Derive cross-domain integration dependencies at build time
 const crossDomainEdges = graph ? deriveCrossDomainEdges(graph) : [];
-const totalCrossDomainRels = crossDomainEdges.reduce((sum, e) => sum + e.weight, 0);
+const totalIntegrations = crossDomainEdges.reduce((sum, e) => sum + e.totalWeight, 0);
+const domainPairs = crossDomainEdges.length;
 ---
 
 <Layout title="Architecture Landscape">
@@ -30,7 +31,9 @@ const totalCrossDomainRels = crossDomainEdges.reduce((sum, e) => sum + e.weight,
       <div class="landscape-header-right">
         <span class="landscape-stat">{domains.length} domains</span>
         <span class="landscape-stat-sep">&middot;</span>
-        <span class="landscape-stat">{totalCrossDomainRels} cross-domain relationships</span>
+        <span class="landscape-stat">{domainPairs} domain connections</span>
+        <span class="landscape-stat-sep">&middot;</span>
+        <span class="landscape-stat">{totalIntegrations} integration dependencies</span>
       </div>
     </div>
 
@@ -43,7 +46,7 @@ const totalCrossDomainRels = crossDomainEdges.reduce((sum, e) => sum + e.weight,
     </div>
 
     <div class="landscape-footer">
-      <p>Click any domain to drill into its context map. Edge labels show the number of element-level relationships between domains.</p>
+      <p>Click any domain to drill into its context map. Edges show integration patterns (API, Events, Data, Service). Hover edge labels for details. Structural relationships (composition, aggregation) are excluded.</p>
     </div>
   </div>
 </Layout>

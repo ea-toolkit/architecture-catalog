@@ -1,21 +1,68 @@
 // catalog-ui/src/lib/cross-domain.ts
-// Derives domain-to-domain relationships from element-level edges.
+// Derives domain-to-domain integration dependencies from element-level edges.
 // Used by the Architecture Landscape page to show how domains interconnect.
+//
+// This is a MAP view (tier 2) — intentionally type-aware.
+// At the cross-domain level, architects care about integration patterns:
+//   - API dependencies (who calls whose APIs)
+//   - Event coupling (who consumes whose events)
+//   - Data dependencies (who accesses whose data)
+//   - Shared infrastructure (who shares tech components)
+//
+// Structural relationships (composition, aggregation) are filtered out
+// because they describe internal hierarchy, not cross-domain integration.
 
 import type { RegistryGraph } from './types';
 
+/** A meaningful integration dependency between two domains */
 export interface CrossDomainEdge {
   sourceDomain: string;
   targetDomain: string;
-  weight: number;
-  /** Relationship types with their counts, sorted by count desc */
-  typeCounts: { type: string; count: number }[];
+  /** Integration patterns found between these domains */
+  integrations: IntegrationPattern[];
+  /** Total element-level edges contributing to this domain link */
+  totalWeight: number;
 }
 
+export interface IntegrationPattern {
+  /** Human-readable category: "API", "Events", "Data", "Service" */
+  category: string;
+  /** Number of element-level edges in this category */
+  count: number;
+  /** Icon for the category */
+  icon: string;
+}
+
+// ── Integration classification ──────────────────────────────
+// Maps element types involved in cross-domain edges to meaningful categories.
+// Structural relationships (composition, aggregation) are excluded
+// because they don't represent cross-domain integration.
+
+const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
+  'composition', 'aggregation',
+]);
+
+// Classify by the TARGET element type — "what is being depended on?"
+const TARGET_TYPE_TO_CATEGORY: Record<string, { category: string; icon: string }> = {
+  api_contract:    { category: 'API', icon: '🔌' },
+  api_endpoint:    { category: 'API', icon: '🔌' },
+  domain_event:    { category: 'Events', icon: '⚡' },
+  data_concept:    { category: 'Data', icon: '📊' },
+  data_aggregate:  { category: 'Data', icon: '📊' },
+  data_entity:     { category: 'Data', icon: '📊' },
+  software_system: { category: 'Service', icon: '⬡' },
+  software_subsystem: { category: 'Service', icon: '⬡' },
+  component:       { category: 'Service', icon: '⬡' },
+  infra_node:      { category: 'Infrastructure', icon: '🖥️' },
+  cloud_service:   { category: 'Infrastructure', icon: '☁️' },
+};
+
+const DEFAULT_CATEGORY = { category: 'Dependency', icon: '→' };
+
 /**
- * Walk all element-level edges and aggregate into domain-to-domain edges.
- * If element A (in domain X) has a relationship to element B (in domain Y),
- * that produces a domain-level edge X → Y with weight = number of such element edges.
+ * Derive meaningful cross-domain integration dependencies.
+ * Filters out internal structural relationships and categorizes
+ * the remaining edges by integration pattern.
  */
 export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] {
   // Build element ID → domain slug lookup
@@ -27,10 +74,13 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     }
   });
 
-  // Aggregate cross-domain edges with per-type counts
-  const edgeMap = new Map<string, Map<string, number>>();
+  // Aggregate cross-domain edges by domain pair + category
+  const edgeMap = new Map<string, Map<string, { category: string; icon: string; count: number }>>();
 
   for (const edge of graph.edges) {
+    // Skip structural relationships — not meaningful at cross-domain level
+    if (STRUCTURAL_RELATIONSHIP_TYPES.has(edge.relationshipType)) continue;
+
     const sourceDomain = elementToDomain.get(edge.sourceId);
     const targetDomain = elementToDomain.get(edge.targetId);
 
@@ -38,30 +88,37 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     if (sourceDomain === targetDomain) continue;
 
     const key = `${sourceDomain}--${targetDomain}`;
-    let typeCounts = edgeMap.get(key);
-    if (!typeCounts) {
-      typeCounts = new Map<string, number>();
-      edgeMap.set(key, typeCounts);
+    let categories = edgeMap.get(key);
+    if (!categories) {
+      categories = new Map();
+      edgeMap.set(key, categories);
     }
-    typeCounts.set(edge.relationshipType, (typeCounts.get(edge.relationshipType) || 0) + 1);
+
+    // Classify by target element type
+    const targetEl = graph.elements.get(edge.targetId);
+    const targetType = targetEl?.elementType || '';
+    const classification = TARGET_TYPE_TO_CATEGORY[targetType] || DEFAULT_CATEGORY;
+
+    const existing = categories.get(classification.category);
+    if (existing) {
+      existing.count++;
+    } else {
+      categories.set(classification.category, { ...classification, count: 1 });
+    }
   }
 
-  // Convert to array, sorted by total weight descending
+  // Convert to array
   const result: CrossDomainEdge[] = [];
-  Array.from(edgeMap.entries()).forEach(([key, typeCounts]) => {
+  Array.from(edgeMap.entries()).forEach(([key, categories]) => {
     const [sourceDomain, targetDomain] = key.split('--');
-    const counts = Array.from(typeCounts.entries())
-      .map(([type, count]) => ({ type, count }))
+    const integrations = Array.from(categories.values())
       .sort((a, b) => b.count - a.count);
-    const weight = counts.reduce((sum, c) => sum + c.count, 0);
+    const totalWeight = integrations.reduce((sum, i) => sum + i.count, 0);
 
-    result.push({
-      sourceDomain,
-      targetDomain,
-      weight,
-      typeCounts: counts,
-    });
+    if (totalWeight > 0) {
+      result.push({ sourceDomain, targetDomain, integrations, totalWeight });
+    }
   });
 
-  return result.sort((a, b) => b.weight - a.weight);
+  return result.sort((a, b) => b.totalWeight - a.totalWeight);
 }

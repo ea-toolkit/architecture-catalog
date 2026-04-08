@@ -24,7 +24,7 @@ import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import { applyDagreLayout } from './utils/layout';
 import { buildCrossDomainGraph } from './utils/cross-domain-graph-data';
 import type { Domain } from '../../data/registry';
-import type { CrossDomainEdge } from '../../lib/cross-domain';
+import type { CrossDomainEdge, IntegrationPattern } from '../../lib/cross-domain';
 
 const nodeTypes = { baseNode: BaseNode };
 const edgeTypes = { relationshipEdge: RelationshipEdge };
@@ -103,6 +103,19 @@ function CrossDomainMapInner({ domains, crossDomainEdges }: CrossDomainMapProps)
     }));
   }, [domains]);
 
+  // Integration category legend — deduplicate from all edges
+  const integrationCategories = useMemo(() => {
+    const seen = new Map<string, IntegrationPattern>();
+    for (const edge of crossDomainEdges) {
+      for (const integration of edge.integrations) {
+        if (!seen.has(integration.category)) {
+          seen.set(integration.category, integration);
+        }
+      }
+    }
+    return Array.from(seen.values());
+  }, [crossDomainEdges]);
+
   if (!isLayoutReady) {
     return (
       <div style={{ width: '100%', height: '100%', minHeight: 400, background: '#fafafa', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
@@ -172,9 +185,23 @@ function CrossDomainMapInner({ domains, crossDomainEdges }: CrossDomainMapProps)
                 </div>
               ))}
             </div>
+            {integrationCategories.length > 0 && (
+              <>
+                <div className="graph-panel-divider" />
+                <div className="graph-panel-heading">Integration Types</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  {integrationCategories.map(cat => (
+                    <div key={cat.category} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ fontSize: 12, width: 16, textAlign: 'center' }}>{cat.icon}</span>
+                      <span className="graph-panel-label">{cat.category}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             <div className="graph-panel-divider" />
             <div style={{ fontSize: 10, color: 'var(--graph-panel-muted, #94a3b8)' }}>
-              {crossDomainEdges.length} cross-domain connections
+              {crossDomainEdges.length} domain connections
             </div>
           </div>
         </Panel>
