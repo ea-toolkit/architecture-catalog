@@ -12,6 +12,19 @@ import { domains, eventMappingEnabled, heatmapMappingEnabled } from '../../data/
   </div>
 
   <div class="page-body">
+    <!-- Cross-domain landscape link -->
+    <a href="/maps/landscape" class="card" style="display: block; padding: 20px; border-top: 3px solid #6366f1; margin-bottom: 16px; text-decoration: none; color: inherit; transition: border-color 0.15s;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        <h3 style="font-size: 15px; font-weight: 600; margin: 0; color: rgb(var(--ec-page-text));">Architecture Landscape</h3>
+      </div>
+      <p style="font-size: 13px; color: rgb(var(--ec-page-text-muted)); margin: 0;">Cross-domain view showing how all domains relate to each other at the highest level</p>
+    </a>
+
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
       {domains.map(d => (
         <div class="card" style={`padding: 20px; border-top: 3px solid ${d.color};`}>

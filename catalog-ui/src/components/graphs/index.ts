@@ -2,6 +2,7 @@
 // Export all graph components
 
 export { default as DomainContextMap } from './DomainContextMap';
+export { default as CrossDomainMap } from './CrossDomainMap';
 export { default as ElementContextGraph } from './ElementContextGraph';
 export { default as BaseNode } from './nodes/BaseNode';
 export { default as RelationshipEdge, EdgeMarkerDefs } from './edges/RelationshipEdge';
@@ -9,5 +10,6 @@ export { default as RelationshipEdge, EdgeMarkerDefs } from './edges/Relationshi
 // Utils
 export { applyDagreLayout, getGraphBounds } from './utils/layout';
 export { buildDomainGraph, buildFocusGraph, buildElementGraph } from './utils/graph-data';
+export { buildCrossDomainGraph } from './utils/cross-domain-graph-data';
 export { NODE_STYLES, EDGE_STYLES, getNodeStyle, getEdgeStyle } from './utils/colors';
 export type { NodeStyle, EdgeStyle } from './utils/colors';
