@@ -9,12 +9,12 @@ import { NODE_STYLES } from './colors';
 
 /**
  * Build edge label from integration patterns.
- * Shows icons + categories: "🔌 API (5)  ⚡ Events (3)"
+ * Shows categories with counts: "API (5) · Events (3)"
  */
 function buildEdgeLabel(edge: CrossDomainEdge): string {
   return edge.integrations
-    .map(i => `${i.icon} ${i.category} (${i.count})`)
-    .join('  ');
+    .map(i => `${i.category} (${i.count})`)
+    .join(' · ');
 }
 
 /**
@@ -22,7 +22,7 @@ function buildEdgeLabel(edge: CrossDomainEdge): string {
  */
 function buildEdgeTooltip(edge: CrossDomainEdge): string {
   const lines = edge.integrations.map(i =>
-    `${i.icon} ${i.category}: ${i.count} element-level dependencies`
+    `${i.category}: ${i.count} dependencies`
   );
   lines.push('');
   lines.push(`Total: ${edge.totalWeight} integration dependencies`);

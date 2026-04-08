@@ -24,10 +24,29 @@ import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import { applyDagreLayout } from './utils/layout';
 import { buildCrossDomainGraph } from './utils/cross-domain-graph-data';
 import type { Domain } from '../../data/registry';
-import type { CrossDomainEdge, IntegrationPattern } from '../../lib/cross-domain';
+import type { CrossDomainEdge } from '../../lib/cross-domain';
 
 const nodeTypes = { baseNode: BaseNode };
 const edgeTypes = { relationshipEdge: RelationshipEdge };
+
+// SVG icons for integration categories — matches the app's inline SVG style
+function IntegrationIcon({ category }: { category: string }) {
+  const style = { width: 14, height: 14, flexShrink: 0 as const, color: 'var(--graph-panel-text, #475569)' };
+  switch (category) {
+    case 'API':
+      return <svg {...style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16v16H4z" /><path d="M4 9h16" /><path d="M9 4v16" /></svg>;
+    case 'Events':
+      return <svg {...style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>;
+    case 'Data':
+      return <svg {...style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" /><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" /></svg>;
+    case 'Service':
+      return <svg {...style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>;
+    case 'Infrastructure':
+      return <svg {...style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="8" rx="2" /><rect x="2" y="14" width="20" height="8" rx="2" /><line x1="6" y1="6" x2="6.01" y2="6" /><line x1="6" y1="18" x2="6.01" y2="18" /></svg>;
+    default:
+      return <svg {...style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></svg>;
+  }
+}
 
 interface CrossDomainMapProps {
   domains: Domain[];
@@ -105,15 +124,17 @@ function CrossDomainMapInner({ domains, crossDomainEdges }: CrossDomainMapProps)
 
   // Integration category legend — deduplicate from all edges
   const integrationCategories = useMemo(() => {
-    const seen = new Map<string, IntegrationPattern>();
+    const seen = new Set<string>();
+    const categories: string[] = [];
     for (const edge of crossDomainEdges) {
       for (const integration of edge.integrations) {
         if (!seen.has(integration.category)) {
-          seen.set(integration.category, integration);
+          seen.add(integration.category);
+          categories.push(integration.category);
         }
       }
     }
-    return Array.from(seen.values());
+    return categories;
   }, [crossDomainEdges]);
 
   if (!isLayoutReady) {
@@ -191,9 +212,9 @@ function CrossDomainMapInner({ domains, crossDomainEdges }: CrossDomainMapProps)
                 <div className="graph-panel-heading">Integration Types</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {integrationCategories.map(cat => (
-                    <div key={cat.category} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: 12, width: 16, textAlign: 'center' }}>{cat.icon}</span>
-                      <span className="graph-panel-label">{cat.category}</span>
+                    <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <IntegrationIcon category={cat} />
+                      <span className="graph-panel-label">{cat}</span>
                     </div>
                   ))}
                 </div>

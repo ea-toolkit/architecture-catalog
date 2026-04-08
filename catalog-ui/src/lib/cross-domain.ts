@@ -29,8 +29,6 @@ export interface IntegrationPattern {
   category: string;
   /** Number of element-level edges in this category */
   count: number;
-  /** Icon for the category */
-  icon: string;
 }
 
 // ── Integration classification ──────────────────────────────
@@ -43,21 +41,21 @@ const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
 ]);
 
 // Classify by the TARGET element type — "what is being depended on?"
-const TARGET_TYPE_TO_CATEGORY: Record<string, { category: string; icon: string }> = {
-  api_contract:    { category: 'API', icon: '🔌' },
-  api_endpoint:    { category: 'API', icon: '🔌' },
-  domain_event:    { category: 'Events', icon: '⚡' },
-  data_concept:    { category: 'Data', icon: '📊' },
-  data_aggregate:  { category: 'Data', icon: '📊' },
-  data_entity:     { category: 'Data', icon: '📊' },
-  software_system: { category: 'Service', icon: '⬡' },
-  software_subsystem: { category: 'Service', icon: '⬡' },
-  component:       { category: 'Service', icon: '⬡' },
-  infra_node:      { category: 'Infrastructure', icon: '🖥️' },
-  cloud_service:   { category: 'Infrastructure', icon: '☁️' },
+const TARGET_TYPE_TO_CATEGORY: Record<string, { category: string }> = {
+  api_contract:       { category: 'API' },
+  api_endpoint:       { category: 'API' },
+  domain_event:       { category: 'Events' },
+  data_concept:       { category: 'Data' },
+  data_aggregate:     { category: 'Data' },
+  data_entity:        { category: 'Data' },
+  software_system:    { category: 'Service' },
+  software_subsystem: { category: 'Service' },
+  component:          { category: 'Service' },
+  infra_node:         { category: 'Infrastructure' },
+  cloud_service:      { category: 'Infrastructure' },
 };
 
-const DEFAULT_CATEGORY = { category: 'Dependency', icon: '→' };
+const DEFAULT_CATEGORY = { category: 'Dependency' };
 
 /**
  * Derive meaningful cross-domain integration dependencies.
@@ -75,7 +73,7 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
   });
 
   // Aggregate cross-domain edges by domain pair + category
-  const edgeMap = new Map<string, Map<string, { category: string; icon: string; count: number }>>();
+  const edgeMap = new Map<string, Map<string, { category: string; count: number }>>();
 
   for (const edge of graph.edges) {
     // Skip structural relationships — not meaningful at cross-domain level
@@ -103,7 +101,7 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     if (existing) {
       existing.count++;
     } else {
-      categories.set(classification.category, { ...classification, count: 1 });
+      categories.set(classification.category, { category: classification.category, count: 1 });
     }
   }
 
