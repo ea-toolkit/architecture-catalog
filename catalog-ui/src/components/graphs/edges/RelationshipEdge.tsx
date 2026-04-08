@@ -12,6 +12,10 @@ import { getEdgeStyle } from '../utils/colors';
 
 export interface RelationshipEdgeData {
   relationship: string;
+  /** Custom label override — if set, takes priority over the style-derived label */
+  label?: string;
+  /** Tooltip text shown on hover */
+  tooltip?: string;
   showLabel?: boolean;
 }
 
@@ -30,6 +34,9 @@ export default function RelationshipEdge({
   const relationship = edgeData?.relationship || 'default';
   const style = getEdgeStyle(relationship);
   const showLabel = edgeData?.showLabel !== false;
+  // Custom label from data takes priority over style-derived label
+  const displayLabel = edgeData?.label || style.label;
+  const tooltip = edgeData?.tooltip;
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -52,9 +59,10 @@ export default function RelationshipEdge({
         }}
         markerEnd="url(#arrowhead)"
       />
-      {showLabel && style.label && (
+      {showLabel && displayLabel && (
         <EdgeLabelRenderer>
           <div
+            title={tooltip}
             style={{
               position: 'absolute',
               transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
@@ -65,12 +73,13 @@ export default function RelationshipEdge({
               fontWeight: 500,
               color: 'var(--edge-label-text, #475569)',
               border: '1px solid var(--edge-label-border, #cbd5e1)',
-              pointerEvents: 'none',
+              pointerEvents: tooltip ? 'auto' : 'none',
               whiteSpace: 'nowrap',
               boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+              cursor: tooltip ? 'help' : 'default',
             }}
           >
-            {style.label}
+            {displayLabel}
           </div>
         </EdgeLabelRenderer>
       )}

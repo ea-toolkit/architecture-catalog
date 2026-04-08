@@ -8,7 +8,8 @@ export interface CrossDomainEdge {
   sourceDomain: string;
   targetDomain: string;
   weight: number;
-  relationshipTypes: string[];
+  /** Relationship types with their counts, sorted by count desc */
+  typeCounts: { type: string; count: number }[];
 }
 
 /**
@@ -26,8 +27,8 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     }
   });
 
-  // Aggregate cross-domain edges
-  const edgeMap = new Map<string, { weight: number; types: Set<string> }>();
+  // Aggregate cross-domain edges with per-type counts
+  const edgeMap = new Map<string, Map<string, number>>();
 
   for (const edge of graph.edges) {
     const sourceDomain = elementToDomain.get(edge.sourceId);
@@ -37,24 +38,28 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     if (sourceDomain === targetDomain) continue;
 
     const key = `${sourceDomain}--${targetDomain}`;
-    const existing = edgeMap.get(key);
-    if (existing) {
-      existing.weight++;
-      existing.types.add(edge.relationshipType);
-    } else {
-      edgeMap.set(key, { weight: 1, types: new Set([edge.relationshipType]) });
+    let typeCounts = edgeMap.get(key);
+    if (!typeCounts) {
+      typeCounts = new Map<string, number>();
+      edgeMap.set(key, typeCounts);
     }
+    typeCounts.set(edge.relationshipType, (typeCounts.get(edge.relationshipType) || 0) + 1);
   }
 
-  // Convert to array, sorted by weight descending
+  // Convert to array, sorted by total weight descending
   const result: CrossDomainEdge[] = [];
-  Array.from(edgeMap.entries()).forEach(([key, value]) => {
+  Array.from(edgeMap.entries()).forEach(([key, typeCounts]) => {
     const [sourceDomain, targetDomain] = key.split('--');
+    const counts = Array.from(typeCounts.entries())
+      .map(([type, count]) => ({ type, count }))
+      .sort((a, b) => b.count - a.count);
+    const weight = counts.reduce((sum, c) => sum + c.count, 0);
+
     result.push({
       sourceDomain,
       targetDomain,
-      weight: value.weight,
-      relationshipTypes: Array.from(value.types),
+      weight,
+      typeCounts: counts,
     });
   });
 

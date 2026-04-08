@@ -8,6 +8,38 @@ import type { CrossDomainEdge } from '../../../lib/cross-domain';
 import { NODE_STYLES } from './colors';
 
 /**
+ * Build a readable label for the edge showing top relationship types.
+ * e.g., "serves (5), accesses (3)" or "14 relationships" for many types
+ */
+function buildEdgeLabel(edge: CrossDomainEdge): string {
+  const counts = edge.typeCounts;
+  if (counts.length <= 2) {
+    // Show all types with counts
+    return counts
+      .map(c => `${c.type.replace(/-/g, ' ')} (${c.count})`)
+      .join(', ');
+  }
+  // Show top 2 types + remaining count
+  const top = counts.slice(0, 2);
+  const rest = edge.weight - top.reduce((s, c) => s + c.count, 0);
+  const label = top.map(c => `${c.type.replace(/-/g, ' ')} (${c.count})`).join(', ');
+  return rest > 0 ? `${label} +${rest} more` : label;
+}
+
+/**
+ * Build a tooltip showing the full breakdown of relationship types.
+ * e.g., "serves: 5\naccesses: 3\ncomposition: 2"
+ */
+function buildEdgeTooltip(edge: CrossDomainEdge): string {
+  const lines = edge.typeCounts.map(c =>
+    `${c.type.replace(/-/g, ' ')}: ${c.count}`
+  );
+  lines.push(`─────────`);
+  lines.push(`Total: ${edge.weight} relationships`);
+  return lines.join('\n');
+}
+
+/**
  * Build ReactFlow graph showing domains as nodes and inter-domain
  * relationships as weighted edges.
  */
@@ -18,7 +50,7 @@ export function buildCrossDomainGraph(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Domain nodes — larger than element nodes, using domain style
+  // Domain nodes — using domain style with per-domain color
   const domainStyle = NODE_STYLES['domain'] ?? {
     bg: '#eff6ff', border: '#3b82f6', text: '#1e40af',
     borderStyle: 'solid', borderRadius: '12px', icon: 'D',
@@ -40,12 +72,9 @@ export function buildCrossDomainGraph(
     });
   }
 
-  // Cross-domain edges with weight labels
+  // Cross-domain edges with descriptive labels and tooltips
   for (const edge of crossDomainEdges) {
     const edgeId = `${edge.sourceDomain}--${edge.targetDomain}`;
-    const label = edge.weight === 1
-      ? '1 relationship'
-      : `${edge.weight} relationships`;
 
     edges.push({
       id: edgeId,
@@ -55,7 +84,8 @@ export function buildCrossDomainGraph(
       animated: true,
       data: {
         relationship: 'cross-domain',
-        label,
+        label: buildEdgeLabel(edge),
+        tooltip: buildEdgeTooltip(edge),
       },
     });
   }
