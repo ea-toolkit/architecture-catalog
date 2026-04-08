@@ -43,21 +43,29 @@ const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
 ]);
 
 // Classify by the TARGET element type — "what is being depended on?"
+// Simplified to 3 categories architects actually think in:
+//   API Integration — calls to another domain's APIs
+//   Event Coupling  — consuming another domain's events
+//   Data Access     — depending on another domain's data
+// Everything else (services, components, infra, domains) maps to
+// "API Integration" because at the cross-domain level, if you depend
+// on another domain's service/component, you're going through its API.
 const TARGET_TYPE_TO_CATEGORY: Record<string, { category: string }> = {
-  api_contract:       { category: 'API' },
-  api_endpoint:       { category: 'API' },
-  domain_event:       { category: 'Events' },
-  data_concept:       { category: 'Data' },
-  data_aggregate:     { category: 'Data' },
-  data_entity:        { category: 'Data' },
-  software_system:    { category: 'Service' },
-  software_subsystem: { category: 'Service' },
-  component:          { category: 'Service' },
-  infra_node:         { category: 'Infrastructure' },
-  cloud_service:      { category: 'Infrastructure' },
+  api_contract:       { category: 'API Integration' },
+  api_endpoint:       { category: 'API Integration' },
+  software_system:    { category: 'API Integration' },
+  software_subsystem: { category: 'API Integration' },
+  component:          { category: 'API Integration' },
+  domain_event:       { category: 'Event Coupling' },
+  data_concept:       { category: 'Data Access' },
+  data_aggregate:     { category: 'Data Access' },
+  data_entity:        { category: 'Data Access' },
+  infra_node:         { category: 'Shared Infrastructure' },
+  cloud_service:      { category: 'Shared Infrastructure' },
 };
 
-const DEFAULT_CATEGORY = { category: 'Dependency' };
+// Domain-level references are not meaningful integration — skip them
+const SKIP_TARGET_TYPES = new Set(['domain']);
 
 /**
  * Derive meaningful cross-domain integration dependencies.
@@ -98,7 +106,12 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     const targetEl = graph.elements.get(edge.targetId);
     const targetType = targetEl?.elementType || '';
     const targetName = (targetEl?.fields.name as string) || edge.targetId;
-    const classification = TARGET_TYPE_TO_CATEGORY[targetType] || DEFAULT_CATEGORY;
+
+    // Skip domain-level references — not meaningful integration
+    if (SKIP_TARGET_TYPES.has(targetType)) continue;
+
+    const classification = TARGET_TYPE_TO_CATEGORY[targetType];
+    if (!classification) continue; // Unknown types are not cross-domain integration
 
     const existing = categories.get(classification.category);
     if (existing) {
