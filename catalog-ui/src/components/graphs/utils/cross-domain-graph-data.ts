@@ -18,16 +18,17 @@ function buildEdgeLabel(edge: CrossDomainEdge): string {
 }
 
 /**
- * Build tooltip showing the full integration breakdown.
+ * Build tooltip showing the actual element names per category.
  */
 function buildEdgeTooltip(edge: CrossDomainEdge): string {
-  const lines = edge.integrations.map(i =>
-    `${i.category}: ${i.count} dependencies`
-  );
-  lines.push('');
-  lines.push(`Total: ${edge.totalWeight} integration dependencies`);
-  lines.push('(structural relationships excluded)');
-  return lines.join('\n');
+  const sections: string[] = [];
+  for (const i of edge.integrations) {
+    sections.push(`${i.category}:`);
+    for (const name of i.targetNames) {
+      sections.push(`  → ${name}`);
+    }
+  }
+  return sections.join('\n');
 }
 
 /**
