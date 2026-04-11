@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { domains, graph } from '../../data/registry';
+import { deriveCrossDomainEdges } from '../../lib/cross-domain';
+import CrossDomainMap from '../../components/graphs/CrossDomainMap';
+
+// Derive cross-domain integration dependencies at build time
+const crossDomainEdges = graph ? deriveCrossDomainEdges(graph) : [];
+const totalIntegrations = crossDomainEdges.reduce((sum, e) => sum + e.totalWeight, 0);
+const domainPairs = crossDomainEdges.length;
+---
+
+<Layout title="Architecture Landscape">
+  <div class="landscape-fullpage">
+    <div class="landscape-header">
+      <div class="landscape-header-left">
+        <a href="/maps" class="landscape-back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Maps
+        </a>
+        <div class="landscape-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+          </svg>
+          <h1>Architecture Landscape</h1>
+          <span class="badge badge-sm badge-domain">Cross-Domain</span>
+        </div>
+      </div>
+      <div class="landscape-header-right">
+        <span class="landscape-stat">{domains.length} domains</span>
+        <span class="landscape-stat-sep">&middot;</span>
+        <span class="landscape-stat">{domainPairs} domain connections</span>
+        <span class="landscape-stat-sep">&middot;</span>
+        <span class="landscape-stat">{totalIntegrations} integration dependencies</span>
+      </div>
+    </div>
+
+    <div class="landscape-container">
+      <CrossDomainMap
+        client:only="react"
+        domains={domains}
+        crossDomainEdges={crossDomainEdges}
+      />
+    </div>
+
+    <div class="landscape-footer">
+      <p>Toggle domains in the selector to focus on specific integrations. Click a domain to drill into its context map. Hover edge labels for integration details.</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .landscape-fullpage {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 20px);
+    background: rgb(var(--ec-page-bg));
+    overflow: hidden;
+  }
+
+  .landscape-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    border-bottom: 1px solid rgb(var(--ec-page-border));
+    background: rgb(var(--ec-page-surface));
+    flex-shrink: 0;
+  }
+
+  .landscape-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .landscape-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: rgb(var(--ec-page-text-muted));
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .landscape-back:hover {
+    color: rgb(59, 130, 246);
+  }
+
+  .landscape-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgb(var(--ec-page-text));
+  }
+
+  .landscape-title h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: rgb(var(--ec-page-text));
+  }
+
+  .landscape-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .landscape-stat {
+    font-size: 12px;
+    color: rgb(var(--ec-page-text-muted));
+  }
+
+  .landscape-stat-sep {
+    color: rgb(var(--ec-page-text-muted));
+    opacity: 0.4;
+  }
+
+  .landscape-container {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .landscape-container > div {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .landscape-footer {
+    padding: 8px 24px;
+    border-top: 1px solid rgb(var(--ec-page-border));
+    background: rgb(var(--ec-page-surface));
+    flex-shrink: 0;
+  }
+
+  .landscape-footer p {
+    font-size: 12px;
+    color: rgb(var(--ec-page-text-muted));
+    margin: 0;
+    text-align: center;
+  }
+</style>
