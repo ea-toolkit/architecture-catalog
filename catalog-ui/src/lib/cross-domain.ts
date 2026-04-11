@@ -24,6 +24,11 @@ export interface CrossDomainEdge {
   totalWeight: number;
 }
 
+export interface IntegrationTarget {
+  id: string;
+  name: string;
+}
+
 export interface IntegrationPattern {
   /** Human-readable category: "API", "Events", "Data", "Service" */
   category: string;
@@ -31,6 +36,8 @@ export interface IntegrationPattern {
   count: number;
   /** Names of the target elements in this category */
   targetNames: string[];
+  /** Target elements with IDs for linking */
+  targets: IntegrationTarget[];
 }
 
 // ── Integration classification ──────────────────────────────
@@ -83,7 +90,7 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
   });
 
   // Aggregate cross-domain edges by domain pair + category
-  const edgeMap = new Map<string, Map<string, { category: string; count: number; names: Set<string> }>>();
+  const edgeMap = new Map<string, Map<string, { category: string; count: number; targets: Map<string, string> }>>();
 
   for (const edge of graph.edges) {
     // Skip structural relationships — not meaningful at cross-domain level
@@ -116,12 +123,12 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
     const existing = categories.get(classification.category);
     if (existing) {
       existing.count++;
-      existing.names.add(targetName);
+      existing.targets.set(edge.targetId, targetName);
     } else {
       categories.set(classification.category, {
         category: classification.category,
         count: 1,
-        names: new Set([targetName]),
+        targets: new Map([[edge.targetId, targetName]]),
       });
     }
   }
@@ -131,11 +138,17 @@ export function deriveCrossDomainEdges(graph: RegistryGraph): CrossDomainEdge[] 
   Array.from(edgeMap.entries()).forEach(([key, categories]) => {
     const [sourceDomain, targetDomain] = key.split('--');
     const integrations: IntegrationPattern[] = Array.from(categories.values())
-      .map(c => ({
-        category: c.category,
-        count: c.count,
-        targetNames: Array.from(c.names).sort(),
-      }))
+      .map(c => {
+        const targets = Array.from(c.targets.entries())
+          .map(([id, name]) => ({ id, name }))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return {
+          category: c.category,
+          count: c.count,
+          targetNames: targets.map(t => t.name),
+          targets,
+        };
+      })
       .sort((a, b) => b.count - a.count);
     const totalWeight = integrations.reduce((sum, i) => sum + i.count, 0);
 

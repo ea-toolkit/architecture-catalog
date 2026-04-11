@@ -303,6 +303,132 @@
   background: rgb(51 65 85);
 }
 
+/* ── Landscape domain selector chips ── */
+.landscape-domain-selector {
+  max-width: 400px;
+}
+.landscape-domain-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 2px solid #e2e8f0;
+  border-radius: 0;
+  background: white;
+  color: #64748b;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  font-family: 'JetBrains Mono', monospace;
+}
+.landscape-domain-chip:hover {
+  border-color: var(--chip-color, #94a3b8);
+  color: #334155;
+}
+.landscape-domain-chip--active {
+  border-color: var(--chip-color, #3b82f6);
+  background: color-mix(in srgb, var(--chip-color, #3b82f6) 10%, white);
+  color: #1e293b;
+  font-weight: 600;
+}
+.landscape-domain-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .landscape-domain-chip {
+  border-color: #334155;
+  background: rgb(15 23 42);
+  color: #94a3b8;
+}
+[data-theme="dark"] .landscape-domain-chip:hover {
+  border-color: var(--chip-color, #64748b);
+  color: #e2e8f0;
+}
+[data-theme="dark"] .landscape-domain-chip--active {
+  border-color: var(--chip-color, #3b82f6);
+  background: color-mix(in srgb, var(--chip-color, #3b82f6) 15%, rgb(15 23 42));
+  color: #e2e8f0;
+}
+
+/* ── Edge tooltip (styled popup) ── */
+.edge-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 0;
+  padding: 10px 14px;
+  min-width: 200px;
+  max-width: 300px;
+  z-index: 1000;
+  font-family: 'JetBrains Mono', monospace;
+  pointer-events: auto;
+}
+.edge-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: #0f172a;
+  border-top: 2px solid #334155;
+  border-left: 2px solid #334155;
+}
+.edge-tooltip-section {
+  margin-bottom: 8px;
+}
+.edge-tooltip-section:last-child {
+  margin-bottom: 0;
+}
+.edge-tooltip-category {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #1e293b;
+}
+.edge-tooltip-item {
+  font-size: 11px;
+  color: #e2e8f0;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.edge-tooltip-arrow {
+  color: #475569;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.edge-tooltip-link {
+  color: #e2e8f0;
+  text-decoration: none;
+  border-bottom: 1px solid #475569;
+  transition: color 0.15s, border-color 0.15s;
+}
+.edge-tooltip-link:hover {
+  color: #60a5fa;
+  border-color: #60a5fa;
+}
+
+/* Light theme tooltip overrides */
+[data-theme="light"] .edge-tooltip,
+:root:not([data-theme="dark"]) .edge-tooltip {
+  background: #0f172a;
+  border-color: #334155;
+}
+
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 

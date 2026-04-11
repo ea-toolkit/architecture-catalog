@@ -9,26 +9,23 @@ import { NODE_STYLES } from './colors';
 
 /**
  * Build edge label from integration patterns.
- * Shows categories with counts: "API (5) · Events (3)"
+ * Shows categories with unique target counts: "API (4) · Events (3)"
+ * Uses target count (not edge count) so the number matches the tooltip items.
  */
 function buildEdgeLabel(edge: CrossDomainEdge): string {
   return edge.integrations
-    .map(i => `${i.category} (${i.count})`)
+    .map(i => `${i.category} (${i.targets.length})`)
     .join(' · ');
 }
 
 /**
- * Build tooltip showing the actual element names per category.
+ * Build structured tooltip sections with linkable targets.
  */
-function buildEdgeTooltip(edge: CrossDomainEdge): string {
-  const sections: string[] = [];
-  for (const i of edge.integrations) {
-    sections.push(`${i.category}:`);
-    for (const name of i.targetNames) {
-      sections.push(`  → ${name}`);
-    }
-  }
-  return sections.join('\n');
+function buildTooltipSections(edge: CrossDomainEdge): Array<{ category: string; items: Array<{ id: string; name: string }> }> {
+  return edge.integrations.map(i => ({
+    category: i.category,
+    items: i.targets,
+  }));
 }
 
 /**
@@ -80,7 +77,7 @@ export function buildCrossDomainGraph(
       data: {
         relationship: 'cross-domain',
         label: buildEdgeLabel(edge),
-        tooltip: buildEdgeTooltip(edge),
+        tooltipSections: buildTooltipSections(edge),
       },
     });
   }
