@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.0.0...v1.1.0) (2026-04-12)
+
+
+### Features
+
+* add cross-domain architecture landscape view ([#62](https://github.com/ea-toolkit/architecture-catalog/issues/62)) ([dbbdf9b](https://github.com/ea-toolkit/architecture-catalog/commit/dbbdf9bd1abcf344231fcb4fbe10c5cf3288d840))
+
 ## v1.0.0 (2026-03-27)
 
 First stable release of Architecture Catalog — a schema-driven, Git-native architecture catalog that turns Markdown files into an interactive static site.
