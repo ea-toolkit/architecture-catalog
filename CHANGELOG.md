@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.1.0...v1.2.0) (2026-04-16)
+
+
+### Features
+
+* visual differentiation for planned, deprecated, and external elements in graphs ([#65](https://github.com/ea-toolkit/architecture-catalog/issues/65)) ([7c6c7b8](https://github.com/ea-toolkit/architecture-catalog/commit/7c6c7b87baa90d9777b7e0a6f7305a7deb7cc788)), closes [#58](https://github.com/ea-toolkit/architecture-catalog/issues/58)
+
+
+### Bug Fixes
+
+* graph node key respects dark mode and uses clearer label ([#67](https://github.com/ea-toolkit/architecture-catalog/issues/67)) ([937a8d2](https://github.com/ea-toolkit/architecture-catalog/commit/937a8d28bfc7e972fbcde555f810f1e1a17392eb))
+
 ## [1.1.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.0.0...v1.1.0) (2026-04-12)
 
 
