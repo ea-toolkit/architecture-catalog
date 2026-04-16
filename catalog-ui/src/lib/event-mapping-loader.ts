@@ -38,6 +38,7 @@ export interface EventNode {
   name: string;
   description: string;
   status: string;
+  sourcing?: string;
   format: string;
   domain: string;
 }
@@ -46,6 +47,7 @@ export interface ServiceNode {
   id: string;
   name: string;
   status: string;
+  sourcing?: string;
   domain: string;
   isCrossDomain: boolean;
 }
@@ -196,6 +198,7 @@ export function resolveEventFlows(
       name: (event.fields.name as string) ?? event.id,
       description: (event.fields.description as string) ?? '',
       status: (event.fields.status as string) ?? 'active',
+      sourcing: event.fields.sourcing as string | undefined,
       format: (event.fields.event_format as string) ?? '',
       domain: domainId,
     };
@@ -296,6 +299,7 @@ function addServiceNode(
     id: element.id,
     name: (element.fields.name as string) ?? element.id,
     status: (element.fields.status as string) ?? 'active',
+    sourcing: element.fields.sourcing as string | undefined,
     domain: normalizedDomain,
     isCrossDomain: normalizedDomain !== domainId,
   });

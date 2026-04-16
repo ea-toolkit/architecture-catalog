@@ -5,6 +5,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import {
   ReactFlow,
   Background,
+  Panel,
   useNodesState,
   useEdgesState,
   useReactFlow,
@@ -17,6 +18,7 @@ import '@xyflow/react/dist/style.css';
 
 import BaseNode from './nodes/BaseNode';
 import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
+import GraphLegend from './GraphLegend';
 import { applyDagreLayout } from './utils/layout';
 import { buildElementGraph } from './utils/graph-data';
 import type { Element } from '../../data/registry';
@@ -145,6 +147,9 @@ function ElementContextGraphInner({ element, allElements, height = 350 }: Elemen
         zoomOnScroll
       >
         <Background color="#e2e8f0" gap={16} size={1} />
+        <Panel position="bottom-left">
+          <GraphLegend />
+        </Panel>
       </ReactFlow>
     </div>
   );

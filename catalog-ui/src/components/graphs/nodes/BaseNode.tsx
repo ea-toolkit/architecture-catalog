@@ -4,6 +4,7 @@
 import React from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import type { NodeStyle } from '../utils/colors';
+import { getStatusVisuals } from '../utils/status-visuals';
 
 export interface BaseNodeData {
   label: string;
@@ -145,6 +146,13 @@ export default function BaseNode({ data, id }: NodeProps) {
   );
   const [hovered, setHovered] = React.useState(false);
 
+  const visuals = getStatusVisuals(d.status, d.sourcing);
+  const baseOpacity = d.opacity ?? 1;
+  const effectiveOpacity = baseOpacity * visuals.opacity;
+  const borderColor = visuals.muted
+    ? 'var(--node-muted-border, #94a3b8)'
+    : style?.border || '#e2e8f0';
+
   const defaultShadow = '0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)';
   const hoverShadow = `0 4px 12px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06)`;
   const focusShadow = `0 0 0 3px ${style?.border}40, 0 4px 12px rgba(0,0,0,0.12)`;
@@ -156,7 +164,7 @@ export default function BaseNode({ data, id }: NodeProps) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: 'var(--node-bg, white)',
-        border: `2px solid ${style?.border || '#e2e8f0'}`,
+        border: `2px ${visuals.borderStyle} ${borderColor}`,
         borderRadius: '8px',
         minWidth: 200,
         maxWidth: 280,
@@ -166,7 +174,7 @@ export default function BaseNode({ data, id }: NodeProps) {
         transform: hovered && !isFocused ? 'translateY(-1px)' : 'none',
         boxShadow: isFocused ? focusShadow : hovered ? hoverShadow : defaultShadow,
         position: 'relative',
-        opacity: d.opacity ?? 1,
+        opacity: effectiveOpacity,
         overflow: 'hidden',
       }}
     >
@@ -335,6 +343,33 @@ export default function BaseNode({ data, id }: NodeProps) {
             background: style?.border || '#3b82f6',
           }}
         />
+      )}
+
+      {/* External/SaaS cloud indicator (top-right overlay) */}
+      {visuals.showExternalIndicator && (
+        <div
+          title={`External / ${d.sourcing}`}
+          aria-label={`External sourcing: ${d.sourcing}`}
+          style={{
+            position: 'absolute',
+            top: 6,
+            right: 6,
+            width: 20,
+            height: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 4,
+            background: 'var(--node-bg, white)',
+            border: `1px solid ${style?.border || '#94a3b8'}`,
+            color: style?.border || '#64748b',
+            pointerEvents: 'auto',
+          }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+          </svg>
+        </div>
       )}
     </div>
   );

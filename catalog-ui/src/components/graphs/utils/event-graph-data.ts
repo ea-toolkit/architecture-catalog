@@ -50,6 +50,7 @@ export function buildEventFlowGraph(
         elementType: eventFlow.serviceLabel,
         catalogUrl: `/catalog/${svc.id}`,
         status: svc.status,
+        sourcing: svc.sourcing,
         mappingIcon: NODE_STYLES['software_subsystem']?.icon ?? 'Sub',
         style: svc.isCrossDomain
           ? { ...style, borderStyle: 'dashed' }
@@ -74,6 +75,7 @@ export function buildEventFlowGraph(
         elementType: eventFlow.eventLabel,
         catalogUrl: `/catalog/${evt.id}`,
         status: evt.status,
+        sourcing: evt.sourcing,
         mappingIcon: NODE_STYLES['domain_event']?.icon ?? 'Ev',
         style,
         rank: 1,
