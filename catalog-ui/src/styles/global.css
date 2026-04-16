@@ -266,6 +266,24 @@
   font-weight: 600;
 }
 
+/* Node-key swatches */
+.graph-legend-swatch {
+  background: #f8fafc;
+  border-color: #64748b;
+  color: #64748b;
+}
+.graph-legend-swatch[data-muted="true"] {
+  border-color: #94a3b8;
+}
+[data-theme="dark"] .graph-legend-swatch {
+  background: rgb(30 41 59);
+  border-color: #94a3b8;
+  color: #94a3b8;
+}
+[data-theme="dark"] .graph-legend-swatch[data-muted="true"] {
+  border-color: #64748b;
+}
+
 [data-theme="dark"] .graph-panel-box {
   background: rgb(15 23 42);
   border-color: rgb(51 65 85);
