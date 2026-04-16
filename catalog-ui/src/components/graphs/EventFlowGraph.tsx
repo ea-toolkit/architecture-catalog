@@ -26,6 +26,7 @@ import '@xyflow/react/dist/style.css';
 import BaseNode from './nodes/BaseNode';
 import { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import FocusModeModal from './FocusModeModal';
+import GraphLegend from './GraphLegend';
 import { applyDagreLayout } from './utils/layout';
 import { buildEventFlowGraph } from './utils/event-graph-data';
 import type { EventFlow } from '../../data/registry';
@@ -310,6 +311,11 @@ function EventFlowGraphInner({ eventFlow, domainName }: EventFlowGraphProps) {
               </div>
             </div>
           </div>
+        </Panel>
+
+        {/* Status / Sourcing Legend */}
+        <Panel position="bottom-left">
+          <GraphLegend />
         </Panel>
       </ReactFlow>
       </div>

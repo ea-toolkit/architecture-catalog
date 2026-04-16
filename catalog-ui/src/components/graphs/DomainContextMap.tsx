@@ -21,6 +21,7 @@ import '@xyflow/react/dist/style.css';
 import BaseNode from './nodes/BaseNode';
 import RelationshipEdge, { EdgeMarkerDefs } from './edges/RelationshipEdge';
 import FocusModeModal from './FocusModeModal';
+import GraphLegend from './GraphLegend';
 import { applyDagreLayout } from './utils/layout';
 import { buildDomainGraph } from './utils/graph-data';
 import { NODE_STYLES, EDGE_STYLES, getNodeStyle } from './utils/colors';
@@ -367,6 +368,11 @@ function DomainContextMapInner({ domain, elements }: DomainContextMapProps) {
                 </>
               )}
             </div>
+          </Panel>
+
+          {/* Status / Sourcing Legend */}
+          <Panel position="bottom-left">
+            <GraphLegend />
           </Panel>
         </ReactFlow>
       </div>
