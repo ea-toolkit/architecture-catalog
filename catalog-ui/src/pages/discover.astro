@@ -32,9 +32,23 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
       </div>
     ) : (
     <Fragment>
+    <!-- Search -->
+    <div class="discover-search-wrapper" style="margin-bottom: 16px; position: relative;">
+      <svg class="discover-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input
+        type="text"
+        id="discover-search"
+        placeholder="Search by name, type, domain, or layer..."
+        autocomplete="off"
+      />
+    </div>
+
     <!-- Layer filter chips -->
     <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
-      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Layer:</span>
+      <span class="filter-label">Layer:</span>
       <button data-layer-filter="all" class="filter-chip active">All</button>
       {Object.entries(LAYER_META).map(([key, meta]) => (
         <button data-layer-filter={key} class="filter-chip">
@@ -44,9 +58,20 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
       ))}
     </div>
 
+    <!-- Domain filter chips -->
+    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
+      <span class="filter-label">Domain:</span>
+      {domains.map(d => (
+        <button data-domain-filter={d.id} class="filter-chip">
+          <span style={`display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: ${d.color}; margin-right: 4px; vertical-align: middle;`}></span>
+          {d.name}
+        </button>
+      ))}
+    </div>
+
     <!-- Type filter chips -->
     <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; align-items: center;">
-      <span style="font-size: 12px; color: rgb(var(--ec-page-text-muted)); margin-right: 4px;">Type:</span>
+      <span class="filter-label">Type:</span>
       {sortedTypes.map(([type, count]) => (
         <button data-type-filter={type} class="filter-chip">
           {type} <span style="color: rgb(var(--ec-page-text-muted)); font-size: 11px;">({count})</span>
@@ -59,10 +84,10 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
       <table class="data-table" id="discover-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Layer</th>
-            <th>Domain</th>
+            <th data-sort-key="name" class="sortable-th">Name <span class="sort-indicator"></span></th>
+            <th data-sort-key="type" class="sortable-th">Type <span class="sort-indicator"></span></th>
+            <th data-sort-key="layer" class="sortable-th">Layer <span class="sort-indicator"></span></th>
+            <th data-sort-key="domain" class="sortable-th">Domain <span class="sort-indicator"></span></th>
             <th>Sourcing</th>
             <th>Status</th>
           </tr>
@@ -72,7 +97,14 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
             const elLayer = LAYER_META[el.layer];
             const dom = domainMap[el.domain];
             return (
-              <tr data-layer={el.layer} data-type-label={el.typeLabel}>
+              <tr
+                data-layer={el.layer}
+                data-type-label={el.typeLabel}
+                data-domain={el.domain || ''}
+                data-domain-name={dom?.name || 'Cross-cutting'}
+                data-name={el.name}
+                data-layer-name={elLayer.name}
+              >
                 <td><a href={`/catalog/${el.id}`} class="table-link">{el.name}</a></td>
                 <td><span class={`badge badge-sm badge-${typeToBadge[el.type] || 'default'}`}>{el.typeLabel}</span></td>
                 <td>
@@ -107,7 +139,10 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
 
     <!-- No results message (hidden by default) -->
     <div id="no-results" style="display: none; text-align: center; padding: 32px 24px; color: rgb(var(--ec-page-text-muted));">
-      <p style="font-size: 14px;">No elements match the current filters.</p>
+      <p style="font-size: 14px;">No elements match your search and filters.</p>
+      <button id="clear-all-btn" style="margin-top: 8px; padding: 6px 14px; border: 1px solid rgb(var(--ec-page-border)); border-radius: 6px; background: rgb(var(--ec-card-bg)); color: rgb(var(--ec-page-text)); font-size: 12px; cursor: pointer;">
+        Clear all filters
+      </button>
     </div>
     </Fragment>
     )}
@@ -115,6 +150,11 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
 </Layout>
 
 <style>
+  .filter-label {
+    font-size: 12px;
+    color: rgb(var(--ec-page-text-muted));
+    margin-right: 4px;
+  }
   .filter-chip {
     padding: 5px 12px;
     border: 1px solid rgb(var(--ec-page-border));
@@ -134,40 +174,282 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
     color: white;
     border-color: rgb(var(--ec-accent));
   }
+  .discover-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(var(--ec-icon-color));
+    pointer-events: none;
+  }
+  #discover-search {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px 0 36px;
+    border: 1px solid rgb(var(--ec-input-border));
+    border-radius: 8px;
+    background: rgb(var(--ec-input-bg));
+    color: rgb(var(--ec-input-text));
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  #discover-search::placeholder {
+    color: rgb(var(--ec-input-placeholder));
+  }
+  #discover-search:focus {
+    border-color: rgb(var(--ec-accent));
+  }
+  .sortable-th {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .sortable-th:hover {
+    color: rgb(var(--ec-accent));
+  }
+  .sort-indicator {
+    font-size: 10px;
+    margin-left: 2px;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .sort-indicator.active {
+    opacity: 1;
+  }
+  .sortable-th:hover .sort-indicator:not(.active) {
+    opacity: 0.3;
+  }
 </style>
 
 <script>
-  function initFilters() {
+  function initDiscover() {
+    // State
     let activeLayer = 'all';
     const activeTypes = new Set<string>();
+    const activeDomains = new Set<string>();
+    let searchQuery = '';
+    let sortKey = '';
+    let sortDir: 'asc' | 'desc' = 'asc';
 
-    const rows = document.querySelectorAll<HTMLTableRowElement>('#discover-table tbody tr');
+    // DOM refs
+    const table = document.getElementById('discover-table') as HTMLTableElement | null;
+    if (!table) return;
+    const tbody = table.querySelector('tbody')!;
+    const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>('tr'));
     const layerBtns = document.querySelectorAll<HTMLButtonElement>('[data-layer-filter]');
     const typeBtns = document.querySelectorAll<HTMLButtonElement>('[data-type-filter]');
+    const domainBtns = document.querySelectorAll<HTMLButtonElement>('[data-domain-filter]');
+    const sortHeaders = document.querySelectorAll<HTMLTableCellElement>('[data-sort-key]');
+    const searchInput = document.getElementById('discover-search') as HTMLInputElement | null;
     const noResults = document.getElementById('no-results');
+    const clearAllBtn = document.getElementById('clear-all-btn');
     const summary = document.getElementById('discover-summary');
     const totalCount = rows.length;
 
+    // ── Filtering ──
+
     function applyFilters() {
       let visibleCount = 0;
+      const query = searchQuery.toLowerCase();
+
       rows.forEach(row => {
-        const rowLayer = row.dataset.layer;
-        const rowType = row.dataset.typeLabel;
+        const rowLayer = row.dataset.layer || '';
+        const rowType = row.dataset.typeLabel || '';
+        const rowDomain = row.dataset.domain || '';
+        const rowName = (row.dataset.name || '').toLowerCase();
+        const rowDomainName = (row.dataset.domainName || '').toLowerCase();
+        const rowLayerName = (row.dataset.layerName || '').toLowerCase();
+        const rowTypeLower = rowType.toLowerCase();
+
         const layerMatch = activeLayer === 'all' || rowLayer === activeLayer;
-        const typeMatch = activeTypes.size === 0 || activeTypes.has(rowType!);
-        const visible = layerMatch && typeMatch;
+        const typeMatch = activeTypes.size === 0 || activeTypes.has(rowType);
+        const domainMatch = activeDomains.size === 0 || activeDomains.has(rowDomain);
+        const searchMatch = !query ||
+          rowName.includes(query) ||
+          rowTypeLower.includes(query) ||
+          rowDomainName.includes(query) ||
+          rowLayerName.includes(query);
+
+        const visible = layerMatch && typeMatch && domainMatch && searchMatch;
         row.style.display = visible ? '' : 'none';
         if (visible) visibleCount++;
       });
+
       if (noResults) noResults.style.display = visibleCount === 0 ? '' : 'none';
+
       if (summary) {
-        summary.textContent = visibleCount === totalCount
-          ? `Browse all ${totalCount} registered architecture elements`
-          : `Showing ${visibleCount} of ${totalCount} elements`;
+        const hasFilters = activeLayer !== 'all' || activeTypes.size > 0 || activeDomains.size > 0 || query;
+        summary.textContent = hasFilters
+          ? `Showing ${visibleCount} of ${totalCount} elements`
+          : `Browse all ${totalCount} registered architecture elements`;
+      }
+
+      // Re-apply sort after filter change
+      if (sortKey) applySortToDOM();
+      syncToUrl();
+    }
+
+    // ── Sorting ──
+
+    function applySortToDOM() {
+      const visible = rows.filter(r => r.style.display !== 'none');
+
+      visible.sort((a, b) => {
+        let aVal = '';
+        let bVal = '';
+
+        switch (sortKey) {
+          case 'name':
+            aVal = a.dataset.name || '';
+            bVal = b.dataset.name || '';
+            break;
+          case 'type':
+            aVal = a.dataset.typeLabel || '';
+            bVal = b.dataset.typeLabel || '';
+            break;
+          case 'layer':
+            aVal = a.dataset.layerName || '';
+            bVal = b.dataset.layerName || '';
+            break;
+          case 'domain':
+            aVal = a.dataset.domainName || '';
+            bVal = b.dataset.domainName || '';
+            break;
+        }
+
+        const cmp = aVal.localeCompare(bVal, undefined, { sensitivity: 'base' });
+        return sortDir === 'asc' ? cmp : -cmp;
+      });
+
+      // Re-append sorted visible rows, then hidden rows
+      const hidden = rows.filter(r => r.style.display === 'none');
+      for (const row of visible) tbody.appendChild(row);
+      for (const row of hidden) tbody.appendChild(row);
+
+      // Update indicators
+      sortHeaders.forEach(th => {
+        const indicator = th.querySelector('.sort-indicator');
+        if (!indicator) return;
+        if (th.dataset.sortKey === sortKey) {
+          indicator.textContent = sortDir === 'asc' ? '▲' : '▼';
+          indicator.classList.add('active');
+        } else {
+          indicator.textContent = '';
+          indicator.classList.remove('active');
+        }
+      });
+    }
+
+    // ── URL sync ──
+
+    function syncToUrl() {
+      const params = new URLSearchParams();
+      if (searchQuery) params.set('q', searchQuery);
+      if (activeLayer !== 'all') params.set('layer', activeLayer);
+      if (activeDomains.size > 0) params.set('domain', Array.from(activeDomains).join(','));
+      if (activeTypes.size > 0) params.set('type', Array.from(activeTypes).join(','));
+      if (sortKey) {
+        params.set('sort', sortKey);
+        params.set('order', sortDir);
+      }
+      const qs = params.toString();
+      const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+      history.replaceState(null, '', url);
+    }
+
+    function restoreFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Search
+      const q = params.get('q');
+      if (q && searchInput) {
+        searchQuery = q;
+        searchInput.value = q;
+      }
+
+      // Layer
+      const layerParam = params.get('layer');
+      if (layerParam) {
+        const btn = document.querySelector<HTMLButtonElement>(`[data-layer-filter="${layerParam}"]`);
+        if (btn) {
+          activeLayer = layerParam;
+          layerBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        }
+      }
+
+      // Domains
+      const domainParam = params.get('domain');
+      if (domainParam) {
+        domainParam.split(',').forEach(id => {
+          const btn = document.querySelector<HTMLButtonElement>(`[data-domain-filter="${id}"]`);
+          if (btn) {
+            activeDomains.add(id);
+            btn.classList.add('active');
+          }
+        });
+      }
+
+      // Types
+      const typeParam = params.get('type');
+      if (typeParam) {
+        typeParam.split(',').forEach(t => {
+          const btn = document.querySelector<HTMLButtonElement>(`[data-type-filter="${t}"]`);
+          if (btn) {
+            activeTypes.add(t);
+            btn.classList.add('active');
+          }
+        });
+      }
+
+      // Sort
+      const sortParam = params.get('sort');
+      const orderParam = params.get('order');
+      if (sortParam) {
+        sortKey = sortParam;
+        sortDir = orderParam === 'desc' ? 'desc' : 'asc';
       }
     }
 
-    // Layer filter clicks
+    // ── Clear all ──
+
+    function clearAll() {
+      activeLayer = 'all';
+      activeTypes.clear();
+      activeDomains.clear();
+      searchQuery = '';
+      sortKey = '';
+      sortDir = 'asc';
+
+      if (searchInput) searchInput.value = '';
+      layerBtns.forEach(b => {
+        b.classList.toggle('active', b.dataset.layerFilter === 'all');
+      });
+      typeBtns.forEach(b => b.classList.remove('active'));
+      domainBtns.forEach(b => b.classList.remove('active'));
+      sortHeaders.forEach(th => {
+        const indicator = th.querySelector('.sort-indicator');
+        if (indicator) {
+          indicator.textContent = '';
+          indicator.classList.remove('active');
+        }
+      });
+
+      applyFilters();
+    }
+
+    // ── Event listeners ──
+
+    // Search
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchQuery = searchInput.value;
+        applyFilters();
+      });
+    }
+
+    // Layer chips (single select)
     layerBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         activeLayer = btn.dataset.layerFilter!;
@@ -177,7 +459,7 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
       });
     });
 
-    // Type filter clicks (toggle)
+    // Type chips (multi-select toggle)
     typeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const type = btn.dataset.typeFilter!;
@@ -192,21 +474,46 @@ const domainMap = Object.fromEntries(domains.map(d => [d.id, d]));
       });
     });
 
-    // Read ?layer= from URL on page load
-    const params = new URLSearchParams(window.location.search);
-    const layerParam = params.get('layer');
-    if (layerParam) {
-      const btn = document.querySelector<HTMLButtonElement>(`[data-layer-filter="${layerParam}"]`);
-      if (btn) {
-        activeLayer = layerParam;
-        layerBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // Domain chips (multi-select toggle)
+    domainBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const domain = btn.dataset.domainFilter!;
+        if (activeDomains.has(domain)) {
+          activeDomains.delete(domain);
+          btn.classList.remove('active');
+        } else {
+          activeDomains.add(domain);
+          btn.classList.add('active');
+        }
         applyFilters();
-      }
+      });
+    });
+
+    // Sort headers
+    sortHeaders.forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.sortKey!;
+        if (sortKey === key) {
+          sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortKey = key;
+          sortDir = 'asc';
+        }
+        applyFilters();
+      });
+    });
+
+    // Clear all button
+    if (clearAllBtn) {
+      clearAllBtn.addEventListener('click', clearAll);
     }
+
+    // ── Init ──
+    restoreFromUrl();
+    applyFilters();
   }
 
   // Run on initial load and on Astro page transitions
-  initFilters();
-  document.addEventListener('astro:after-swap', initFilters);
+  initDiscover();
+  document.addEventListener('astro:after-swap', initDiscover);
 </script>
