@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.2.0...v1.3.0) (2026-04-21)
+
+
+### Features
+
+* discover page improvements — search, domain filter, sort, URL sync ([#68](https://github.com/ea-toolkit/architecture-catalog/issues/68)) ([8304872](https://github.com/ea-toolkit/architecture-catalog/commit/83048722ec5adadef1f57facc85347b45b7adeb5)), closes [#60](https://github.com/ea-toolkit/architecture-catalog/issues/60)
+
 ## [1.2.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.1.0...v1.2.0) (2026-04-16)
 
 
