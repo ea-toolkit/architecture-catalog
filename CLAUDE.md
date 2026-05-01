@@ -136,10 +136,11 @@ docs-site/                   # Starlight documentation site
 ## Key Scripts
 
 ```bash
-python scripts/validate.py              # Validate model
-python scripts/generate_dashboard.py    # Generate dashboard.html
-python scripts/refresh_diagrams.py      # Sync registry to diagrams
-python scripts/extract_view.py <file>   # Extract YAML from diagram
+python scripts/validate.py                            # Validate model
+python scripts/generate_dashboard.py                  # Generate dashboard.html
+python scripts/refresh_diagrams.py                    # Sync registry to diagrams
+python scripts/extract_view.py <file>                 # Extract YAML from diagram
+python scripts/generate_metamodel.py <file.drawio>    # Generate registry-mapping.yaml from meta-model diagram
 ```
 
 ---
