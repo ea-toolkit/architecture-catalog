@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.3.0...v1.4.0) (2026-05-01)
+
+
+### Features
+
+* add /crawl-apis skill for API discovery and registry entry generation ([#72](https://github.com/ea-toolkit/architecture-catalog/issues/72)) ([6f4a56b](https://github.com/ea-toolkit/architecture-catalog/commit/6f4a56b92047bdef8c136035fd80db86cfa31da2)), closes [#39](https://github.com/ea-toolkit/architecture-catalog/issues/39)
+* add /crawl-data skill for data model discovery and registry entry generation ([#73](https://github.com/ea-toolkit/architecture-catalog/issues/73)) ([6b8e558](https://github.com/ea-toolkit/architecture-catalog/commit/6b8e558054c5148273fb511cfc6e92415dc733fb)), closes [#40](https://github.com/ea-toolkit/architecture-catalog/issues/40)
+* add /deploy skill for Firebase Hosting deployment ([#70](https://github.com/ea-toolkit/architecture-catalog/issues/70)) ([f1ef533](https://github.com/ea-toolkit/architecture-catalog/commit/f1ef533bfe1c69e07f1d1f1091918a4bc20c74af)), closes [#48](https://github.com/ea-toolkit/architecture-catalog/issues/48)
+* add Piece 2 meta-model generator (draw.io → registry-mapping.yaml) ([#74](https://github.com/ea-toolkit/architecture-catalog/issues/74)) ([0372f49](https://github.com/ea-toolkit/architecture-catalog/commit/0372f491265cf47e47665faf122760bc881e00b1))
+
 ## [1.3.0](https://github.com/ea-toolkit/architecture-catalog/compare/v1.2.0...v1.3.0) (2026-04-21)
 
 
