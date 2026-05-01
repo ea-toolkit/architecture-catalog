@@ -1,0 +1,133 @@
+<mxfile host="app.diagrams.net" agent="meta-model-generator" version="1.0">
+  <diagram id="meta-model" name="Meta-Model">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- Layer: Business                             -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="layer-business" value="Business" style="swimlane;startSize=30;fillColor=#faf5ff;strokeColor=#a855f7;" vertex="1" parent="1">
+          <mxGraphModel><root>
+            <mxCell id="layer" value="business"/>
+            <mxCell id="layerColor" value="#a855f7"/>
+            <mxCell id="layerBg" value="#faf5ff"/>
+            <mxCell id="layerIcon" value="B"/>
+          </root></mxGraphModel>
+          <mxGeometry x="40" y="40" width="1520" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="el-product" value="Product" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-business">
+          <mxGeometry x="40" y="50" width="160" height="60" as="geometry"/>
+          <Object key="product" icon="📦" graph_rank="-1" badge_category="product" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-market-segment" value="Market Segment" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-business">
+          <mxGeometry x="260" y="50" width="160" height="60" as="geometry"/>
+          <Object key="market_segment" icon="👥" graph_rank="-2" badge_category="segment" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-business-service" value="Business Service" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-business">
+          <mxGeometry x="480" y="50" width="160" height="60" as="geometry"/>
+          <Object key="business_service" icon="🎁" graph_rank="-1" badge_category="service" as="customProperties"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- Layer: Organization                         -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="layer-organization" value="Organization" style="swimlane;startSize=30;fillColor=#fffbeb;strokeColor=#f59e0b;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="1520" height="200" as="geometry"/>
+          <Object layer="organization" layerColor="#f59e0b" layerBg="#fffbeb" layerIcon="O" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-capability" value="Business Capability" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-organization">
+          <mxGeometry x="40" y="50" width="180" height="60" as="geometry"/>
+          <Object key="business_capability" icon="🎯" graph_rank="1" badge_category="capability" fields="maturity:string:Maturity,lifecycle:string:Lifecycle,sourcing:string:Sourcing,size:string:Size" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-process" value="Business Process" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-organization">
+          <mxGeometry x="280" y="50" width="180" height="60" as="geometry"/>
+          <Object key="business_process" icon="🔄" graph_rank="1" badge_category="process" fields="specialization:string:Specialization,value_stream:string:Value Stream" as="customProperties"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- Layer: Application                          -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="layer-application" value="Application" style="swimlane;startSize=30;fillColor=#eff6ff;strokeColor=#3b82f6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="520" width="1520" height="200" as="geometry"/>
+          <Object layer="application" layerColor="#3b82f6" layerBg="#eff6ff" layerIcon="A" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-domain" value="Domain" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-application">
+          <mxGeometry x="40" y="50" width="140" height="60" as="geometry"/>
+          <Object key="domain" icon="🏛️" graph_rank="0" badge_category="domain" fields="aliases:string[]:Aliases" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-component" value="Component" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-application">
+          <mxGeometry x="220" y="50" width="140" height="60" as="geometry"/>
+          <Object key="component" icon="🧩" graph_rank="1" badge_category="component" fields="sourcing:string:Sourcing" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-software-system" value="Software System" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-application">
+          <mxGeometry x="400" y="50" width="160" height="60" as="geometry"/>
+          <Object key="software_system" icon="🖥️" graph_rank="2" badge_category="system" fields="full_name:string:Full Name,abbreviation:string:Abbreviation,sourcing:string:Sourcing,catalog_id:string:Catalog ID,system_type:string:System Type,vendor:string:Vendor" as="customProperties"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- Layer: Technology                           -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="layer-technology" value="Technology" style="swimlane;startSize=30;fillColor=#ecfdf5;strokeColor=#10b981;" vertex="1" parent="1">
+          <mxGeometry x="40" y="760" width="1520" height="200" as="geometry"/>
+          <Object layer="technology" layerColor="#10b981" layerBg="#ecfdf5" layerIcon="T" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-infra-node" value="Infrastructure Node" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-technology">
+          <mxGeometry x="40" y="50" width="180" height="60" as="geometry"/>
+          <Object key="infra_node" icon="🖧" graph_rank="4" badge_category="infrastructure" fields="node_type:string:Node Type,cloud_provider:string:Cloud Provider" as="customProperties"/>
+        </mxCell>
+
+        <mxCell id="el-cloud-service" value="Cloud Service" style="rounded=0;whiteSpace=wrap;" vertex="1" parent="layer-technology">
+          <mxGeometry x="280" y="50" width="160" height="60" as="geometry"/>
+          <Object key="cloud_service" icon="☁️" graph_rank="4" badge_category="infrastructure" fields="cloud_provider:string:Cloud Provider" as="customProperties"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- Relationships (arrows)                      -->
+        <!-- ═══════════════════════════════════════════ -->
+
+        <!-- Product → Market Segment (serving) -->
+        <mxCell id="rel-1" value="serves_market_segments" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="el-product" target="el-market-segment" parent="1">
+          <Object type="serving" cardinality="many" resolve_by="name" inverse="served_by_products" required="false" as="customProperties"/>
+        </mxCell>
+
+        <!-- Product → Business Service (aggregation) -->
+        <mxCell id="rel-2" value="aggregates_business_services" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="el-product" target="el-business-service" parent="1">
+          <Object type="aggregation" cardinality="many" resolve_by="name" inverse="aggregated_by_product" required="false" as="customProperties"/>
+        </mxCell>
+
+        <!-- Domain → Component (composition) -->
+        <mxCell id="rel-3" value="composes_components" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="el-domain" target="el-component" parent="1">
+          <Object type="composition" cardinality="many" resolve_by="slug" inverse="parent_domain" required="false" as="customProperties"/>
+        </mxCell>
+
+        <!-- Component → Software System (realization) -->
+        <mxCell id="rel-4" value="realized_by_software_systems" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="el-component" target="el-software-system" parent="1">
+          <Object type="realization" cardinality="many" resolve_by="name" inverse="realizes_components" required="false" as="customProperties"/>
+        </mxCell>
+
+        <!-- Business Capability → Component (realization) -->
+        <mxCell id="rel-5" value="realized_by_components" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="el-capability" target="el-component" parent="1">
+          <Object type="realization" cardinality="many" resolve_by="name" inverse="realizes_business_capability" required="false" as="customProperties"/>
+        </mxCell>
+
+        <!-- Relationship Types table -->
+        <mxCell id="rel-types" value="Relationship Types" style="shape=table;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="40" width="300" height="180" as="geometry"/>
+          <Object metamodel_type="relationship_types" data="composition|Composes|Part of|◇;aggregation|Owns|Owned by|◆;realization|Realizes|Realized by|▲;serving|Serves|Served by|→;assignment|Assigned to|Assigned from|⊕;access|Accesses|Accessed by|⊙" as="customProperties"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
