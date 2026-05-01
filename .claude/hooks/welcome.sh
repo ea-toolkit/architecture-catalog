@@ -11,6 +11,7 @@ Architecture Catalog - Available Skills:
   /scaffold-component [Name]             - Scaffold React component + test
   /deploy [--dry-run] [--target ...]     - Build & deploy to Firebase
   /crawl-apis <path> [--domain ...]      - Discover APIs → registry entries
+  /crawl-data <path> [--domain ...]      - Discover data models → registry entries
 
 Examples:
   /enterprise-platform-archi What data does Tenant Management own?
