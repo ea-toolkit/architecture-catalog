@@ -53,6 +53,7 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 | `/new-entry` | `/new-entry [type] [name]` | Create registry entry (guided wizard) |
 | `/scaffold-component` | `/scaffold-component [Name]` | Scaffold React component + test file |
 | `/deploy` | `/deploy [--dry-run] [--target catalog\|docs\|all]` | Build & deploy to Firebase Hosting |
+| `/crawl-apis` | `/crawl-apis <path> [--domain <name>] [--write]` | Scan codebase for APIs, propose registry entries |
 
 ### Examples
 ```
@@ -64,6 +65,7 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 /scaffold-component CapabilityHeatmap
 /deploy --dry-run
 /deploy --target catalog
+/crawl-apis ./src --domain "Customer Management"
 ```
 
 ### Why Skills?
