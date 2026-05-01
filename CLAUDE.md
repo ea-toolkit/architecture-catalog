@@ -52,6 +52,7 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 | `/dashboard` | `/dashboard` | Generate HTML health dashboard |
 | `/new-entry` | `/new-entry [type] [name]` | Create registry entry (guided wizard) |
 | `/scaffold-component` | `/scaffold-component [Name]` | Scaffold React component + test file |
+| `/deploy` | `/deploy [--dry-run] [--target catalog\|docs\|all]` | Build & deploy to Firebase Hosting |
 
 ### Examples
 ```
@@ -61,6 +62,8 @@ registry-mapping.yaml  ──→  registry-loader.ts  ──→  Astro pages
 /dashboard
 /new-entry data-object "Payment Record"
 /scaffold-component CapabilityHeatmap
+/deploy --dry-run
+/deploy --target catalog
 ```
 
 ### Why Skills?

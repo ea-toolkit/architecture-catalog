@@ -9,6 +9,7 @@ Architecture Catalog - Available Skills:
   /dashboard                             - Generate visual report
   /new-entry [type] [name]               - Create registry entry
   /scaffold-component [Name]             - Scaffold React component + test
+  /deploy [--dry-run] [--target ...]     - Build & deploy to Firebase
 
 Examples:
   /enterprise-platform-archi What data does Tenant Management own?
